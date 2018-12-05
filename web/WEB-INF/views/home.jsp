@@ -16,8 +16,6 @@
 <html>
 <head>
     <title>VIDE GRENIER</title>
-
-    <jsp:include page="head.jsp"/>
 </head>
 <body>
 
