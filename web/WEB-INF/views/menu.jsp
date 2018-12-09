@@ -8,6 +8,8 @@
     <!-- Optional theme -->
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/minty/bootstrap.min.css" rel="stylesheet" integrity="sha384-w+yWASP3zYNxxvwoQBD5fUSc1tctKq4KUiZzxgkBSJACiUp+IbweVKvsEhMI+gz7" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- my css -->
+    <link href="<c:url value="/resources/css/css.css"/>" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -40,6 +42,7 @@
             </sec:authorize>
         </ul>
     </div>
+    <a href="?language=en" style="color:white">EN</a>/<a href="?language=fr" style="color:white">FR</a>
 </nav>
 </body>
 </html>
