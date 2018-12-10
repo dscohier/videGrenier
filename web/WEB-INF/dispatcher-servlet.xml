@@ -155,8 +155,17 @@
             <ref bean="localeChangeInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <bean name="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource">
+            <ref bean="messageSource"/>
+        </property>
+    </bean>
+
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
           p:basename="messages" p:fallbackToSystemLocale="false" />
 
+    <mvc:annotation-driven validator="validator" />
 </beans>
 
