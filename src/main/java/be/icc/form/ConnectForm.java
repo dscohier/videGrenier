@@ -22,6 +22,7 @@ public class ConnectForm {
     private String lastName;
     @NotBlank(message = "{error.notBlank}" )
     private String city;
+    @NotBlank(message = "{error.notBlank}")
     @Pattern(regexp = "[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,3})", message = "{error.mail}")
     private String email;
     @NotBlank(message = "{error.notBlank}")
