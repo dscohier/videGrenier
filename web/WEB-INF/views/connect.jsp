@@ -12,18 +12,21 @@
 </head>
 <body>
 
-<form:form cssClass="form-horizontal" method="post" action="connect/login" commandName="connectForm" >
+<form:form cssClass="form-horizontal" method="post" action="connect/login" commandName="loginForm" >
 	<fieldset>
-		<h2><spring:message code="connect.login"/></h2>
+        <c:if test="${not empty message}">
+            <label class="error"><spring:message code="${message}"/></label>
+        </c:if>
+        <h2><spring:message code="connect.login" text="test"/></h2>
 		<div class="form-group">
-			<label for="userName" class="col-lg-1 control-label"><spring:message code="connect.userName"/></label>
+			<label for="userName" class="col-lg-3 control-label"><spring:message code="connect.userName"/></label>
 			<div class="col-lg-3">
 				<form:input type="text" path="userName" cssClass=" form-control" id="username"/>
 				<form:errors path="userName" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="password" class="col-lg-1 control-label"><spring:message code="connect.password"/></label>
+			<label for="password" class="col-lg-3 control-label"><spring:message code="connect.password"/></label>
 			<div class="col-lg-3">
 					<form:input type="password" path="password" cssClass="form-control" id="password"/>
 					<form:errors path="password" cssClass="error"/>
@@ -45,62 +48,63 @@
 		</fieldset>
 </form:form>
 
-<form:form cssClass="form-horizontal" method="post" action="connect/signup" commandName="connectForm" >
+<form:form cssClass="form-horizontal" method="post" action="connect/signup" commandName="signupForm" >
 	<fieldset>
 		<h2><spring:message code="connect.signup"/></h2>
 		<div class="form-group">
-			<label for="firstName" class="col-lg-1 control-label"><spring:message code="connect.firstName"/></label>
+			<label for="firstName" class="col-lg-3 control-label"><spring:message code="connect.firstName"/></label>
 			<div class="col-lg-3">
 				<form:input type="text" path="firstName" cssClass=" form-control" id="firstName"/>
 				<form:errors path="firstName" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="lastName" class="col-lg-1 control-label"><spring:message code="connect.lastName"/></label>
+			<label for="lastName" class="col-lg-3 control-label"><spring:message code="connect.lastName"/></label>
 			<div class="col-lg-3">
 				<form:input type="text" path="lastName" cssClass=" form-control" id="lastName"/>
 				<form:errors path="lastName" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="email" class="col-lg-1 control-label"><spring:message code="connect.mail"/></label>
+			<label for="email" class="col-lg-3 control-label"><spring:message code="connect.mail"/></label>
 			<div class="col-lg-3">
 				<form:input type="text" path="email" cssClass=" form-control" id="email"/>
 				<form:errors path="email" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="city" class="col-lg-1 control-label"><spring:message code="connect.city"/></label>
+			<label for="city" class="col-lg-3 control-label"><spring:message code="connect.city"/></label>
 			<div class="col-lg-3">
 				<form:input type="text" path="city" cssClass=" form-control" id="city"/>
 				<form:errors path="city" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="userName" class="col-lg-1 control-label"><spring:message code="connect.userName"/></label>
+			<label for="userName" class="col-lg-3 control-label"><spring:message code="connect.userName"/></label>
 			<div class="col-lg-3">
 				<form:input type="text" path="userName" cssClass=" form-control" id="username"/>
 				<form:errors path="userName" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="password" class="col-lg-1 control-label"><spring:message code="connect.password"/></label>
+			<label for="password" class="col-lg-3 control-label"><spring:message code="connect.password"/></label>
 			<div class="col-lg-3">
 				<form:input type="password" path="password" cssClass="form-control" id="password"/>
 				<form:errors path="password" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="passwordCheck" class="col-lg-1 control-label"><spring:message code="connect.passwordCheck"/></label>
+			<label for="passwordCheck" class="col-lg-3 control-label"><spring:message code="connect.passwordCheck"/></label>
 			<div class="col-lg-3">
 			<form:input type="password" path="passwordCheck" cssClass=" form-control" id="passwordCheck"/>
-			<form:errors path="passwordCheck"/>
-		</div>
+			<form:errors path="passwordCheck" cssClass="error"/>
+			<br/>
+			<form:errors path="isPasswordMatch" cssClass="error"/>
+			</div>
+        <br/>
 		<div class="form-group">
-			<div class="col-lg-3">
 				<spring:message code="connect.signup" var="signup"/>
 				<input type="submit" class="btn btn-primary" value="${signup}">
-			</div>
 		</div>
 		</div>
 	</fieldset>
