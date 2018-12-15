@@ -4,6 +4,7 @@ import be.icc.controller.CategoryEnum;
 import be.icc.dto.CategoryDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  * Created by Scohier Dorian on 04-11-18.
  */
 @Entity
-public class Category {
+public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,14 +1,19 @@
 package be.icc.form;
 
+import be.icc.service.UserService;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Pattern;
 
 /**
- * Created by Student on 27-01-16.
+ * Created by Student on 11-12-18.
  */
-public class ConnectForm {
+public class SignupForm {
+
+    @Autowired
+    UserService userService;
 
     @NotBlank(message = "{error.notBlank}")
     private String userName;
@@ -22,19 +27,27 @@ public class ConnectForm {
     private String lastName;
     @NotBlank(message = "{error.notBlank}" )
     private String city;
+    @NotBlank(message = "{error.selectValueFromGoogle}" )
+    private String state;
     @NotBlank(message = "{error.notBlank}")
     @Pattern(regexp = "[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,3})", message = "{error.mail}")
     private String email;
     @NotBlank(message = "{error.notBlank}")
     private String passwordCheck;
+    private boolean isPasswordMatch;
 
-    @AssertTrue(message = "error.passwordMatch")
-    public boolean isPasswordMatch(){
+    public void setPasswordMatch(boolean passwordMatch) {
+        isPasswordMatch = passwordMatch;
+    }
+
+    @AssertTrue(message = "{error.passwordMatch}")
+    public boolean getIsPasswordMatch() {
         if(password==null||passwordCheck==null){
-            return false;
+            isPasswordMatch = false;
         }else{
-            return password.equals(passwordCheck);
+            isPasswordMatch = password.equals(passwordCheck);
         }
+        return  isPasswordMatch;
     }
 
     public String getUserName() {
@@ -91,5 +104,13 @@ public class ConnectForm {
 
     public void setPasswordCheck(String passwordCheck) {
         this.passwordCheck = passwordCheck;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

@@ -22,7 +22,6 @@ public class UserDto implements UserDetails {
     private Set<CommentDto> myComments;
     private Set<CommentDto> myAppreciations;
     private PanierDto panier;
-    private Set<OrderDto> orders;
     private Set<ProductDto> productToSell;
     private Set<ProductDto> auctionedProduct;
     private CityDto city;
@@ -43,9 +42,6 @@ public class UserDto implements UserDetails {
         }
         for(CommentDto comment : getMyAppreciations()) {
             user.getMyAppreciations().add(comment.toEntity());
-        }
-        for(OrderDto order : getOrders()) {
-            user.getOrders().add(order.toEntity());
         }
         for(ProductDto product : getProductToSell()) {
             user.getProductToSell().add(product.toEntity());
@@ -177,17 +173,6 @@ public class UserDto implements UserDetails {
 
     public void setPanier(PanierDto panier) {
         this.panier = panier;
-    }
-
-    public Set<OrderDto> getOrders() {
-        if (orders == null) {
-            orders = new HashSet<>();
-        }
-        return orders;
-    }
-
-    public void setOrders(Set<OrderDto> orders) {
-        this.orders = orders;
     }
 
     public Set<ProductDto> getProductToSell() {

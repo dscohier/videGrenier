@@ -10,6 +10,7 @@ public class OrderDto {
     private Long id;
     private Set<ProductDto> products;
     private Date date;
+    private UserDto user;
 
     public OrderDto() {
     }
@@ -21,6 +22,7 @@ public class OrderDto {
             order.getProducts().add(product.toEntity());
         }
         order.setDate(this.getDate());
+        order.setUser(this.getUser().toEntity());
         return order;
     }
 
@@ -49,5 +51,13 @@ public class OrderDto {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public UserDto getUser() {
+        return user;
+    }
+
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 }

@@ -3,11 +3,12 @@ package be.icc.entity;
 import be.icc.dto.PanierDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Panier {
+public class Panier implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

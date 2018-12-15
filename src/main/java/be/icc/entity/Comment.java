@@ -3,13 +3,14 @@ package be.icc.entity;
 import be.icc.dto.CommentDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Scohier Dorian on 04-11-18.
  */
 @Entity
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

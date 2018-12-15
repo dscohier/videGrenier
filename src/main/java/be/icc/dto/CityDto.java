@@ -9,6 +9,7 @@ public class CityDto {
 
     private Long id;
     private String name;
+    private String state;
 
     public CityDto() {
     }
@@ -29,10 +30,19 @@ public class CityDto {
         this.name = name;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public City toEntity() {
         City city = new City();
         city.setId(this.getId());
         city.setName(this.getName());
+        city.setState(this.getState());
         return city;
     }
 }

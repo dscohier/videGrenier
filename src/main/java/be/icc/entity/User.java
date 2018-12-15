@@ -36,8 +36,6 @@ public class User implements UserDetails{
     @OneToOne
     private Panier panier;
     @OneToMany
-    private Set<Order> orders;
-    @OneToMany
     private Set<Product> productToSell;
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -71,9 +69,7 @@ public class User implements UserDetails{
         for(Comment comment : getMyAppreciations()) {
             user.getMyAppreciations().add(comment.toDto());
         }
-        for(Order order : getOrders()) {
-            user.getOrders().add(order.toDto());
-        }
+
         for(Product product : getProductToSell()) {
             user.getProductToSell().add(product.toDto());
         }
@@ -176,18 +172,10 @@ public class User implements UserDetails{
         this.panier = panier;
     }
 
-    public Set<Order> getOrders() {
-        if(orders==null){
-            orders=new HashSet<>();
-        }
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
-
     public Set<Product> getProductToSell() {
+        if (productToSell == null) {
+            productToSell = new HashSet<>();
+        }
         return productToSell;
     }
 

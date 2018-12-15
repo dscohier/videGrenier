@@ -3,6 +3,7 @@ package be.icc.entity;
 import be.icc.dto.ProductDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +12,7 @@ import java.util.Set;
  * Created by Scohier Dorian on 04-11-18.
  */
 @Entity
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

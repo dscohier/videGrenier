@@ -74,10 +74,17 @@
 		</div>
 		<div class="form-group">
 			<label for="city" class="col-lg-3 control-label"><spring:message code="connect.city"/></label>
-			<div class="col-lg-3">
-				<form:input type="text" path="city" cssClass=" form-control" id="city"/>
-				<form:errors path="city" cssClass="error"/>
-			</div>
+            <div class="col-lg-3">
+                <input type="text" id="autocomplete" name="city" value="${signupForm.city}"></input>
+                <br/>
+                <form:errors path="state" cssClass="error"/>
+            </div>
+            <div style="display: none">
+                <table id="address">
+                    <td><form:input type="text" id="locality" name="city" path="city"></form:input></td>
+                    <td><form:input type="text" path="state" id="administrative_area_level_1"></form:input></td>
+                </table>
+            </div>
 		</div>
 		<div class="form-group">
 			<label for="userName" class="col-lg-3 control-label"><spring:message code="connect.userName"/></label>
@@ -108,6 +115,36 @@
 		</div>
 		</div>
 	</fieldset>
+    <script>
+        var autocomplete;
+        var componentForm = {
+            locality: 'long_name',
+            administrative_area_level_1: 'short_name',
+        };
+
+        function initSearch() {
+            autocomplete = new google.maps.places.Autocomplete((
+                document.getElementById('autocomplete')), {
+                types: ['(cities)'],
+            });
+            autocomplete.addListener('place_changed', fillInAddress);
+        }
+
+        function fillInAddress() {
+            // Get the place details from the autocomplete object.
+            var place = autocomplete.getPlace();
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (componentForm[addressType]) {
+                    var val = place.address_components[i][componentForm[addressType]];
+                    document.getElementById(addressType).value = val;
+                }
+            }
+
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBaebZ5i6230uvRvSiAqecuRv_pEqnXcA&signed_in=true&libraries=places&callback=initSearch&language=fr"
+    async defer></script>
 </form:form>
 
 </font>
