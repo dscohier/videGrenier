@@ -17,11 +17,8 @@ import java.util.Set;
 @Service
 @Transactional
 public class CityServiceImp implements CityService {
-
-
     @Autowired
     CityRepository cityRepository;
-
 
     @Override
     public CityDto add(CityDto city) {
@@ -29,11 +26,12 @@ public class CityServiceImp implements CityService {
     }
 
     @Override
-    public CityDto createOrGetIfExists(String name, String stateName, String countryName) {
-        City foundCity = cityRepository.findByName(name.toUpperCase());
+    public CityDto createOrGetIfExists(String name, String stateName) {
+        City foundCity = cityRepository.findByNameAndState(name, stateName);
         if (foundCity == null) {
             City newCity = new City();
-            newCity.setName(name.toUpperCase());
+            newCity.setName(name);
+            newCity.setState(stateName);
             return cityRepository.save(newCity).toDto();
         } else {
             return foundCity.toDto();

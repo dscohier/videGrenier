@@ -14,8 +14,11 @@
 
 <form:form cssClass="form-horizontal" method="post" action="connect/login" commandName="loginForm" >
 	<fieldset>
-        <c:if test="${not empty message}">
-            <label class="error"><spring:message code="${message}"/></label>
+        <c:if test="${not empty error}">
+            <label class="error"><spring:message code="${error}"/></label>
+        </c:if>
+        <c:if test="${not empty success}">
+            <label class="success"><spring:message code="${success}"/></label>
         </c:if>
         <h2><spring:message code="connect.login" text="test"/></h2>
 		<div class="form-group">

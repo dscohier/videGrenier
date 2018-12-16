@@ -35,7 +35,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <sec:authorize access="isAuthenticated()">
-                <li class="nav-item"><a class="nav-link" href="<c:url value="/deco"/>">Deconnexion</a></li>
+                <li class="nav-item"><a class="nav-link" href="<c:url value="/logout"/>">Deconnexion</a></li>
             </sec:authorize>
             <sec:authorize access="isAnonymous()">
                 <li class="nav-item"><a class="nav-link" href="<c:url value="/connect"/>">Log in / Sign up</a></li>

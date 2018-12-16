@@ -10,7 +10,7 @@ import java.util.Set;
 public interface CityService {
 
    CityDto add(CityDto city);
-   CityDto createOrGetIfExists(String name, String nameState, String nameCountry);
+   CityDto createOrGetIfExists(String name, String nameState);
    CityDto findById(Long id);
    Set<CityDto> findAll();
 

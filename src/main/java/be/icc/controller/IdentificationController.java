@@ -40,14 +40,17 @@ public class IdentificationController {
     PanierService panierService;
 
     @RequestMapping("")
-    public String connect(Model model,  @RequestParam(required = false) String error) {
+    public String connect(Model model, @RequestParam(required = false) String error, @RequestParam(required = false) String success) {
         if (isNotBlank(error)) {
             if (error.equals("wrong")) {
-                model.addAttribute("message", "error.login.error");
+                model.addAttribute("error", "error.login.error");
             }
             if (error.equals("notUnique")) {
-                model.addAttribute("message", "error.usernameNotUnique");
+                model.addAttribute("error", "error.usernameNotUnique");
             }
+        }
+        if (isNotBlank(success)) {
+            model.addAttribute("success", "success.userCreated");
         }
         if (!model.containsAttribute("loginForm")) {
             model.addAttribute("loginForm", new LoginForm());
@@ -98,12 +101,11 @@ public class IdentificationController {
         user.setLastName(signupForm.getLastName());
         user.setPassword(signupForm.getPassword());
         user.setUsername(signupForm.getUserName());
-        CityDto city = new CityDto();
-        city.setName(signupForm.getCity());
-        city.setState(signupForm.getState());
-        user.setCity(cityService.add(city));
+        String city = signupForm.getCity().split(",")[0];
+        CityDto cityDto = cityService.createOrGetIfExists(city, signupForm.getState());
+        user.setCity(cityDto);
         user.setPanier(panierService.add(new PanierDto()));
         userService.signUp(user);
-        return "redirect:/";
+        return "redirect:/connect?success=userCreated";
     }
 }
