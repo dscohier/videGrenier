@@ -17,14 +17,18 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToMany
-    private Set<Category> categories;
+    @OneToOne
+    private User seller;
+    @ManyToOne
+    private Category category;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private long price;
+    private double price;
+    @Column
+    private String picture;
     @Column
     private boolean isAuction;
     @Column
@@ -38,12 +42,12 @@ public class Product implements Serializable {
     }
     public ProductDto toDto(){
         ProductDto product = new ProductDto();
-        for(Category category : getCategories()) {
-            product.getCategories().add(category.toDto());
-        }
+        product.setCategory(category.toDto());
         for(User user : getBidders()) {
             product.getBidders().add(user.toDto());
         }
+        product.setSeller(this.getSeller().toDto());
+        product.setPicture(this.getPicture());
         product.setName(this.getName());
         product.setDescription(this.getDescription());
         product.setPrice(this.getPrice());
@@ -61,15 +65,12 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public Set<Category> getCategories() {
-        if(categories == null){
-            categories = new HashSet<>();
-        }
-        return categories;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getName() {
@@ -88,11 +89,11 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -121,10 +122,29 @@ public class Product implements Serializable {
     }
 
     public Set<User> getBidders() {
+        if (bidders == null) {
+            bidders = new HashSet<>();
+        }
         return bidders;
     }
 
     public void setBidders(Set<User> bidders) {
         this.bidders = bidders;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 }

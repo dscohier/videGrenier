@@ -11,26 +11,28 @@ import java.util.Set;
  */
 public class ProductDto {
     private Long id;
-    private Set<CategoryDto> categories;
+    private CategoryDto category;
     private String name;
     private String description;
-    private long price;
+    private String picture;
+    private double price;
     private boolean isAuction;
     private boolean isSell;
     private Date endDate;
     private Set<UserDto> bidders;
+    private UserDto seller;
 
     public ProductDto() {
     }
 
     public Product toEntity(){
         Product product = new Product();
-        for(CategoryDto category : getCategories()) {
-            product.getCategories().add(category.toEntity());
-        }
+        product.setCategory(this.getCategory().toEntity());
         for(UserDto user : getBidders()) {
             product.getBidders().add(user.toEntity());
         }
+        product.setSeller(this.getSeller().toEntity());
+        product.setPicture(this.getPicture());
         product.setName(this.getName());
         product.setDescription(this.getDescription());
         product.setPrice(this.getPrice());
@@ -48,15 +50,12 @@ public class ProductDto {
         this.id = id;
     }
 
-    public Set<CategoryDto> getCategories() {
-        if(categories == null){
-            categories = new HashSet();
-        }
-        return categories;
+    public CategoryDto getCategory() {
+        return category;
     }
 
-    public void setCategories(Set<CategoryDto> categories) {
-        this.categories = categories;
+    public void setCategory(CategoryDto category) {
+        this.category = category;
     }
 
     public String getName() {
@@ -75,11 +74,11 @@ public class ProductDto {
         this.description = description;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -108,10 +107,29 @@ public class ProductDto {
     }
 
     public Set<UserDto> getBidders() {
+        if (bidders == null) {
+            bidders = new HashSet<>();
+        }
         return bidders;
     }
 
     public void setBidders(Set<UserDto> bidders) {
         this.bidders = bidders;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public UserDto getSeller() {
+        return seller;
+    }
+
+    public void setSeller(UserDto seller) {
+        this.seller = seller;
     }
 }

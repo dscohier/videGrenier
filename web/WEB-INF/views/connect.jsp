@@ -113,8 +113,10 @@
 			</div>
         <br/>
 		<div class="form-group">
+			<div class="col-lg-3">
 				<spring:message code="connect.signup" var="signup"/>
 				<input type="submit" class="btn btn-primary" value="${signup}">
+			</div>
 		</div>
 		</div>
 	</fieldset>
