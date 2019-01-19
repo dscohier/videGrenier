@@ -24,4 +24,9 @@ public class ProductServiceImp implements ProductService {
         ProductDto productSaved = productRepository.save(product).toDto();
         return productSaved;
     }
+
+    @Override
+    public ProductDto findById(Long id) {
+        return productRepository.findOne(id).toDto();
+    }
 }

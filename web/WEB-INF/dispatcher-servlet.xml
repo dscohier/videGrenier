@@ -28,8 +28,7 @@
     </bean>
 
     <!--resource mapping pour que des indique ressources, trouve le fichier-->
-    <mvc:resources mapping="/resources/**" location="/resources/" />
-
+    <mvc:resources mapping="/img/**" location="/img/" />
     <!-- JPA -->
 
     <jpa:repositories base-package="be.icc.repository" />
@@ -130,9 +129,8 @@
         </property>
     </bean>
 
-    <!-- File uupload -->
+    <!-- File upload -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
-
     <!--Messages  traduction-->
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
         <property name="defaultLocale" value="fr"/>

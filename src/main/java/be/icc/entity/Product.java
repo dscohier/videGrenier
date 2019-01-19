@@ -35,6 +35,8 @@ public class Product implements Serializable {
     private boolean isSell;
     @Column
     private Date endDate;
+    @Column(nullable = false)
+    Date creationDate;
     @ManyToMany(mappedBy = "auctionedProduct")
     private Set<User> bidders;
 
@@ -54,6 +56,8 @@ public class Product implements Serializable {
         product.setAuction(this.isAuction());
         product.setSell(this.isSell());
         product.setEndDate(this.getEndDate());
+        product.setCreationDate(this.getCreationDate());
+        product.setId(this.getId());
         return product;
     }
 
@@ -146,5 +150,13 @@ public class Product implements Serializable {
 
     public void setSeller(User seller) {
         this.seller = seller;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }

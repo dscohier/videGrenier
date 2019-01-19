@@ -8,4 +8,6 @@ import be.icc.dto.ProductDto;
 public interface ProductService {
 
     ProductDto add(ProductDto productDto);
+
+    ProductDto findById(Long id);
 }

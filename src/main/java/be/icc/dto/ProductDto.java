@@ -20,6 +20,7 @@ public class ProductDto {
     private boolean isSell;
     private Date endDate;
     private Set<UserDto> bidders;
+    private Date creationDate;
     private UserDto seller;
 
     public ProductDto() {
@@ -39,6 +40,7 @@ public class ProductDto {
         product.setAuction(this.isAuction());
         product.setSell(this.isSell());
         product.setEndDate(this.getEndDate());
+        product.setCreationDate(this.getCreationDate());
         return product;
     }
 
@@ -131,5 +133,13 @@ public class ProductDto {
 
     public void setSeller(UserDto seller) {
         this.seller = seller;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }
