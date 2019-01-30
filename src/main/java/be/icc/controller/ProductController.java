@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.xml.bind.DatatypeConverter;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Date;
@@ -95,8 +98,8 @@ public class ProductController {
             return "redirect:/product/newProduct?error=PictureFormat";
         }
         String userName = ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String rootPath = request.getSession().getServletContext().getRealPath("/");
-        File dir = new File(rootPath + File.separator + "img/" + userName);
+        String directoryName = "D:/tmp/img/" + userName + "/";
+        File dir = new File(directoryName);
 
         if (!dir.exists()) {
             dir.mkdirs();
@@ -121,7 +124,7 @@ public class ProductController {
         productDto.setDescription(addProductForm.getDescription());
         productDto.setName(addProductForm.getName());
         productDto.setAuction(addProductForm.isAuction());
-        productDto.setPicture(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/img/" + userName + "/" + fileName);
+        productDto.setPicture(dir.getAbsolutePath() + "\\" + fileName);
         productDto.setPrice(addProductForm.getPrice());
         productDto.setCategory(categoryService.createOrGetIfExists(addProductForm.getCategory()));
         productDto.setSeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
@@ -132,7 +135,23 @@ public class ProductController {
 
     @RequestMapping("/details")
     public String details(Model model, @RequestParam(required = true) Long id) {
-        model.addAttribute("product", productService.findById(id));
+        ProductDto product = productService.findById(id);
+        model.addAttribute("product", product);
+        String picture = "";
+        try {
+            String imgName = product.getPicture();
+            BufferedImage bImage = ImageIO.read(new File(imgName));//give the path of an image
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "jpg", baos);
+            baos.flush();
+            byte[] imageInByteArray = baos.toByteArray();
+            baos.close();
+            picture = DatatypeConverter.printBase64Binary(imageInByteArray);
+        }catch(IOException e){
+            System.out.println("Error: "+e);
+            model.addAttribute("error", "error.details.pictureError");
+        }
+        model.addAttribute("picture", picture);
         return "details";
     }
 }

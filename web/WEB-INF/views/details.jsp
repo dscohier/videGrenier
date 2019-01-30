@@ -13,6 +13,9 @@
 
 
 <jsp:include page="menu.jsp"/>
+<c:if test="${not empty error}">
+    <label class="error"><spring:message code="${error}"/></label>
+</c:if>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <font color="#0ce3ac">
@@ -21,7 +24,7 @@
     </div>
     <div class="panel-body">
         <div class="col-sm-3">
-            <img src=${product.picture} class="col-md-12"/>
+            <img  class="img-responsive" src="data:image/jpg;base64,${picture}"/>
         </div>
     </div>
 
