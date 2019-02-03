@@ -16,38 +16,56 @@
 <c:if test="${not empty error}">
     <label class="error"><spring:message code="${error}"/></label>
 </c:if>
-<div class="panel panel-primary">
     <div class="panel-heading">
         <font color="#0ce3ac">
             <h3>${product.name}</h3>
         </font>
     </div>
-    <div class="panel-body">
-        <div class="col-sm-3">
-            <img  class="img-responsive" src="data:image/jpg;base64,${picture}"/>
+<div class="row">
+    <div class="col-lg-8">
+        <img  class="img-responsive" src="data:image/jpg;base64,${picture}" width="300" height="300"/>
+    </div>
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="width: 500px;">
+            <div class="card-header"><h3 style="text-align: center">Vendeur</h3></div>
+            <div class="card-body">
+                <h5 class="card-title">ajouté par : ${product.seller.lastName}</h5>
+                <p class="card-text">ville : ${product.seller.city.name}</p>
+                <sec:authorize access="isAuthenticated()">
+                    <sec:authentication property="principal.username" var="username" />
+                    <c:if test = "${!product.seller.username.equals(username)}">
+                        <p class="card-text">distance de votre ville : </p></c:if>
+                </sec:authorize>
+                <p class="card-text">mis en ligne le : ${product.creationDate}</p>
+            </div>
+        </div>
+        <div class="card text-white bg-primary mb-3" style="width: 500px;">
+            <div class="card-header"><h4 style="text-align: center"> Prix : ${product.price}€ </h4></div>
+            <div class="card-body">
+                <sec:authorize access="isAuthenticated()">
+                    <sec:authentication property="principal.username" var="username" />
+                    <c:if test = "${!product.seller.username.equals(username)}">
+                        <button class="btn btn-primary btn-lg btn-block" type="button">Ajouter au panier</button>
+                    </c:if>
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
+                    <button class="btn btn-primary btn-lg btn-block" type="button" disabled>Ajouter au panier</button>
+                    <label class="error">Veuillez vous connecter pour pouvoir ajouter au panier !</label>
+                </sec:authorize>
+            </div>
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <font color="#0ce3ac">
-                <h3>Description</h3>
-            </font>
-        </div>
-        <div class="panel-body">
-            ${product.description}
+    <div class="card text-white bg-secondary mb-3" style="width: 1500px;">
+        <div class="card-header">Description</div>
+        <div class="card-body">
+            <p class="card-text">
+                ${product.description}
+            </p>
         </div>
     </div>
-
-    <br />
-    créateur : ${product.seller.lastName}
-    <br />
-    date de création: ${product.creationDate}
-    <br />
 </div>
-
 <jsp:include page="footer.jsp"/>
-
 </body>
 
 </html>
