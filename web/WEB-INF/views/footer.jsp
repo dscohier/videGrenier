@@ -12,16 +12,14 @@
 <footer>
 <div class="card text-white bg-primary mb-3" >
     <div class="card-body">
-                    <h3>A propos</h3>
-                    <ul>
-                        <li><a href="" style="color:white">Qui sommes nous</a></li>
-                        <li><a href="" style="color:white">FAQ</a></li>
-                        <li><a href="" style="color:white">Conditions général d'utilisation</a></li>
-                        <li><a href=""style="color:white">Contact</a></li>
-
-                    </ul>
-
-                    <p>© Vide Grenier 2019</p>
+        <h3>A propos</h3>
+        <ul>
+            <li style="display:inline"><a href="" style="color:white">Qui sommes nous</a></li>
+            <li style="display:inline; margin-left: 150px"><a href="" style="color:white">FAQ</a></li>
+            <li style="display:inline; margin-left: 150px"><a href="" style="color:white">Conditions général d'utilisation</a></li>
+            <li style="display:inline; margin-left: 150px"><a href="" style="color:white">Contact</a></li>
+        </ul>
+        <p>© Vide Grenier 2019</p>
     </div>
 </div>
 </footer>
