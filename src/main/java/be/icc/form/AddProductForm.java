@@ -26,6 +26,8 @@ public class AddProductForm {
 
     private Date endDate;
 
+    private Long id;
+
     public CategoryEnum getCategory() {
         return category;
     }
@@ -80,5 +82,13 @@ public class AddProductForm {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

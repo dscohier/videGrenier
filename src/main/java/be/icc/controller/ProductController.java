@@ -2,6 +2,7 @@ package be.icc.controller;
 
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
+import be.icc.entity.Product;
 import be.icc.form.AddProductForm;
 import be.icc.model.FileModel;
 import be.icc.service.CategoryService;
@@ -51,46 +52,104 @@ public class ProductController {
     public String newProduct(Model model, @RequestParam(required = false) String error) {
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
-        } else {
-            if (!model.containsAttribute("addProductForm")) {
-                model.addAttribute("addProductForm", new AddProductForm());
+        }
+        if (!model.containsAttribute("addProductForm")) {
+            model.addAttribute("addProductForm", new AddProductForm());
+        }
+        initialiseModelForAddAndUpdate(model, error);
+        return "addProduct";
+    }
+
+    @RequestMapping("/updateProduct")
+    public String updateProduct(@ModelAttribute("addProductForm")  AddProductForm updateProductForm,Model model, @RequestParam(required = false) String error) {
+        ProductDto productDto = productService.findById(updateProductForm.getId());
+        if (!productDto.getSeller().getUsername().equals(((UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername())) {
+            return "redirect:/product/details?id=" + updateProductForm.getId();
+        }
+        if (!model.containsAttribute("addProductForm") || updateProductForm != null) {
+            AddProductForm addProductForm = new AddProductForm();
+            addProductForm.setId(productDto.getId());
+            addProductForm.setCategory(productDto.getCategory().getCategory());
+            addProductForm.setDescription(productDto.getDescription());
+            addProductForm.setName(productDto.getName());
+            addProductForm.setPrice(productDto.getPrice());
+            model.addAttribute("addProductForm", addProductForm);
+        }
+        initialiseModelForAddAndUpdate(model, error);
+        return "addProduct";
+    }
+
+    private void initialiseModelForAddAndUpdate(Model model, String error) {
+        if (!model.containsAttribute("fileModel")) {
+            FileModel fileModel = new FileModel();
+            model.addAttribute("fileModel", fileModel);
+        }
+        if (!model.containsAttribute("categoryList")) {
+            model.addAttribute("categoryList", CategoryEnum.values());
+        }
+        if (isNotBlank(error)) {
+            switch (error) {
+                case "NoPicture":
+                    model.addAttribute("error", "error.add.noPicture");
+                    break;
+                case "PictureFormat":
+                    model.addAttribute("error", "error.add.pictureFormat");
+                    break;
+                case "PictureError":
+                    model.addAttribute("error", "error.add.pictureError");
+                    break;
             }
-            if (!model.containsAttribute("fileModel")) {
-                FileModel fileModel = new FileModel();
-                model.addAttribute("fileModel", fileModel);
-            }
-            if (!model.containsAttribute("categoryList")) {
-                model.addAttribute("categoryList", CategoryEnum.values());
-            }
-            if (isNotBlank(error)) {
-                switch (error) {
-                    case "NoPicture":
-                        model.addAttribute("error", "error.add.noPicture");
-                        break;
-                    case "PictureFormat":
-                        model.addAttribute("error", "error.add.pictureFormat");
-                        break;
-                    case "PictureError":
-                        model.addAttribute("error", "error.add.pictureError");
-                        break;
-                }
-            }
-            return "addProduct";
         }
     }
 
     @RequestMapping("/add")
     public String add(@ModelAttribute("addProductForm") @Valid AddProductForm addProductForm, BindingResult result,
                       RedirectAttributes attr, HttpServletRequest request, @RequestParam MultipartFile file) {
-        if (result.hasErrors() || addProductForm.getFile().isEmpty()) {
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.addProductForm", result);
-            attr.addFlashAttribute("addProductForm", addProductForm);
-            if (addProductForm.getFile().isEmpty()) {
-                return "redirect:/product/newProduct?error=NoPicture";
-            } else {
-                return "redirect:/product/newProduct";
-            }
+        String redirect = checkError(result, attr, addProductForm);
+        if (redirect != null) {
+            return redirect;
         }
+
+        String filePath = uploadFile(addProductForm, attr, file);
+
+        ProductDto productDto = new ProductDto();
+        productDto.setDescription(addProductForm.getDescription());
+        productDto.setName(addProductForm.getName());
+        productDto.setAuction(addProductForm.isAuction());
+        productDto.setPicture(filePath);
+        productDto.setPrice(addProductForm.getPrice());
+        productDto.setCategory(categoryService.createOrGetIfExists(addProductForm.getCategory()));
+        productDto.setSeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+        productDto.setCreationDate(new Date());
+        productDto = productService.add(productDto);
+        return "redirect:/product/details?id=" + productDto.getId();
+    }
+
+    @RequestMapping("/update")
+    public String update(@ModelAttribute("addProductForm") @Valid AddProductForm addProductForm, BindingResult result,
+                      RedirectAttributes attr, HttpServletRequest request, @RequestParam MultipartFile file) {
+        String redirect = checkError(result, attr, addProductForm);
+        if (redirect != null) {
+            return redirect;
+        }
+        String filePath = null;
+        if (isNotBlank(file.getOriginalFilename())) {
+            filePath = uploadFile(addProductForm, attr, file);
+        }
+        Product product = productService.findEntityById(addProductForm.getId());
+        product.setDescription(addProductForm.getDescription());
+        product.setName(addProductForm.getName());
+        product.setAuction(addProductForm.isAuction());
+        if(isNotBlank(filePath)) {
+            product.setPicture(filePath);
+        }
+        product.setPrice(addProductForm.getPrice());
+        product.setCategory(categoryService.createOrGetIfExists(addProductForm.getCategory()).toEntity());
+        ProductDto productDto = productService.update(product);
+        return "redirect:/product/details?id=" + productDto.getId();
+    }
+
+    private String uploadFile(AddProductForm addProductForm, RedirectAttributes attr, MultipartFile file) {
         String[] location = addProductForm.getFile().getOriginalFilename().split("\\\\");
         String fileName = location[location.length - 1];
         if (!contentTypes.contains(fileName.split("\\.")[1])) {
@@ -119,18 +178,20 @@ public class ProductController {
         } catch (IOException e) {
             System.out.println("error : " + e.getMessage());
         }
+        return dir.getAbsolutePath() + "\\" + fileName;
+    }
 
-        ProductDto productDto = new ProductDto();
-        productDto.setDescription(addProductForm.getDescription());
-        productDto.setName(addProductForm.getName());
-        productDto.setAuction(addProductForm.isAuction());
-        productDto.setPicture(dir.getAbsolutePath() + "\\" + fileName);
-        productDto.setPrice(addProductForm.getPrice());
-        productDto.setCategory(categoryService.createOrGetIfExists(addProductForm.getCategory()));
-        productDto.setSeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
-        productDto.setCreationDate(new Date());
-        productDto = productService.add(productDto);
-        return "redirect:/product/details?id=" + productDto.getId();
+    private String checkError(BindingResult result, RedirectAttributes attr, AddProductForm addProductForm) {
+        if (result.hasErrors() || (addProductForm.getFile().isEmpty() && addProductForm.getId() == null)) {
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.addProductForm", result);
+            attr.addFlashAttribute("addProductForm", addProductForm);
+            if (addProductForm.getFile().isEmpty()) {
+                return "redirect:/product/newProduct?error=NoPicture";
+            } else {
+                return "redirect:/product/newProduct";
+            }
+        }
+        return null;
     }
 
     @RequestMapping("/details")
@@ -151,7 +212,10 @@ public class ProductController {
             System.out.println("Error: "+e);
             model.addAttribute("error", "error.details.pictureError");
         }
+        AddProductForm productForm = new AddProductForm();
+        productForm.setId(id);
         model.addAttribute("picture", picture);
+        model.addAttribute("updateProductForm", productForm);
         return "details";
     }
 }
