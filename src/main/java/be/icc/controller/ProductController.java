@@ -115,7 +115,9 @@ public class ProductController {
         ProductDto productDto = new ProductDto();
         productDto.setDescription(addProductForm.getDescription());
         productDto.setName(addProductForm.getName());
-        productDto.setAuction(addProductForm.isAuction());
+        if("auction".equals(addProductForm.getAuctionOrFixPrice())) {
+            productDto.setAuction(true);
+        }
         productDto.setPicture(filePath);
         productDto.setPrice(addProductForm.getPrice());
         productDto.setCategory(categoryService.createOrGetIfExists(addProductForm.getCategory()));
@@ -139,7 +141,10 @@ public class ProductController {
         Product product = productService.findEntityById(addProductForm.getId());
         product.setDescription(addProductForm.getDescription());
         product.setName(addProductForm.getName());
-        product.setAuction(addProductForm.isAuction());
+        if("auction".equals(addProductForm.getAuctionOrFixPrice())) {
+            product.setAuction(true);
+            product.setEndDate(addProductForm.getEndDate());
+        }
         if(isNotBlank(filePath)) {
             product.setPicture(filePath);
         }

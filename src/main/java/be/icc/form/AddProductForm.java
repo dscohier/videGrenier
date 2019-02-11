@@ -2,8 +2,10 @@ package be.icc.form;
 
 import be.icc.controller.CategoryEnum;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import java.util.Date;
 
@@ -22,9 +24,11 @@ public class AddProductForm {
     @Min(value = 1, message = "{error.add.min1}")
     private double price;
 
-    private boolean isAuction;
+    private String auctionOrFixPrice;
 
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     private Date endDate;
+    private boolean isEndDateCorrect;
 
     private Long id;
 
@@ -60,14 +64,6 @@ public class AddProductForm {
         this.price = price;
     }
 
-    public boolean isAuction() {
-        return isAuction;
-    }
-
-    public void setAuction(boolean auction) {
-        isAuction = auction;
-    }
-
     public Date getEndDate() {
         return endDate;
     }
@@ -90,5 +86,31 @@ public class AddProductForm {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAuctionOrFixPrice() {
+        return auctionOrFixPrice;
+    }
+
+    public void setAuctionOrFixPrice(String auctionOrFixPrice) {
+        this.auctionOrFixPrice = auctionOrFixPrice;
+    }
+
+    @AssertTrue(message = "{error.add.endDateInvalid}")
+    public boolean getIsEndDateCorrect() {
+        if("auction".equals(getAuctionOrFixPrice())) {
+            if(endDate == null || endDate.before(new Date())) {
+               isEndDateCorrect = false;
+            } else {
+                isEndDateCorrect = true;
+            }
+        } else {
+            isEndDateCorrect = true;
+        }
+        return isEndDateCorrect;
+    }
+
+    public void setEndDateCorrect(boolean endDateCorrect) {
+        isEndDateCorrect = endDateCorrect;
     }
 }
