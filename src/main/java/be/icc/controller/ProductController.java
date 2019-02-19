@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import javax.xml.bind.DatatypeConverter;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -73,6 +74,12 @@ public class ProductController {
             addProductForm.setDescription(productDto.getDescription());
             addProductForm.setName(productDto.getName());
             addProductForm.setPrice(productDto.getPrice());
+            if (productDto.isAuction()) {
+                addProductForm.setAuctionOrFixPrice("auction");
+                addProductForm.setPriceAuction(productDto.getPrice());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                addProductForm.setEndDateString(dateFormat.format(productDto.getEndDate()));
+            }
             model.addAttribute("addProductForm", addProductForm);
         }
         initialiseModelForAddAndUpdate(model, error);
@@ -117,6 +124,7 @@ public class ProductController {
         productDto.setName(addProductForm.getName());
         if("auction".equals(addProductForm.getAuctionOrFixPrice())) {
             productDto.setAuction(true);
+            productDto.setEndDate(addProductForm.getEndDate());
         }
         productDto.setPicture(filePath);
         productDto.setPrice(addProductForm.getPrice());

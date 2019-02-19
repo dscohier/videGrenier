@@ -38,6 +38,9 @@
                         <p class="card-text">distance de votre ville : </p></c:if>
                 </sec:authorize>
                 <p class="card-text">mis en ligne le : ${product.creationDate}</p>
+                <c:if test="${product.auction}">
+                    <p class="card-text">cloture des enchères le : ${product.endDate}</p>
+                </c:if>
                 <sec:authorize access="isAuthenticated()">
                     <sec:authentication property="principal.username" var="username" />
                     <c:if test = "${!product.seller.username.equals(username)}">

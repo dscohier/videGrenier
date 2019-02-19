@@ -25,7 +25,7 @@ public class Product implements Serializable {
     private String name;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = false)
+    @Column(nullable = false,  columnDefinition="Decimal(10,2)")
     private double price;
     @Column
     private String picture;

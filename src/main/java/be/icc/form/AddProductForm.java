@@ -6,7 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Min;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -21,14 +22,17 @@ public class AddProductForm {
 
     private MultipartFile file;
 
-    @Min(value = 1, message = "{error.add.min1}")
     private double price;
+    private double priceAuction;
 
     private String auctionOrFixPrice;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd/mm/yyyy hh:mm")
     private Date endDate;
+    private String endDateString;
+
     private boolean isEndDateCorrect;
+    private boolean isPriceCorrect;
 
     private Long id;
 
@@ -99,6 +103,13 @@ public class AddProductForm {
     @AssertTrue(message = "{error.add.endDateInvalid}")
     public boolean getIsEndDateCorrect() {
         if("auction".equals(getAuctionOrFixPrice())) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            try {
+                endDate = dateFormat.parse(endDateString);
+            } catch (ParseException e) {
+                isEndDateCorrect = false;
+                return isEndDateCorrect;
+            }
             if(endDate == null || endDate.before(new Date())) {
                isEndDateCorrect = false;
             } else {
@@ -112,5 +123,37 @@ public class AddProductForm {
 
     public void setEndDateCorrect(boolean endDateCorrect) {
         isEndDateCorrect = endDateCorrect;
+    }
+
+    public String getEndDateString() {
+        return endDateString;
+    }
+
+    public void setEndDateString(String endDateString) {
+        this.endDateString = endDateString;
+    }
+
+    public double getPriceAuction() {
+        return priceAuction;
+    }
+
+    public void setPriceAuction(double priceAuction) {
+        this.priceAuction = priceAuction;
+    }
+
+    @AssertTrue(message = "{error.add.min1}")
+    public boolean getIsPriceCorrect() {
+        isPriceCorrect = false;
+        if ("auction".equals(auctionOrFixPrice)) {
+            if (priceAuction >= 1) {
+                isPriceCorrect = true;
+                price = priceAuction;
+            }
+        } else {
+            if (price >= 1) {
+                isPriceCorrect = true;
+            }
+        }
+        return isPriceCorrect;
     }
 }

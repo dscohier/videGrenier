@@ -39,7 +39,7 @@
         <div class="form-group">
             <label for="title" class="col-lg-3 control-label"><spring:message code="product.add.description"/></label>
             <div class="col-lg-3">
-                <form:textarea  path="description" cssClass=" form-control" id="description"/>
+                <form:textarea  path="description" cssClass="form-control" id="description"/>
                 <form:errors path="description" cssClass="error"/>
             </div>
         </div>
@@ -69,27 +69,28 @@
             <label for="title" class="col-lg-3 control-label"><spring:message code="product.add.price"/></label>
             <div class="col-lg-3">
                 <form:input type="text" path="price" cssClass="form-control" id="price"/>
-                <form:errors path="price" cssClass="error"/>
+                <form:errors path="isPriceCorrect" cssClass="error"/>
             </div>
         </div>
 
         <div class="form-group" id="auction">
             <label for="price" class="col-lg-3 control-label">Prix de base</label>
             <div class="col-lg-3">
-                <form:input type="text" path="price" cssClass="form-control" id="price"/>
-                <form:errors path="price" cssClass="error"/>
+                <form:input type="text" path="priceAuction" cssClass="form-control" id="priceAuction"/>
+                <form:errors path="isPriceCorrect" cssClass="error"/>
             </div>
             <label for="endDate" class="col-lg-3 control-label">Date de fin</label>
             <div class="col-lg-3">
                 <div class="dates">
                     <div class="start_date input-group mb-4">
-                        <form:input path="endDate" class="form-control end_date" type="text" placeholder="dd/mm/yyyy" id="endDate"/>
+                        <form:input  path="endDateString" class="form-control end_date" type="text" placeholder="dd/mm/yyyy hh:mm" id="endDate"/>
                         <div class="input-group-append">
                             <span class="fa fa-calendar input-group-text end_date_calendar" aria-hidden="true"></span>
                         </div>
                     </div>
             </div>
             <form:errors path="isEndDateCorrect" cssClass="error"/>
+        </div>
         </div>
 
         <div class="form-group">
@@ -102,7 +103,6 @@
                 </c:if>
                 <input type="submit" class="btn btn-primary" value="${message}">
             </div>
-        </div>
     </form:form>
 </div><!-- End row -->
 
@@ -110,14 +110,16 @@
 <script>
     function hideAuctionDiv(){
         $("#fixePrice").show();
-        $("#auction").hide();
+        $("#auctionend").hide();
     }
 
     function hideFixPriceDiv(){
         $("#fixePrice").hide();
         $("#auction").show();
     }
-    $("#endDate").datepicker();
+    $("#endDate").datepicker({
+        format: 'dd/mm/yyyy 00:00'
+    });
 </script>
 
 <c:if test="${addProductForm.auctionOrFixPrice ne 'auction'}">
