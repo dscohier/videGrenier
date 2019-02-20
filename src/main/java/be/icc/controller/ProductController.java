@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang.StringUtils.*;
 
 
 /**
@@ -77,8 +77,9 @@ public class ProductController {
             if (productDto.isAuction()) {
                 addProductForm.setAuctionOrFixPrice("auction");
                 addProductForm.setPriceAuction(productDto.getPrice());
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-                addProductForm.setEndDateString(dateFormat.format(productDto.getEndDate()));
+                String dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm").format(productDto.getEndDate());
+                addProductForm.setEndDateString(left(dateFormat, indexOf(dateFormat, " ")));
+                addProductForm.setEndTimeString(dateFormat.substring(indexOf(dateFormat, " ") + 1));
             }
             model.addAttribute("addProductForm", addProductForm);
         }

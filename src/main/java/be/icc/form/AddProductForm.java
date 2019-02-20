@@ -30,6 +30,7 @@ public class AddProductForm {
     @DateTimeFormat(pattern = "dd/mm/yyyy hh:mm")
     private Date endDate;
     private String endDateString;
+    private String endTimeString = "00:00";
 
     private boolean isEndDateCorrect;
     private boolean isPriceCorrect;
@@ -103,9 +104,13 @@ public class AddProductForm {
     @AssertTrue(message = "{error.add.endDateInvalid}")
     public boolean getIsEndDateCorrect() {
         if("auction".equals(getAuctionOrFixPrice())) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            if (!endTimeString.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")) {
+                isEndDateCorrect = false;
+                return isEndDateCorrect;
+            }
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             try {
-                endDate = dateFormat.parse(endDateString);
+                endDate = dateFormat.parse(endDateString + " " + endTimeString);
             } catch (ParseException e) {
                 isEndDateCorrect = false;
                 return isEndDateCorrect;
@@ -155,5 +160,13 @@ public class AddProductForm {
             }
         }
         return isPriceCorrect;
+    }
+
+    public String getEndTimeString() {
+        return endTimeString;
+    }
+
+    public void setEndTimeString(String endTimeString) {
+        this.endTimeString = endTimeString;
     }
 }

@@ -46,8 +46,11 @@
 
         <div class="form-group">
             <label for="title" class="col-lg-3 control-label"><spring:message code="product.add.picture"/></label>
-            <div class="col-lg-3">
+            <div class="col-lg-7">
                 <form:input path="file" type="file" id="file"/>
+                <c:if test="${addProductForm.id != null}">
+                    Si aucune photo n'est choisie la photo restera la même
+                </c:if>
                 <form:errors path="file" cssClass="error"/>
             </div>
         </div>
@@ -83,10 +86,11 @@
             <div class="col-lg-3">
                 <div class="dates">
                     <div class="start_date input-group mb-4">
-                        <form:input  path="endDateString" class="form-control end_date" type="text" placeholder="dd/mm/yyyy hh:mm" id="endDate"/>
+                        <form:input  path="endDateString" class="form-control end_date" type="text" placeholder="dd/mm/yyyy" id="endDate"/>
                         <div class="input-group-append">
                             <span class="fa fa-calendar input-group-text end_date_calendar" aria-hidden="true"></span>
                         </div>
+                        <form:input path="endTimeString" class="form-control end_date" type="text" id="endDate"/>
                     </div>
             </div>
             <form:errors path="isEndDateCorrect" cssClass="error"/>
@@ -118,7 +122,7 @@
         $("#auction").show();
     }
     $("#endDate").datepicker({
-        format: 'dd/mm/yyyy 00:00'
+        format: 'dd/mm/yyyy'
     });
 </script>
 
