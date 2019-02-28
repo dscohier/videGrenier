@@ -27,8 +27,9 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!--resource mapping pour que des indique ressources, trouve le fichier-->
-    <mvc:resources mapping="/img/**" location="/img/" />
+    <!--resource mapping pour que des indique ressources, trouve les fichier css et js-->
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+
     <!-- JPA -->
 
     <jpa:repositories base-package="be.icc.repository" />

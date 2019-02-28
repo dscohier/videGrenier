@@ -111,7 +111,7 @@
         </sec:authorize>
     </div>
 
-    <div class="card text-white bg-secondary mb-3" style="width: 99%; height: 450px">
+    <div class="card text-white bg-secondary mb-3" style="width: 99%; height: 300px">
         <div class="card-header">Description</div>
         <div class="card-body">
             <p class="card-text">
