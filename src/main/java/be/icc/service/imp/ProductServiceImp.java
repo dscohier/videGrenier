@@ -27,8 +27,8 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public ProductDto update(Product product) {
-        ProductDto productSaved = productRepository.save(product).toDto();
-        return productSaved;
+        Product productSaved = productRepository.save(product);
+        return productSaved.toDto();
     }
 
     @Override

@@ -23,7 +23,7 @@ public class UserDto implements UserDetails {
     private Set<CommentDto> myAppreciations;
     private PanierDto panier;
     private Set<ProductDto> productToSell;
-    private Set<ProductDto> auctionedProduct;
+    private Set<BidderDto> bidders;
     private CityDto city;
 
     public User toEntity(){
@@ -46,8 +46,8 @@ public class UserDto implements UserDetails {
         for(ProductDto product : getProductToSell()) {
             user.getProductToSell().add(product.toEntity());
         }
-        for(ProductDto product : getAuctionedProduct()) {
-            user.getAuctionedProduct().add(product.toEntity());
+        for(BidderDto bidder : getBidders()) {
+            user.getBidders().add(bidder.toEntity());
         }
         if(getPanier()!=null)  user.setPanier(this.getPanier().toEntity());
         if(getCity()!=null)  user.setCity(this.getCity().toEntity());
@@ -186,15 +186,15 @@ public class UserDto implements UserDetails {
         this.productToSell = productToSell;
     }
 
-    public Set<ProductDto> getAuctionedProduct() {
-        if (auctionedProduct == null) {
-            auctionedProduct = new HashSet<>();
+    public Set<BidderDto> getBidders() {
+        if (bidders == null) {
+            bidders = new HashSet<>();
         }
-        return auctionedProduct;
+        return bidders;
     }
 
-    public void setAuctionedProduct(Set<ProductDto> auctionedProduct) {
-        this.auctionedProduct = auctionedProduct;
+    public void setBidders(Set<BidderDto> bidders) {
+        this.bidders = bidders;
     }
 
     @Override

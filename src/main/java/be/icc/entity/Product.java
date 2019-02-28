@@ -37,16 +37,16 @@ public class Product implements Serializable {
     private Date endDate;
     @Column(nullable = false)
     Date creationDate;
-    @ManyToMany(mappedBy = "auctionedProduct")
-    private Set<User> bidders;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Bidder> bidders;
 
     public Product() {
     }
     public ProductDto toDto(){
         ProductDto product = new ProductDto();
         product.setCategory(category.toDto());
-        for(User user : getBidders()) {
-            product.getBidders().add(user.toDto());
+        for(Bidder bidder : getBidders()) {
+            product.getBidders().add(bidder.toDto());
         }
         product.setSeller(this.getSeller().toDto());
         product.setPicture(this.getPicture());
@@ -125,14 +125,14 @@ public class Product implements Serializable {
         this.endDate = endDate;
     }
 
-    public Set<User> getBidders() {
+    public Set<Bidder> getBidders() {
         if (bidders == null) {
             bidders = new HashSet<>();
         }
         return bidders;
     }
 
-    public void setBidders(Set<User> bidders) {
+    public void setBidders(Set<Bidder> bidders) {
         this.bidders = bidders;
     }
 

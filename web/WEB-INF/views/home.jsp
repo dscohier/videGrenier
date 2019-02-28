@@ -38,8 +38,27 @@
 </div>
 
 <script>
-    $("#startdate_datepicker").datepicker();
+    $("#startdate_datepicker").datepicker({
+        format: 'dd/mm/yyyy 00:00'
+    });
     $("#enddate_datepicker").datepicker();
+</script>
+
+<div class="well">
+    <div id="datetimepicker1" class="input-append date">
+        <input type="text"></input>
+        <span class="add-on">
+      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+      </i>
+    </span>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('#datetimepicker1').datetimepicker({
+            language: 'pt-BR'
+        });
+    });
 </script>
 <jsp:include page="footer.jsp"/>
 

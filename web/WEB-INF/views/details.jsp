@@ -44,11 +44,11 @@
                 <sec:authorize access="isAuthenticated()">
                     <sec:authentication property="principal.username" var="username" />
                     <c:if test = "${!product.seller.username.equals(username)}">
-                        <button class="btn btn-primary btn-lg btn-block" type="button" disabled>Envoyer un message</button>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" disabled>Envoyer un message</button>
                     </c:if>
                 </sec:authorize>
                 <sec:authorize access="!isAuthenticated()">
-                    <button class="btn btn-primary btn-lg btn-block" type="button" disabled>Envoyer un message</button>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit" disabled>Envoyer un message</button>
                     <label class="error">Veuillez vous connecter pour pouvoir contacter le vendeur !</label>
                 </sec:authorize>
             </div>
@@ -56,17 +56,45 @@
     </div>
     <div class="col-lg-4">
         <div class="card text-white bg-primary mb-3" style="width: 500px;">
-            <div class="card-header"><h4 style="text-align: center"> Prix : ${product.price}€ </h4></div>
+            <c:if test="${product.auction}">
+                <div class="card-header"><h4 style="text-align: center"> Prix actuel : ${product.price}€ </h4></div>
+                <c:if test="${lastBidder ne null}">
+                    Prix proposé par : ${lastBidder.user.username} le ${lastBidder.insertionDate}
+                </c:if>
+            </c:if>
+            <c:if test="${!product.auction}">
+                <div class="card-header"><h4 style="text-align: center"> Prix : ${product.price}€ </h4></div>
+            </c:if>
+
             <div class="card-body">
                 <sec:authorize access="isAuthenticated()">
                     <sec:authentication property="principal.username" var="username" />
+
                     <c:if test = "${!product.seller.username.equals(username)}">
-                        <button class="btn btn-primary btn-lg btn-block" type="button">Ajouter au panier</button>
+                        <c:if test="${product.auction}">
+                            <form:form cssClass="form-horizontal" method="post" action="bid" enctype="multipart/form-data" commandName="bidForm">
+                                <form:input type="text" path="newPrice" id="newPrice" style="margin-left: 25%;font-size:18px;"/>
+                                <button class="btn btn-primary btn-lg btn-block" type="submit">Enchérir</button>
+                                <div style="visibility: hidden;">
+                                    <form:input type="text" path="idProduct" cssClass="form-control" id="idProduct"/>
+                                </div>
+                            </form:form>
+                        </c:if>
+                        <c:if test="${!product.auction}">
+                             <button class="btn btn-primary btn-lg btn-block" type="submit">Ajouter au panier</button>
+                        </c:if>
                     </c:if>
                 </sec:authorize>
                 <sec:authorize access="!isAuthenticated()">
-                    <button class="btn btn-primary btn-lg btn-block" type="button" disabled>Ajouter au panier</button>
-                    <label class="error">Veuillez vous connecter pour pouvoir ajouter au panier !</label>
+                    <c:if test="${!product.auction}">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" disabled>Ajouter au panier</button>
+                        <label class="error">Veuillez vous connecter pour pouvoir ajouter au panier !</label>
+                    </c:if>
+                    <c:if test="${product.auction}">
+                            <input type="text" cssClass="form-control" id="newPrice" style="margin-left: 25%;" readonly/>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit" disabled>Enchérir</button>
+                            <label class="error">Veuillez vous connecter pour pouvoir enchérir !</label>
+                    </c:if>
                 </sec:authorize>
             </div>
         </div>
@@ -75,7 +103,7 @@
             <c:if test = "${product.seller.username.equals(username)}">
                 <form:form cssClass="form-horizontal" method="get" action="updateProduct" enctype="multipart/form-data" commandName="updateProductForm">
                     <div style="visibility: hidden;">
-                        <form:input type="text" path="id" cssClass="form-control" id="title"/>
+                        <form:input type="text" path="id" cssClass="form-control" id="id"/>
                     </div>
                     <button class="btn btn-primary btn-lg btn-block" type="submit" style="width: 500px">Modifier l'offre</button>
                 </form:form>
@@ -94,6 +122,7 @@
         </div>
     </div>
 </div>
+
 <jsp:include page="footer.jsp"/>
 </body>
 

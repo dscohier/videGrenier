@@ -52,7 +52,6 @@
     </servlet-mapping>
 
     <error-page>
-        <error-code>404</error-code>
-        <location>/WEB-INF/views/erreur.jsp</location>
+        <location>/errors</location>
     </error-page>
 </web-app>

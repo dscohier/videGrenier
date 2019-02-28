@@ -13,7 +13,7 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Product> products;
     @Column(nullable = false)
     private Date date;

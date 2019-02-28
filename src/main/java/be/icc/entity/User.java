@@ -16,7 +16,7 @@ public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Authority> authorities;
     @Column(nullable = false)
     private String password;
@@ -29,23 +29,16 @@ public class User implements UserDetails{
     @Column(nullable = false, unique=true)
     private String username;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Comment> myComments;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Comment> myAppreciations;
     @OneToOne
     private Panier panier;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Product> productToSell;
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "HistoryAuctionned",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private Set<Product> auctionedProduct;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Bidder> bidders;
 
     @ManyToOne
     private City city;
@@ -73,8 +66,8 @@ public class User implements UserDetails{
         for(Product product : getProductToSell()) {
             user.getProductToSell().add(product.toDto());
         }
-        for(Product product : getAuctionedProduct()) {
-            user.getAuctionedProduct().add(product.toDto());
+        for(Bidder bidder : getBidders()) {
+            user.getBidders().add(bidder.toDto());
         }
         if(getPanier()!=null)  user.setPanier(this.getPanier().toDto());
         if(getCity()!=null)  user.setCity(this.getCity().toDto());
@@ -183,15 +176,15 @@ public class User implements UserDetails{
         this.productToSell = productToSell;
     }
 
-    public Set<Product> getAuctionedProduct() {
-        if (auctionedProduct == null) {
-            auctionedProduct = new HashSet<>();
+    public Set<Bidder> getBidders() {
+        if (bidders == null) {
+            bidders = new HashSet<>();
         }
-        return auctionedProduct;
+        return bidders;
     }
 
-    public void setAuctionedProduct(Set<Product> auctionedProduct) {
-        this.auctionedProduct = auctionedProduct;
+    public void setBidders(Set<Bidder> bidders) {
+        this.bidders = bidders;
     }
 
     @Override

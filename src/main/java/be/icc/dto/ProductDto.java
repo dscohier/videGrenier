@@ -19,7 +19,7 @@ public class ProductDto {
     private boolean isAuction;
     private boolean isSell;
     private Date endDate;
-    private Set<UserDto> bidders;
+    private Set<BidderDto> bidders;
     private Date creationDate;
     private UserDto seller;
 
@@ -29,8 +29,8 @@ public class ProductDto {
     public Product toEntity(){
         Product product = new Product();
         product.setCategory(this.getCategory().toEntity());
-        for(UserDto user : getBidders()) {
-            product.getBidders().add(user.toEntity());
+        for(BidderDto bidder : getBidders()) {
+            product.getBidders().add(bidder.toEntity());
         }
         product.setSeller(this.getSeller().toEntity());
         product.setPicture(this.getPicture());
@@ -108,14 +108,14 @@ public class ProductDto {
         this.endDate = endDate;
     }
 
-    public Set<UserDto> getBidders() {
+    public Set<BidderDto> getBidders() {
         if (bidders == null) {
             bidders = new HashSet<>();
         }
         return bidders;
     }
 
-    public void setBidders(Set<UserDto> bidders) {
+    public void setBidders(Set<BidderDto> bidders) {
         this.bidders = bidders;
     }
 

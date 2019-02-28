@@ -1,9 +1,9 @@
 package be.icc.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,10 +25,10 @@ public class HomeController {
         return "menu";
     }
 
-    @ExceptionHandler(Exception.class)
-    public String erreur(HttpServletRequest request, Model model, Exception exception) {
-        model.addAttribute("exception",exception);
-        model.addAttribute("url",request.getRequestURL());
-        return "erreur";
+
+    @RequestMapping(value = "errors", method = RequestMethod.GET)
+    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
+        ModelAndView errorPage = new ModelAndView("error");
+        return errorPage;
     }
 }

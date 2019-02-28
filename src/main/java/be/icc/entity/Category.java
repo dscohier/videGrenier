@@ -17,7 +17,7 @@ public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Product> products;
     @Column(nullable = false)
     private CategoryEnum category;

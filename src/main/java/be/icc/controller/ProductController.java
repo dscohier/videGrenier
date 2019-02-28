@@ -1,10 +1,13 @@
 package be.icc.controller;
 
+import be.icc.dto.BidderDto;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Product;
 import be.icc.form.AddProductForm;
+import be.icc.form.BidForm;
 import be.icc.model.FileModel;
+import be.icc.service.BidderService;
 import be.icc.service.CategoryService;
 import be.icc.service.ProductService;
 import be.icc.service.UserService;
@@ -13,9 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -46,6 +47,8 @@ public class ProductController {
     CategoryService categoryService;
     @Autowired
     UserService userService;
+    @Autowired
+    BidderService bidderService;
 
     private static final List<String> contentTypes = Arrays.asList("png", "jpeg", "jpg");
 
@@ -209,7 +212,7 @@ public class ProductController {
     }
 
     @RequestMapping("/details")
-    public String details(Model model, @RequestParam(required = true) Long id) {
+    public String details(Model model, @RequestParam(required = true) Long id, @RequestParam(required = false) String error, @RequestParam(required = false) String success) {
         ProductDto product = productService.findById(id);
         model.addAttribute("product", product);
         String picture = "";
@@ -228,8 +231,57 @@ public class ProductController {
         }
         AddProductForm productForm = new AddProductForm();
         productForm.setId(id);
+        BidForm bidForm = new BidForm();
+        bidForm.setIdProduct(id);
+        bidForm.setNewPrice(product.getPrice()+1);
         model.addAttribute("picture", picture);
         model.addAttribute("updateProductForm", productForm);
+        model.addAttribute("bidForm", bidForm);
+        if (isNotBlank(error)) {
+            switch (error) {
+                case "InvalidBid":
+                    model.addAttribute("error", "error.bid.invalidBid");
+                    break;
+                case "EndBid":
+                    model.addAttribute("error", "error.bid.endBid");
+                    break;
+            }
+        }
+        if ((product.getBidders()).isEmpty()) {
+            model.addAttribute("lastBidder", null);
+
+        } else{
+            model.addAttribute("lastBidder",product.getBidders().toArray()[product.getBidders().size()-1]);
+        }
         return "details";
+    }
+
+
+    @RequestMapping(value = "/bid", method = RequestMethod.POST)
+    public String bid(@ModelAttribute("bidForm")  BidForm bidForm, Model model) {
+        Product product = productService.findEntityById(bidForm.getIdProduct());
+        if (product.getPrice() >= bidForm.getNewPrice()) {
+            return "redirect:/product/details?id=" + product.getId() + "&error=InvalidBid";
+        }
+        if (product.getEndDate().before(new Date())) {
+            return "redirect:/product/details?id=" + product.getId() + "&error=EndBid";
+        }
+        product.setPrice(bidForm.getNewPrice());
+        BidderDto bidderDto = new BidderDto();
+        bidderDto.setUser((UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        bidderDto.setPrice(bidForm.getNewPrice());
+        bidderDto.setInsertionDate(new Date());
+        bidderDto.setProductId(product.getId());
+        product.getBidders().add(bidderService.save(bidderDto).toEntity());
+        productService.update(product);
+        return "redirect:/product/details?id=" + product.getId();
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String ErreurExample(HttpServletRequest request, Model model, Exception exception) {
+        model.addAttribute("exception",exception);
+        model.addAttribute("url",request.getRequestURL());
+
+        return "erreur";
     }
 }
