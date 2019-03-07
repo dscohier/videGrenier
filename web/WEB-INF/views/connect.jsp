@@ -76,7 +76,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="city" class="col-lg-3 control-label"><spring:message code="connect.city"/></label>
+			<label for="city" class="col-lg-3 control-label"><spring:message code="common.city"/></label>
             <div class="col-lg-3">
                 <input type="text" id="autocomplete" name="city" value="${signupForm.city}"></input>
                 <br/>

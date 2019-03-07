@@ -7,3 +7,16 @@
     color: mediumseagreen;
     font-weight: bold;
 }
+
+.categoriesPicture {
+    display: inline-block;
+    width:270px;
+    height:290px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+.categoriesPicture img {
+    width:260px;
+    height:260px;
+}

@@ -8,7 +8,6 @@ public enum CategoryEnum {
     AUTO_MOTO,
     BIJOUX,
     BRICOLAGE,
-    AUDIO,
     MUSIQUE,
     JEUX_JOUET,
     LIVRES,

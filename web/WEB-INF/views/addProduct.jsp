@@ -10,7 +10,6 @@
 <head>
     <title>VIDE GRENIER</title>
 <body>
-<!-- FIXME translate -->
 <jsp:include page="menu.jsp"/>
 <div>
     <c:if test="${addProductForm.id == null}">
@@ -37,9 +36,9 @@
         </div>
 
         <div class="form-group">
-            <label for="title" class="col-lg-3 control-label"><spring:message code="product.add.description"/></label>
+            <label for="title" class="col-lg-3 control-label"><spring:message code="common.description"/></label>
             <div class="col-lg-3">
-                <form:textarea  path="description" cssClass="form-control" id="description"/>
+                <form:textarea  path="description" cssClass="form-control" id="description" cssStyle="height: 350px; width: 700px;"/>
                 <form:errors path="description" cssClass="error"/>
             </div>
         </div>
@@ -49,7 +48,7 @@
             <div class="col-lg-7">
                 <form:input path="file" type="file" id="file"/>
                 <c:if test="${addProductForm.id != null}">
-                    Si aucune photo n'est choisie la photo restera la même
+                    <spring:message code="product.add.infoPicture"/>
                 </c:if>
                 <form:errors path="file" cssClass="error"/>
             </div>
@@ -64,12 +63,12 @@
         </div>
         <div class="custom-control custom-radio">
             <form:radiobutton value="fixPrice" checked="checked" path="auctionOrFixPrice" onclick="hideAuctionDiv()"/>
-            <label class="col-lg-1 control-label" for="fixePrice">Prix fixe</label>
+            <label class="col-lg-1 control-label" for="fixePrice"><spring:message code="product.add.fixPrice"/></label>
             <form:radiobutton value="auction" path="auctionOrFixPrice" onclick="hideFixPriceDiv()"/>
-            <label class="col-lg-1 control-label" for="auction">Enchère</label>
+            <label class="col-lg-1 control-label" for="auction"><spring:message code="product.add.bid"/></label>
         </div>
         <div class="form-group" id="fixePrice">
-            <label for="title" class="col-lg-3 control-label"><spring:message code="product.add.price"/></label>
+            <label for="title" class="col-lg-3 control-label"><spring:message code="common.price"/></label>
             <div class="col-lg-3">
                 <form:input type="text" path="price" cssClass="form-control" id="price"/>
                 <form:errors path="isPriceCorrect" cssClass="error"/>
@@ -77,12 +76,12 @@
         </div>
 
         <div class="form-group" id="auction">
-            <label for="price" class="col-lg-3 control-label">Prix de base</label>
+            <label for="price" class="col-lg-3 control-label"><spring:message code="product.add.startingPrice"/></label>
             <div class="col-lg-3">
                 <form:input type="text" path="priceAuction" cssClass="form-control" id="priceAuction"/>
                 <form:errors path="isPriceCorrect" cssClass="error"/>
             </div>
-            <label for="endDate" class="col-lg-3 control-label">Date de fin</label>
+            <label for="endDate" class="col-lg-3 control-label"><spring:message code="product.add.endDate"/></label>
             <div class="col-lg-3">
                 <div class="dates">
                     <div class="start_date input-group mb-4">

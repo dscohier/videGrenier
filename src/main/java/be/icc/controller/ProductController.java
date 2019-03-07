@@ -52,6 +52,30 @@ public class ProductController {
 
     private static final List<String> contentTypes = Arrays.asList("png", "jpeg", "jpg");
 
+    @RequestMapping("/products")
+    public String products(Model model, @RequestParam(required = false) String category) {
+        List<ProductDto> products;
+        if (isNotBlank(category)) {
+            CategoryEnum categoryEnum;
+            try {
+                categoryEnum = CategoryEnum.valueOf(category);
+            } catch (Exception e) {
+                return "redirect:";
+            }
+            products = productService.findByCategoryAndSalable(categoryEnum);
+        } else {
+            products = productService.findAllSalableProduct();
+        }
+        if (products.isEmpty()) {
+            model.addAttribute("error", "error.products.noProducts");
+        } else {
+            model.addAttribute("size", (int) Math.ceil(products.size()/5.0));
+            model.addAttribute("currentPage", 1 );
+        }
+        model.addAttribute("products", products);
+        return "products";
+    }
+
     @RequestMapping("/newProduct")
     public String newProduct(Model model, @RequestParam(required = false) String error) {
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
@@ -124,7 +148,7 @@ public class ProductController {
         String filePath = uploadFile(addProductForm, attr, file);
 
         ProductDto productDto = new ProductDto();
-        productDto.setDescription(addProductForm.getDescription());
+        productDto.setDescription(addProductForm.getDescription().replace("\n", "<br>"));
         productDto.setName(addProductForm.getName());
         if("auction".equals(addProductForm.getAuctionOrFixPrice())) {
             productDto.setAuction(true);
@@ -151,7 +175,7 @@ public class ProductController {
             filePath = uploadFile(addProductForm, attr, file);
         }
         Product product = productService.findEntityById(addProductForm.getId());
-        product.setDescription(addProductForm.getDescription());
+        product.setDescription(addProductForm.getDescription().replace("\n", "<br>"));
         product.setName(addProductForm.getName());
         if("auction".equals(addProductForm.getAuctionOrFixPrice())) {
             product.setAuction(true);
