@@ -101,10 +101,10 @@
             <value>587</value>
         </property>
         <property name="username" >
-            <value>37161@heb.be</value>
+            <value>videgreniernoreply@gmail.com</value>
         </property>
         <property name="password">
-            <value>uuJp6K2A</value>
+            <value>videGrenierICC2019</value>
         </property>
         <property name="javaMailProperties">
             <props>
@@ -116,7 +116,7 @@
         </property>
     </bean>
 
-    <bean id="registrationService" class="be.icc.service.imp.RegistrationServiceImp">
+    <bean id="registrationService" class="be.icc.service.imp.MailServiceImp">
         <property name="mailSender" ref="mailSender"/>
         <property name="velocityEngine" ref="velocityEngine"/>
     </bean>

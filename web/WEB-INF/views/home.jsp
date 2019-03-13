@@ -12,6 +12,7 @@
 <body>
 <jsp:include page="menu.jsp"/>
 <div>
+    <!-- TODO translate -->
     <h2>
         <spring:message code="home.welcome"/>
     </h2>

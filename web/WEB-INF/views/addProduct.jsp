@@ -63,9 +63,9 @@
         </div>
         <div class="custom-control custom-radio">
             <form:radiobutton value="fixPrice" checked="checked" path="auctionOrFixPrice" onclick="hideAuctionDiv()"/>
-            <label class="col-lg-1 control-label" for="fixePrice"><spring:message code="product.add.fixPrice"/></label>
+            <label class="col-lg-1 control-label" for="fixePrice"><spring:message code="common.directSale"/></label>
             <form:radiobutton value="auction" path="auctionOrFixPrice" onclick="hideFixPriceDiv()"/>
-            <label class="col-lg-1 control-label" for="auction"><spring:message code="product.add.bid"/></label>
+            <label class="col-lg-1 control-label" for="auction"><spring:message code="common.bid"/></label>
         </div>
         <div class="form-group" id="fixePrice">
             <label for="title" class="col-lg-3 control-label"><spring:message code="common.price"/></label>

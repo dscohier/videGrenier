@@ -2,6 +2,12 @@ package be.icc.dto;
 
 import be.icc.entity.Product;
 
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -141,5 +147,23 @@ public class ProductDto {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String displayPicture() {
+        String picture = "";
+        try {
+            String imgName = this.getPicture();
+            BufferedImage bImage = ImageIO.read(new File(imgName));//give the path of an image
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "jpg", baos);
+            baos.flush();
+            byte[] imageInByteArray = baos.toByteArray();
+            baos.close();
+            picture = DatatypeConverter.printBase64Binary(imageInByteArray);
+        }catch(IOException e){
+            System.out.println("Error: "+e);
+        } finally {
+            return picture;
+        }
     }
 }

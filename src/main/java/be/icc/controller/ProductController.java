@@ -20,11 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.xml.bind.DatatypeConverter;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -72,7 +69,11 @@ public class ProductController {
             model.addAttribute("size", (int) Math.ceil(products.size()/5.0));
             model.addAttribute("currentPage", 1 );
         }
-        model.addAttribute("products", products);
+        if (products.size() > 5) {
+            model.addAttribute("products", products.subList(0, 4));
+        } else {
+            model.addAttribute("products", products);
+        }
         return "products";
     }
 
@@ -239,26 +240,11 @@ public class ProductController {
     public String details(Model model, @RequestParam(required = true) Long id, @RequestParam(required = false) String error, @RequestParam(required = false) String success) {
         ProductDto product = productService.findById(id);
         model.addAttribute("product", product);
-        String picture = "";
-        try {
-            String imgName = product.getPicture();
-            BufferedImage bImage = ImageIO.read(new File(imgName));//give the path of an image
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(bImage, "jpg", baos);
-            baos.flush();
-            byte[] imageInByteArray = baos.toByteArray();
-            baos.close();
-            picture = DatatypeConverter.printBase64Binary(imageInByteArray);
-        }catch(IOException e){
-            System.out.println("Error: "+e);
-            model.addAttribute("error", "error.details.pictureError");
-        }
         AddProductForm productForm = new AddProductForm();
         productForm.setId(id);
         BidForm bidForm = new BidForm();
         bidForm.setIdProduct(id);
         bidForm.setNewPrice(product.getPrice()+1);
-        model.addAttribute("picture", picture);
         model.addAttribute("updateProductForm", productForm);
         model.addAttribute("bidForm", bidForm);
         if (isNotBlank(error)) {

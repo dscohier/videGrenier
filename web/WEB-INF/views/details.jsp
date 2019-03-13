@@ -22,7 +22,7 @@
     </div>
 <div class="row">
     <div class="col-lg-4">
-        <img  class="img-responsive" src="data:image/jpg;base64,${picture}" width="350" height="350"/>
+        <img  class="img-responsive" src="data:image/jpg;base64,${product.displayPicture()}" width="350" height="350"/>
     </div>
     <div class="col-lg-4">
         <div class="card text-white bg-primary mb-3" style="width: 500px;">
@@ -72,7 +72,7 @@
                         <c:if test="${product.auction}">
                             <form:form cssClass="form-horizontal" method="post" action="bid" enctype="multipart/form-data" commandName="bidForm">
                                 <form:input type="text" path="newPrice" id="newPrice" style="margin-left: 25%;font-size:18px;"/>
-                                <button class="btn btn-primary btn-lg btn-block" type="submit"><spring:message code="common.bid"/></button>
+                                <button class="btn btn-primary btn-lg btn-block" type="submit"><spring:message code="common.toBid"/></button>
                                 <div style="visibility: hidden;">
                                     <form:input type="text" path="idProduct" cssClass="form-control" id="idProduct"/>
                                 </div>
@@ -90,7 +90,7 @@
                     </c:if>
                     <c:if test="${product.auction}">
                             <input type="text" cssClass="form-control" id="newPrice" style="margin-left: 25%;" readonly/>
-                            <button class="btn btn-primary btn-lg btn-block" type="submit" disabled><spring:message code="common.bid"/></button>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit" disabled><spring:message code="common.toBid"/></button>
                             <label class="error"><spring:message code="error.details.bid"/></label>
                     </c:if>
                 </sec:authorize>
