@@ -6,6 +6,7 @@ import be.icc.dto.UserDto;
 import be.icc.form.LoginForm;
 import be.icc.form.SignupForm;
 import be.icc.service.CityService;
+import be.icc.service.MailService;
 import be.icc.service.PanierService;
 import be.icc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class IdentificationController {
     CityService cityService;
     @Autowired
     PanierService panierService;
+    @Autowired
+    MailService mailService;
 
     @RequestMapping("")
     public String connect(Model model, @RequestParam(required = false) String error, @RequestParam(required = false) String success) {
@@ -80,7 +83,7 @@ public class IdentificationController {
         }
         return "redirect:/";
     }
-
+// TODO CHECK EMAIL duplicate
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@ModelAttribute("signupForm") @Valid SignupForm signupForm, BindingResult result,
                         RedirectAttributes attr) {
@@ -106,6 +109,7 @@ public class IdentificationController {
         user.setCity(cityDto);
         user.setPanier(panierService.add(new PanierDto()));
         userService.signUp(user);
+        mailService.sendConfirmationSignUpEmail(user);
         return "redirect:/connect?success=userCreated";
     }
 }

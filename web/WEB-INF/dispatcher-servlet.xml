@@ -116,7 +116,7 @@
         </property>
     </bean>
 
-    <bean id="registrationService" class="be.icc.service.imp.MailServiceImp">
+    <bean id="mailService" class="be.icc.service.imp.MailServiceImp">
         <property name="mailSender" ref="mailSender"/>
         <property name="velocityEngine" ref="velocityEngine"/>
     </bean>
