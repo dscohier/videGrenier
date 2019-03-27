@@ -2,6 +2,7 @@ package be.icc.service;
 
 import be.icc.controller.CategoryEnum;
 import be.icc.dto.ProductDto;
+import be.icc.dto.UserDto;
 import be.icc.entity.Product;
 
 import java.util.List;
@@ -23,4 +24,5 @@ public interface ProductService {
 
     Product findEntityById(Long id);
 
+    List<ProductDto> findBySeller(UserDto seller);
 }

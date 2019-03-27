@@ -66,13 +66,7 @@ public class ProductController {
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noProducts");
         } else {
-            model.addAttribute("size", (int) Math.ceil(products.size()/5.0));
-            model.addAttribute("currentPage", 1 );
-        }
-        if (products.size() > 5) {
-            model.addAttribute("products", products.subList(0, 4));
-        } else {
-            model.addAttribute("products", products);
+            initialisePaging(model, products);
         }
         return "products";
     }
@@ -285,6 +279,30 @@ public class ProductController {
         product.getBidders().add(bidderService.save(bidderDto).toEntity());
         productService.update(product);
         return "redirect:/product/details?id=" + product.getId();
+    }
+
+    @RequestMapping("/mySales")
+    public String mySales(Model model) {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+        List<ProductDto> products = productService.findBySeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+        if (products.isEmpty()) {
+            model.addAttribute("error", "error.products.noSales");
+        } else {
+            initialisePaging(model, products);
+        }
+        return "products";
+    }
+
+    private void initialisePaging(Model model, List<ProductDto> products) {
+        model.addAttribute("size", (int) Math.ceil(products.size() / 5.0));
+        model.addAttribute("currentPage", 1);
+        if (products.size() > 5) {
+            model.addAttribute("products", products.subList(0, 4));
+        } else {
+            model.addAttribute("products", products);
+        }
     }
 
     @ExceptionHandler(Exception.class)

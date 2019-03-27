@@ -16,10 +16,6 @@
     <h2>
         <spring:message code="home.welcome"/>
     </h2>
-    <sec:authorize access="isAuthenticated()">
-        <sec:authentication property="principal.username" var="username" />
-        Vous êtes connecté en tant que : ${username}
-    </sec:authorize>
     <br/>
     <h3>Découvrez nos ventes par catégorie</h3>
     <div>

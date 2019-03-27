@@ -34,9 +34,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="<c:url value="/product/newProduct"/>"><spring:message code="menu.add"/></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-            </li>
+            <sec:authorize access="isAuthenticated()">
+                <sec:authentication property="principal.username" var="username" />
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value="/product/mySales"/>"><spring:message code="menu.mySales"/></a>
+                </li>
+            </sec:authorize>
             <li class="nav-item">
                 <a class="nav-link" href="#">About</a>
             </li>
