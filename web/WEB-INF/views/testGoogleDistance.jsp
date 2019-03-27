@@ -2,51 +2,13 @@
 <html>
 <head>
     <title>Distance Matrix Service</title>
-    <style>
-        #right-panel {
-            font-family: 'Roboto','sans-serif';
-            line-height: 30px;
-            padding-left: 10px;
-        }
-
-        #right-panel select, #right-panel input {
-            font-size: 15px;
-        }
-
-        #right-panel select {
-            width: 100%;
-        }
-
-        #right-panel i {
-            font-size: 12px;
-        }
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        #map {
-            height: 100%;
-            width: 50%;
-        }
-        #right-panel {
-            float: right;
-            width: 48%;
-            padding-left: 2%;
-        }
-        #output {
-            font-size: 11px;
-        }
-    </style>
 </head>
 <body>
 <div id="right-panel">
     <div id="inputs">
         <pre>
-var origin1 = {lat: 55.930, lng: -3.118};
 var origin2 = 'Greenwich, England';
 var destinationA = 'Stockholm, Sweden';
-var destinationB = {lat: 50.087, lng: 14.421};
         </pre>
     </div>
     <div>
@@ -59,15 +21,13 @@ var destinationB = {lat: 50.087, lng: 14.421};
     function initMap() {
         var markersArray = [];
 
-        var origin1 = {lat: 55.93, lng: -3.118};
         var origin2 = 'Greenwich, England';
         var destinationA = 'Stockholm, Sweden';
-        var destinationB = {lat: 50.087, lng: 14.421};
 
         var service = new google.maps.DistanceMatrixService;
         service.getDistanceMatrix({
-            origins: [origin1, origin2],
-            destinations: [destinationA, destinationB],
+            origins: [origin2],
+            destinations: [destinationA],
             travelMode: 'DRIVING',
             unitSystem: google.maps.UnitSystem.METRIC,
             avoidHighways: false,
