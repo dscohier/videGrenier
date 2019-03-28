@@ -83,6 +83,7 @@ public class IdentificationController {
         }
         return "redirect:/";
     }
+
 // TODO CHECK EMAIL duplicate
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@ModelAttribute("signupForm") @Valid SignupForm signupForm, BindingResult result,
