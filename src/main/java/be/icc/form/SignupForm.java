@@ -3,6 +3,7 @@ package be.icc.form;
 import be.icc.service.UserService;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Pattern;
@@ -25,6 +26,9 @@ public class SignupForm {
     private String firstName;
     @NotBlank(message = "{error.notBlank}" )
     private String lastName;
+
+    private MultipartFile file;
+
     @NotBlank(message = "{error.notBlank}" )
     private String city;
     @NotBlank(message = "{error.selectValueFromGoogle}" )
@@ -112,5 +116,13 @@ public class SignupForm {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }

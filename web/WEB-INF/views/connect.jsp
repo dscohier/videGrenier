@@ -51,7 +51,7 @@
 		</fieldset>
 </form:form>
 
-<form:form cssClass="form-horizontal" method="post" action="connect/signup" commandName="signupForm" >
+<form:form cssClass="form-horizontal" method="post" enctype="multipart/form-data" action="connect/signup" commandName="signupForm" >
 	<fieldset>
 		<h2><spring:message code="connect.signup"/></h2>
 		<div class="form-group">
@@ -66,6 +66,13 @@
 			<div class="col-lg-3">
 				<form:input type="text" path="lastName" cssClass=" form-control" id="lastName"/>
 				<form:errors path="lastName" cssClass="error"/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="file" class="col-lg-3 control-label"><spring:message code="common.picture"/></label>
+			<div class="col-lg-7">
+				<form:input path="file" type="file" id="file"/>
+				<form:errors path="file" cssClass="error"/>
 			</div>
 		</div>
 		<div class="form-group">

@@ -36,7 +36,7 @@ public class Product implements Serializable {
     @Column
     private Date endDate;
     @Column(nullable = false)
-    Date creationDate;
+    private Date creationDate;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Bidder> bidders;
 

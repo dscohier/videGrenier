@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group">
-            <label for="title" class="col-lg-3 control-label"><spring:message code="product.add.picture"/></label>
+            <label for="title" class="col-lg-3 control-label"><spring:message code="common.picture"/></label>
             <div class="col-lg-7">
                 <form:input path="file" type="file" id="file"/>
                 <c:if test="${addProductForm.id != null}">

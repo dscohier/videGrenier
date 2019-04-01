@@ -7,10 +7,7 @@ import be.icc.entity.Product;
 import be.icc.form.AddProductForm;
 import be.icc.form.BidForm;
 import be.icc.model.FileModel;
-import be.icc.service.BidderService;
-import be.icc.service.CategoryService;
-import be.icc.service.ProductService;
-import be.icc.service.UserService;
+import be.icc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,6 +42,8 @@ public class ProductController {
     UserService userService;
     @Autowired
     BidderService bidderService;
+    @Autowired
+    FileService fileService;
 
     private static final List<String> contentTypes = Arrays.asList("png", "jpeg", "jpg");
 
@@ -134,14 +132,17 @@ public class ProductController {
 
     @RequestMapping("/add")
     public String add(@ModelAttribute("addProductForm") @Valid AddProductForm addProductForm, BindingResult result,
-                      RedirectAttributes attr, HttpServletRequest request, @RequestParam MultipartFile file) {
+                      RedirectAttributes attr, @RequestParam MultipartFile file) {
         String redirect = checkError(result, attr, addProductForm);
         if (redirect != null) {
             return redirect;
         }
 
-        String filePath = uploadFile(addProductForm, attr, file);
-
+        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        if (filePath.contains("error")) {
+            attr.addFlashAttribute("addProductForm", addProductForm);
+            return "redirect:/product/newProduct?error=PictureFormat";
+        }
         ProductDto productDto = new ProductDto();
         productDto.setDescription(addProductForm.getDescription().replace("\n", "<br>"));
         productDto.setName(addProductForm.getName());
@@ -165,9 +166,10 @@ public class ProductController {
         if (redirect != null) {
             return redirect;
         }
-        String filePath = null;
-        if (isNotBlank(file.getOriginalFilename())) {
-            filePath = uploadFile(addProductForm, attr, file);
+        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        if (filePath.contains("error")) {
+            attr.addFlashAttribute("addProductForm", addProductForm);
+            return "redirect:/product/newProduct?error=PictureFormat";
         }
         Product product = productService.findEntityById(addProductForm.getId());
         product.setDescription(addProductForm.getDescription().replace("\n", "<br>"));
@@ -183,38 +185,6 @@ public class ProductController {
         product.setCategory(categoryService.createOrGetIfExists(addProductForm.getCategory()).toEntity());
         ProductDto productDto = productService.update(product);
         return "redirect:/product/details?id=" + productDto.getId();
-    }
-
-    private String uploadFile(AddProductForm addProductForm, RedirectAttributes attr, MultipartFile file) {
-        String[] location = addProductForm.getFile().getOriginalFilename().split("\\\\");
-        String fileName = location[location.length - 1];
-        if (!contentTypes.contains(fileName.split("\\.")[1])) {
-            attr.addFlashAttribute("addProductForm", addProductForm);
-            return "redirect:/product/newProduct?error=PictureFormat";
-        }
-        String userName = ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        String directoryName = "D:/tmp/img/" + userName + "/";
-        File dir = new File(directoryName);
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
-
-        //write uploaded image to disk
-        try {
-            try (InputStream is = file.getInputStream(); BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile))) {
-                int i;
-                while ((i = is.read()) != -1) {
-                    stream.write(i);
-                }
-                stream.flush();
-            }
-        } catch (IOException e) {
-            System.out.println("error : " + e.getMessage());
-        }
-        return dir.getAbsolutePath() + "\\" + fileName;
     }
 
     private String checkError(BindingResult result, RedirectAttributes attr, AddProductForm addProductForm) {

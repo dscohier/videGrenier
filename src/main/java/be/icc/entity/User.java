@@ -4,6 +4,7 @@ import be.icc.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,18 +29,24 @@ public class User implements UserDetails{
     private String email;
     @Column(nullable = false, unique=true)
     private String username;
-
+    @Column
+    private String picture;
+    @Column(nullable = false)
+    private double averageRatingSeller;
+    @Column(nullable = false)
+    private double averageRatingBuyer;
     @OneToMany(fetch = FetchType.EAGER)
-    private Set<Comment> myComments;
+    private Set<Comment> commentByBuyer;
     @OneToMany(fetch = FetchType.EAGER)
-    private Set<Comment> myAppreciations;
+    private Set<Comment> commentBySeller;
     @OneToOne
     private Panier panier;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Product> productToSell;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Bidder> bidders;
-
+    @Column(nullable = false)
+    private Date creationDate;
     @ManyToOne
     private City city;
 
@@ -48,6 +55,7 @@ public class User implements UserDetails{
     public UserDto toDto(){
         UserDto user= new UserDto();
         user.setId(this.getId());
+        user.setPicture(this.getPicture());
         for (Authority a: this.getAuthorities()) {
             user.getAuthorities().add(a);
         }
@@ -56,10 +64,12 @@ public class User implements UserDetails{
         user.setLastName(this.getLastName());
         user.setEmail(this.getEmail());
         user.setUsername(this.getUsername());
-        for(Comment comment : getMyComments()) {
+        user.setAverageRatingBuyer(this.getAverageRatingBuyer());
+        user.setAverageRatingSeller(this.getAverageRatingSeller());
+        for(Comment comment : getCommentByBuyer()) {
             user.getMyComments().add(comment.toDto());
         }
-        for(Comment comment : getMyAppreciations()) {
+        for(Comment comment : getCommentBySeller()) {
             user.getMyAppreciations().add(comment.toDto());
         }
 
@@ -71,6 +81,7 @@ public class User implements UserDetails{
         }
         if(getPanier()!=null)  user.setPanier(this.getPanier().toDto());
         if(getCity()!=null)  user.setCity(this.getCity().toDto());
+        user.setCreationDate(this.getCreationDate());
         return user;
     }
 
@@ -135,26 +146,26 @@ public class User implements UserDetails{
         this.city = city;
     }
 
-    public Set<Comment> getMyComments() {
-        if(myComments==null){
-            myComments=new HashSet<>();
+    public Set<Comment> getCommentByBuyer() {
+        if(commentByBuyer ==null){
+            commentByBuyer =new HashSet<>();
         }
-        return myComments;
+        return commentByBuyer;
     }
 
-    public void setMyComments(Set<Comment> myComments) {
-        this.myComments = myComments;
+    public void setCommentByBuyer(Set<Comment> commentByBuyer) {
+        this.commentByBuyer = commentByBuyer;
     }
 
-    public Set<Comment> getMyAppreciations() {
-        if(myAppreciations==null){
-            myAppreciations=new HashSet<>();
+    public Set<Comment> getCommentBySeller() {
+        if(commentBySeller ==null){
+            commentBySeller =new HashSet<>();
         }
-        return myAppreciations;
+        return commentBySeller;
     }
 
-    public void setMyAppreciations(Set<Comment> myAppreciations) {
-        this.myAppreciations = myAppreciations;
+    public void setCommentBySeller(Set<Comment> commentBySeller) {
+        this.commentBySeller = commentBySeller;
     }
 
     public Panier getPanier() {
@@ -214,6 +225,38 @@ public class User implements UserDetails{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public double getAverageRatingSeller() {
+        return averageRatingSeller;
+    }
+
+    public void setAverageRatingSeller(double averageRatingSeller) {
+        this.averageRatingSeller = averageRatingSeller;
+    }
+
+    public double getAverageRatingBuyer() {
+        return averageRatingBuyer;
+    }
+
+    public void setAverageRatingBuyer(double averageRatingBuyer) {
+        this.averageRatingBuyer = averageRatingBuyer;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

@@ -4,6 +4,13 @@ import be.icc.entity.Authority;
 import be.icc.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,17 +25,21 @@ public class UserDto implements UserDetails {
     private String lastName;
     private String email;
     private String username;
-    
+    private String picture;
+    private double averageRatingSeller;
+    private double averageRatingBuyer;
     private Set<CommentDto> myComments;
     private Set<CommentDto> myAppreciations;
     private PanierDto panier;
     private Set<ProductDto> productToSell;
     private Set<BidderDto> bidders;
     private CityDto city;
+    private Date creationDate;
 
     public User toEntity(){
         User user= new User();
         user.setId(this.getId());
+        user.setPicture(this.getPicture());
         for (Authority a: this.getAuthorities()) {
             user.getAuthorities().add(a);
         }
@@ -37,11 +48,13 @@ public class UserDto implements UserDetails {
         user.setLastName(this.getLastName());
         user.setEmail(this.getEmail());
         user.setUsername(this.getUsername());
+        user.setAverageRatingBuyer(this.getAverageRatingBuyer());
+        user.setAverageRatingSeller(this.getAverageRatingSeller());
         for(CommentDto comment : getMyComments()) {
-            user.getMyComments().add(comment.toEntity());
+            user.getCommentByBuyer().add(comment.toEntity());
         }
         for(CommentDto comment : getMyAppreciations()) {
-            user.getMyAppreciations().add(comment.toEntity());
+            user.getCommentBySeller().add(comment.toEntity());
         }
         for(ProductDto product : getProductToSell()) {
             user.getProductToSell().add(product.toEntity());
@@ -51,6 +64,7 @@ public class UserDto implements UserDetails {
         }
         if(getPanier()!=null)  user.setPanier(this.getPanier().toEntity());
         if(getCity()!=null)  user.setCity(this.getCity().toEntity());
+        user.setCreationDate(this.getCreationDate());
         return user;
     }
 
@@ -195,6 +209,56 @@ public class UserDto implements UserDetails {
 
     public void setBidders(Set<BidderDto> bidders) {
         this.bidders = bidders;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public double getAverageRatingSeller() {
+        return averageRatingSeller;
+    }
+
+    public void setAverageRatingSeller(double averageRatingSeller) {
+        this.averageRatingSeller = averageRatingSeller;
+    }
+
+    public double getAverageRatingBuyer() {
+        return averageRatingBuyer;
+    }
+
+    public void setAverageRatingBuyer(double averageRatingBuyer) {
+        this.averageRatingBuyer = averageRatingBuyer;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String displayPicture() {
+        String picture = "";
+        try {
+            String imgName = this.getPicture();
+            BufferedImage bImage = ImageIO.read(new File(imgName));//give the path of an image
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "jpg", baos);
+            baos.flush();
+            byte[] imageInByteArray = baos.toByteArray();
+            baos.close();
+            picture = DatatypeConverter.printBase64Binary(imageInByteArray);
+        }catch(IOException e){
+            System.out.println("Error: "+e);
+        } finally {
+            return picture;
+        }
     }
 
     @Override
