@@ -43,7 +43,8 @@
         </property>
         <property name="jpaProperties">
             <props>
-                <!-- this property delete de table when the server stop and create again when server start -->
+                <!-- create-drop : this property delete de table when the server stop and create again when server start -->
+                <!-- update : update all table -->
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
             </props>

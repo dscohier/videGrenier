@@ -138,7 +138,7 @@ public class ProductController {
             return redirect;
         }
 
-        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), addProductForm.getFile().getOriginalFilename());
         if (filePath.contains("error")) {
             attr.addFlashAttribute("addProductForm", addProductForm);
             return "redirect:/product/newProduct?error=PictureFormat";
@@ -166,7 +166,7 @@ public class ProductController {
         if (redirect != null) {
             return redirect;
         }
-        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), addProductForm.getFile().getOriginalFilename());
         if (filePath.contains("error")) {
             attr.addFlashAttribute("addProductForm", addProductForm);
             return "redirect:/product/newProduct?error=PictureFormat";

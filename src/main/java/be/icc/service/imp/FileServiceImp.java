@@ -19,8 +19,8 @@ public class FileServiceImp implements FileService {
     private static final List<String> contentTypes = Arrays.asList("png", "jpeg", "jpg");
 
     @Override
-    public String uploadFile(MultipartFile file, String userName) {
-        String[] location = file.getOriginalFilename().split("\\\\");
+    public String uploadFile(MultipartFile file, String userName, String fileOriginalName) {
+        String[] location = fileOriginalName.split("\\\\");
         String fileName = location[location.length - 1];
         if (!contentTypes.contains(fileName.split("\\.")[1])) {
             return "error";

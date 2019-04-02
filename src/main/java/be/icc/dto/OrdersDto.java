@@ -1,22 +1,22 @@
 package be.icc.dto;
 
-import be.icc.entity.Order;
+import be.icc.entity.Orders;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class OrderDto {
+public class OrdersDto {
     private Long id;
     private Set<ProductDto> products;
     private Date date;
     private UserDto user;
 
-    public OrderDto() {
+    public OrdersDto() {
     }
 
-    public Order toEntity(){
-        Order order= new Order();
+    public Orders toEntity(){
+        Orders order= new Orders();
         order.setId(this.getId());
         for (ProductDto product: this.getProducts()) {
             order.getProducts().add(product.toEntity());

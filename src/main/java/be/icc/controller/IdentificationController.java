@@ -103,7 +103,7 @@ public class IdentificationController {
         }
         String filePath = null;
         if (file != null) {
-            filePath = fileService.uploadFile(file, signupForm.getUserName());
+            filePath = fileService.uploadFile(file, signupForm.getUserName(), signupForm.getFile().getOriginalFilename());
             if (filePath.contains("error")) {
                 attr.addFlashAttribute("signupForm", signupForm);
                 return "redirect:/connect?error=PictureFormat";

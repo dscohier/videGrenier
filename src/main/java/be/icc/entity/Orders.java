@@ -1,6 +1,6 @@
 package be.icc.entity;
 
-import be.icc.dto.OrderDto;
+import be.icc.dto.OrdersDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Order implements Serializable {
+public class Orders implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,11 +20,11 @@ public class Order implements Serializable {
     @ManyToOne
     private User user;
 
-    public Order() {
+    public Orders() {
     }
 
-    public OrderDto toDto(){
-        OrderDto order = new OrderDto();
+    public OrdersDto toDto(){
+        OrdersDto order = new OrdersDto();
         order.setId(this.getId());
         for (Product product: this.getProducts()) {
             order.getProducts().add(product.toDto());
