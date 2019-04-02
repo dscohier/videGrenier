@@ -67,10 +67,10 @@ public class User implements UserDetails{
         user.setAverageRatingBuyer(this.getAverageRatingBuyer());
         user.setAverageRatingSeller(this.getAverageRatingSeller());
         for(Comment comment : getCommentByBuyer()) {
-            user.getMyComments().add(comment.toDto());
+            user.getCommentByBuyer().add(comment.toDto());
         }
         for(Comment comment : getCommentBySeller()) {
-            user.getMyAppreciations().add(comment.toDto());
+            user.getCommentBySeller().add(comment.toDto());
         }
 
         for(Product product : getProductToSell()) {

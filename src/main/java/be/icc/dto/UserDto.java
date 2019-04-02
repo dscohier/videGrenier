@@ -28,8 +28,8 @@ public class UserDto implements UserDetails {
     private String picture;
     private double averageRatingSeller;
     private double averageRatingBuyer;
-    private Set<CommentDto> myComments;
-    private Set<CommentDto> myAppreciations;
+    private Set<CommentDto> commentByBuyer;
+    private Set<CommentDto> commentBySeller;
     private PanierDto panier;
     private Set<ProductDto> productToSell;
     private Set<BidderDto> bidders;
@@ -50,10 +50,10 @@ public class UserDto implements UserDetails {
         user.setUsername(this.getUsername());
         user.setAverageRatingBuyer(this.getAverageRatingBuyer());
         user.setAverageRatingSeller(this.getAverageRatingSeller());
-        for(CommentDto comment : getMyComments()) {
+        for(CommentDto comment : getCommentByBuyer()) {
             user.getCommentByBuyer().add(comment.toEntity());
         }
-        for(CommentDto comment : getMyAppreciations()) {
+        for(CommentDto comment : getCommentBySeller()) {
             user.getCommentBySeller().add(comment.toEntity());
         }
         for(ProductDto product : getProductToSell()) {
@@ -159,26 +159,26 @@ public class UserDto implements UserDetails {
         this.city = city;
     }
 
-    public Set<CommentDto> getMyComments() {
-        if (myComments == null) {
-            myComments = new HashSet<>();
+    public Set<CommentDto> getCommentByBuyer() {
+        if (commentByBuyer == null) {
+            commentByBuyer = new HashSet<>();
         }
-        return myComments;
+        return commentByBuyer;
     }
 
-    public void setMyComments(Set<CommentDto> myComments) {
-        this.myComments = myComments;
+    public void setCommentByBuyer(Set<CommentDto> commentByBuyer) {
+        this.commentByBuyer = commentByBuyer;
     }
 
-    public Set<CommentDto> getMyAppreciations() {
-        if (myAppreciations == null) {
-            myAppreciations = new HashSet<>();
+    public Set<CommentDto> getCommentBySeller() {
+        if (commentBySeller == null) {
+            commentBySeller = new HashSet<>();
         }
-        return myAppreciations;
+        return commentBySeller;
     }
 
-    public void setMyAppreciations(Set<CommentDto> myAppreciations) {
-        this.myAppreciations = myAppreciations;
+    public void setCommentBySeller(Set<CommentDto> commentBySeller) {
+        this.commentBySeller = commentBySeller;
     }
 
     public PanierDto getPanier() {

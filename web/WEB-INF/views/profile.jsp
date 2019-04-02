@@ -22,6 +22,7 @@
 				<c:forEach begin="${user.averageRatingSeller + 1}" end="5">
 					<i class="icon-star"></i>
 				</c:forEach>
+				<p><spring:message code="profile.opinion"/> : ${user.commentByBuyer.size()} </p>
 			</span>
 		</div>
 		<div class="col-lg-3">
@@ -35,6 +36,7 @@
 				<c:forEach begin="${user.averageRatingBuyer + 1}" end="5">
 					<i class="icon-star"></i>
 				</c:forEach>
+				<p><spring:message code="profile.opinion"/> : ${user.commentBySeller.size()} </p>
 			</span>
 		</div>
 	</div>
