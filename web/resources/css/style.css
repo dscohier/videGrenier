@@ -502,6 +502,15 @@ h1, h2, h3, h4, h5, h6, figure {
   -ms-border-radius: 50%;
   border-radius: 50%;
 }
+
+.comment img {
+  width: 50px;
+  margin-bottom: 20px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%;
+}
 .fh5co-staff h3 {
   font-size: 24px;
   margin-bottom: 5px;

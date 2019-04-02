@@ -45,13 +45,12 @@
 			<div class="fh5co-tabs animate-box">
 				<ul class="fh5co-tab-nav">
 					<li class="active"><a href="#" data-tab="1"><span class="icon visible-xs"><i class="icon-file"></i></span><span class="hidden-xs"><spring:message code="profile.informations"/></span></a></li>
-					<li><a href="#" data-tab="2"><span class="icon visible-xs"><i class="icon-bar-graph"></i></span><span class="hidden-xs">Specification</span></a></li>
+					<li><a href="#" data-tab="2"><span class="icon visible-xs"><i class="icon-bar-graph"></i></span><span class="hidden-xs"><spring:message code="profile.opinionFromSeller"/></span></a></li>
 					<li><a href="#" data-tab="3"><span class="icon visible-xs"><i class="icon-star"></i></span><span class="hidden-xs">Feedback &amp; Ratings</span></a></li>
 				</ul>
 
 				<!-- Tabs -->
 				<div class="fh5co-tab-content-wrap">
-
 					<div class="fh5co-tab-content tab-content active" data-tab-content="1">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="row">
@@ -80,28 +79,42 @@
 									<p>${purchaseNumber}</p>
 								</div>
 							</div>
-
 						</div>
 					</div>
 
 					<div class="fh5co-tab-content tab-content" data-tab-content="2">
 						<div class="col-md-10 col-md-offset-1">
-							<h3>Product Specification</h3>
-							<ul>
-								<li>Paragraph placeat quis fugiat provident veritatis quia iure a debitis adipisci dignissimos consectetur magni quas eius</li>
-								<li>adipisci dignissimos consectetur magni quas eius nobis reprehenderit soluta eligendi</li>
-								<li>Veritatis tenetur odio delectus quibusdam officiis est.</li>
-								<li>Magni quas eius nobis reprehenderit soluta eligendi quo reiciendis fugit? Veritatis tenetur odio delectus quibusdam officiis est.</li>
-							</ul>
-							<ul>
-								<li>Paragraph placeat quis fugiat provident veritatis quia iure a debitis adipisci dignissimos consectetur magni quas eius</li>
-								<li>adipisci dignissimos consectetur magni quas eius nobis reprehenderit soluta eligendi</li>
-								<li>Veritatis tenetur odio delectus quibusdam officiis est.</li>
-								<li>Magni quas eius nobis reprehenderit soluta eligendi quo reiciendis fugit? Veritatis tenetur odio delectus quibusdam officiis est.</li>
-							</ul>
+							<h3><spring:message code="profile.opinionFromSeller"/></h3>
 						</div>
-					</div>
-
+						<div class="col-md-10 col-md-offset-1">
+							<div class="feed">
+								<div>
+								<c:if test="${user.commentByBuyer.size() > 0}">
+								<c:forEach var="comment" items="${user.commentByBuyer}">
+								<div class="comment" style="display: inline;">
+									<img src="data:image/jpg;base64,${comment.given.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
+									<h3>${comment.given.username}</h3>
+										<span class="rate">
+										<c:forEach begin="1" end="${comment.note}">
+											<i class="icon-star2" style="color:yellow"></i>
+										</c:forEach>
+										<c:forEach begin="${comment.note + 1}" end="5">
+											<i class="icon-star"></i>
+										</c:forEach>
+									</div>
+								</div>
+								<div>
+									<blockquote>
+										<p>${comment.comment}</p>
+									</blockquote>
+								</div>
+								</c:forEach>
+								</c:if>
+								<c:if test="${user.commentByBuyer.size() == 0}">
+									<h3><spring:message code="profile.noComment"/></h3>
+								</c:if>
+							</div>
+						</div>
 					<div class="fh5co-tab-content tab-content" data-tab-content="3">
 						<div class="col-md-10 col-md-offset-1">
 							<h3>Happy Buyers</h3>
