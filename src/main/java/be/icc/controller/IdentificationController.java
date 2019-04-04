@@ -63,7 +63,7 @@ public class IdentificationController {
         if (!model.containsAttribute("signupForm")) {
             model.addAttribute("signupForm", new SignupForm());
         }
-        return "connect";
+        return "connect2";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
