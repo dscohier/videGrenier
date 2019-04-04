@@ -112,7 +112,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 .fh5co-nav .menu-2 li.search {
   float: left;
-  width: 83%;
+  width: 48%;
   font-family: "Playfair Display", serif;
   -webkit-transition: 0.3s;
   -o-transition: 0.3s;
@@ -151,9 +151,7 @@ h1, h2, h3, h4, h5, h6, figure {
 .fh5co-nav .menu-2 li button:hover i, .fh5co-nav .menu-2 li button:focus i {
   color: black;
 }
-.fh5co-nav .menu-2 li.shopping-cart {
-  float: right;
-}
+
 .fh5co-nav .menu-2 li a.cart {
   color: black;
 }
