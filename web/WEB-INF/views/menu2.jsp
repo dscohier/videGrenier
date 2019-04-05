@@ -42,7 +42,15 @@
                     </li>
                     <li class="shopping-cart"><a href="#" class="cart"><span><small>0</small><i class="icon-shopping-cart"></i></span></a></li>
                     <sec:authorize access="isAuthenticated()">
-                        <li><a href="<c:url value="/logout"/>"><spring:message code="menu.logout"/></a></li>
+                        <sec:authentication property="principal.username" var="username" />
+                        <li class="has-dropdown">
+                            <a href="services.html"><spring:message code="menu.profile"/></a>
+                            <ul class="dropdown">
+                                <li><a href="<c:url value="/profile?username=${username}"/>"><spring:message code="menu.myProfile"/></a></li>
+                                <li><a href="<c:url value="/connect/modifyProfil"/>"><spring:message code="menu.modify"/></a></li>
+                                <li><a href="<c:url value="/logout"/>"><spring:message code="menu.logout"/></a></li>
+                            </ul>
+                        </li>
                     </sec:authorize>
                     <sec:authorize access="isAnonymous()">
                         <li><a href="<c:url value="/connect"/>"><spring:message code="menu.login"/></a></li>
