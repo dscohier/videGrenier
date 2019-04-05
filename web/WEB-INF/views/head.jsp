@@ -24,6 +24,9 @@
         <!-- Theme style  -->
         <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>">
 
+        <!-- My css style  -->
+        <link rel="stylesheet" href="<c:url value="/resources/css/css.css"/>">
+
         <!-- Modernizr JS -->
         <script src="<c:url value="/resources/js/modernizr-2.6.2.min.js"/>"></script>
         <script src="<c:url value="/resources/js/respond.min.js"/>"></script>
