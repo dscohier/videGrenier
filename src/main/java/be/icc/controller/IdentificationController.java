@@ -3,12 +3,15 @@ package be.icc.controller;
 import be.icc.dto.CityDto;
 import be.icc.dto.PanierDto;
 import be.icc.dto.UserDto;
+import be.icc.entity.User;
 import be.icc.form.LoginForm;
 import be.icc.form.SignupForm;
+import be.icc.model.FileModel;
 import be.icc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import java.util.Date;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -46,20 +49,6 @@ public class IdentificationController {
 
     @RequestMapping("")
     public String connect(Model model, @RequestParam(required = false) String error, @RequestParam(required = false) String success) {
-        if (isNotBlank(error)) {
-            if (error.equals("wrong")) {
-                model.addAttribute("error", "error.login.error");
-            }
-            if (error.equals("notUnique")) {
-                model.addAttribute("errorSignup", "error.usernameNotUnique");
-            }
-            if (error.equals("noPicture")) {
-                model.addAttribute("errorSignup", "error.profile.noPicture");
-            }
-            if (error.equals("pictureFormat")) {
-                model.addAttribute("errorSignup", "error.add.pictureFormat");
-            }
-        }
         if (isNotBlank(success)) {
             model.addAttribute("success", "success.userCreated");
         }
@@ -69,6 +58,7 @@ public class IdentificationController {
         if (!model.containsAttribute("signupForm")) {
             model.addAttribute("signupForm", new SignupForm());
         }
+        initialiseModelForAddAndUpdate(model, error);
         return "connect";
     }
 
@@ -97,17 +87,16 @@ public class IdentificationController {
     public String signup(@ModelAttribute("signupForm") @Valid SignupForm signupForm, BindingResult result,
                         RedirectAttributes attr, @RequestParam MultipartFile file, Model model) {
         boolean isUsernameUnique = userService.findByUsername(signupForm.getUserName()) == null;
-        if (result.hasErrors() || !isUsernameUnique || signupForm.getFile().isEmpty()) {
+        String redirect = checkError(result, attr, signupForm);
+        if (redirect != null) {
+            return redirect;
+        }
+        if (!isUsernameUnique) {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.signupForm", result);
             attr.addFlashAttribute("signupForm", signupForm);
-            if (!isUsernameUnique) {
-                return "redirect:/connect?error=notUnique";
-            }
-            if (signupForm.getFile().isEmpty()) {
-                return "redirect:/connect?error=noPicture";
-            }
-            return "redirect:/connect";
+            return "redirect:/connect?error=notUnique";
         }
+
         String filePath = null;
         if (!signupForm.getFile().isEmpty()) {
             filePath = fileService.uploadFile(file, signupForm.getUserName(), signupForm.getFile().getOriginalFilename());
@@ -133,5 +122,87 @@ public class IdentificationController {
         userService.signUp(user);
         mailService.sendConfirmationSignUpEmail(user);
         return "redirect:/connect?success=userCreated";
+    }
+
+    @RequestMapping("/modifyProfil")
+    public String modifyProfil(@ModelAttribute("signupForm") SignupForm updateSignupForm, Model model, @RequestParam(required = false) String error) {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+        UserDto userDto = (UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userDto = userService.findEntityById(userDto.getId()).toDto();
+        if (!model.containsAttribute("signupForm") || updateSignupForm != null) {
+            SignupForm signupForm = new SignupForm();
+            signupForm.setId(userDto.getId());
+            signupForm.setCity(userDto.getCity().getName());
+            signupForm.setEmail(userDto.getEmail());
+            signupForm.setFirstName(userDto.getFirstName());
+            signupForm.setLastName(userDto.getLastName());
+            signupForm.setUserName(userDto.getUsername());
+            model.addAttribute("signupForm", signupForm);
+        }
+        initialiseModelForAddAndUpdate(model, error);
+        return "connect";
+    }
+
+    @RequestMapping("/update")
+    public String update(@ModelAttribute("signupForm") @Valid SignupForm signupForm, BindingResult result,
+                         RedirectAttributes attr, HttpServletRequest request, @RequestParam MultipartFile file) {
+        String redirect = checkError(result, attr, signupForm);
+        if (redirect != null) {
+            return "redirect:/connect";
+        }
+        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), signupForm.getFile().getOriginalFilename());
+        if (filePath.contains("error")) {
+            attr.addFlashAttribute("signupForm", signupForm);
+            return "redirect:/connect?error=PictureFormat";
+        }
+        User user = userService.findEntityById(signupForm.getId());
+        user.setEmail(signupForm.getEmail());
+        user.setFirstName(signupForm.getFirstName());
+        user.setLastName(signupForm.getLastName());
+        BCryptPasswordEncoder encoder= new BCryptPasswordEncoder();
+        String hashedPassword= encoder.encode(signupForm.getPassword());
+        user.setPassword(hashedPassword);
+        user.setUsername(signupForm.getUserName());
+        user.setPicture(filePath);
+        String city = signupForm.getCity().split(",")[0];
+        CityDto cityDto = cityService.createOrGetIfExists(city, signupForm.getState());
+        user.setCity(cityDto.toEntity());
+        UserDto userDto = userService.update(user);
+        return "redirect:/profile?username=" + userDto.getUsername();
+    }
+
+    private void initialiseModelForAddAndUpdate(Model model, String error) {
+        if (!model.containsAttribute("fileModel")) {
+            FileModel fileModel = new FileModel();
+            model.addAttribute("fileModel", fileModel);
+        }
+        if (isNotBlank(error)) {
+            if (error.equals("wrong")) {
+                model.addAttribute("error", "error.login.error");
+            }
+            if (error.equals("notUnique")) {
+                model.addAttribute("errorSignup", "error.usernameNotUnique");
+            }
+            if (error.equals("noPicture")) {
+                model.addAttribute("errorSignup", "error.profile.noPicture");
+            }
+            if (error.equals("pictureFormat")) {
+                model.addAttribute("errorSignup", "error.add.pictureFormat");
+            }
+        }
+    }
+
+    private String checkError(BindingResult result, RedirectAttributes attr, SignupForm signupForm) {
+        if (result.hasErrors() || (signupForm.getFile().isEmpty()&& signupForm.getId() == null)) {
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.signupForm", result);
+            attr.addFlashAttribute("signupForm", signupForm);
+            if (signupForm.getFile().isEmpty() && signupForm.getId() == null) {
+                return "redirect:/connect?error=noPicture";
+            }
+            return "redirect:/connect";
+        }
+        return null;
     }
 }

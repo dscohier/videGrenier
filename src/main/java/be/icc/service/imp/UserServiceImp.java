@@ -78,4 +78,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
             return user.toDto();
         }
     }
+
+    @Override
+    public User findEntityById(Long id) {
+        return userRepository.findOne(id);
+    }
+
+    @Override
+    public UserDto update(User user) {
+        User userSaved = userRepository.save(user);
+        return userSaved.toDto();
+    }
 }

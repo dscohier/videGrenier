@@ -280,6 +280,6 @@ public class ProductController {
         model.addAttribute("exception",exception);
         model.addAttribute("url",request.getRequestURL());
 
-        return "erreur";
+        return "error";
     }
 }

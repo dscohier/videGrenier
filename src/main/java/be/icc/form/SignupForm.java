@@ -39,6 +39,7 @@ public class SignupForm {
     @NotBlank(message = "{error.notBlank}")
     private String passwordCheck;
     private boolean isPasswordMatch;
+    private Long id;
 
     public void setPasswordMatch(boolean passwordMatch) {
         isPasswordMatch = passwordMatch;
@@ -124,5 +125,13 @@ public class SignupForm {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

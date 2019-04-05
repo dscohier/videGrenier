@@ -102,7 +102,7 @@
                     <spring:message code="product.add.add" var="message"/>
                 </c:if>
                 <c:if test="${addProductForm.id != null}">
-                    <spring:message code="product.add.update" var="message"/>
+                    <spring:message code="common.update" var="message"/>
                 </c:if>
                 <input type="submit" class="btn btn-primary" value="${message}">
             </div>

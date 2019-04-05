@@ -9,49 +9,60 @@
     <body>
         <div id="page">
             <jsp:include page="menu2.jsp"/>
-            <div class="col-lg-6">
-                <form:form cssClass="form-horizontal" method="post" action="connect/login" commandName="loginForm">
-                    <fieldset>
-                        <c:if test="${not empty error}">
-                            <label class="error"><spring:message code="${error}"/></label>
-                        </c:if>
-                        <c:if test="${not empty success}">
-                            <label class="success"><spring:message code="${success}"/></label>
-                        </c:if>
-                        <h2><spring:message code="connect.login" text="test"/></h2>
-                        <div class="form-group">
-                            <label for="userName" class="col-lg-2 control-label"><spring:message
-                                    code="connect.userName"/></label>
-                            <div class="col-lg-8">
-                                <form:input type="text" path="userName" cssClass=" form-control" id="username"/>
-                                <form:errors path="userName" cssClass="error"/>
+            <c:if test="${signupForm.id == null}">
+                <div class="col-lg-6">
+                    <form:form cssClass="form-horizontal" method="post" action="connect/login" commandName="loginForm">
+                        <fieldset>
+                            <c:if test="${not empty error}">
+                                <label class="error"><spring:message code="${error}"/></label>
+                            </c:if>
+                            <c:if test="${not empty success}">
+                                <label class="success"><spring:message code="${success}"/></label>
+                            </c:if>
+                            <h2><spring:message code="connect.login" text="test"/></h2>
+                            <div class="form-group">
+                                <label for="userName" class="col-lg-2 control-label"><spring:message
+                                        code="connect.userName"/></label>
+                                <div class="col-lg-8">
+                                    <form:input type="text" path="userName" cssClass=" form-control" id="username"/>
+                                    <form:errors path="userName" cssClass="error"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-lg-2 control-label"><spring:message
-                                    code="connect.password"/></label>
-                            <div class="col-lg-8">
-                                <form:input type="password" path="password" cssClass="form-control" id="password"/>
-                                <form:errors path="password" cssClass="error"/>
-                                <p class="small">
-                                    <a href="#"><spring:message code="connect.forgotPassword"/></a>
-                                </p>
+                            <div class="form-group">
+                                <label for="password" class="col-lg-2 control-label"><spring:message
+                                        code="connect.password"/></label>
+                                <div class="col-lg-8">
+                                    <form:input type="password" path="password" cssClass="form-control" id="password"/>
+                                    <form:errors path="password" cssClass="error"/>
+                                    <p class="small">
+                                        <a href="#"><spring:message code="connect.forgotPassword"/></a>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-offset-5">
-                            <spring:message code="connect.login" var="login"/>
-                            <input type="submit" class="btn btn-primary" value="${login}">
-                        </div>
-                    </fieldset>
-                </form:form>
-            </div>
+                            <div class="col-md-offset-5">
+                                <spring:message code="connect.login" var="login"/>
+                                <input type="submit" class="btn btn-primary" value="${login}">
+                            </div>
+                        </fieldset>
+                    </form:form>
+                </div>
+            </c:if>
+            <c:if test="${signupForm.id == null}">
+                <c:set var="signupOrUpdate" value="connect/signup"/>
+            </c:if>
+            <c:if test="${signupForm.id != null}">
+                <c:set var="signupOrUpdate" value="update"/>
+            </c:if>
             <div class="col-lg-6">
                 <form:form cssClass="form-horizontal" method="post" enctype="multipart/form-data"
-                           action="connect/signup" commandName="signupForm" autocomplete="off">
+                           action="${signupOrUpdate}" commandName="signupForm" autocomplete="off">
                     <fieldset>
                         <c:if test="${not empty errorSignup}">
                             <label class="error"><spring:message code="${errorSignup}"/></label>
                         </c:if>
+                        <div style="visibility: hidden;">
+                            <form:input type="text" path="id" cssClass="form-control" id="title"/>
+                        </div>
                         <h2><spring:message code="connect.signup"/></h2>
                         <div class="form-group">
                             <label for="firstName" class="col-lg-2 control-label"><spring:message
@@ -105,8 +116,14 @@
                             <label for="userName" class="col-lg-2 control-label"><spring:message
                                     code="connect.userName"/></label>
                             <div class="col-lg-8">
-                                <form:input type="text" path="userName" cssClass=" form-control" id="username"/>
-                                <form:errors path="userName" cssClass="error"/>
+                                <c:if test="${signupForm.id == null}">
+                                    <form:input type="text" path="userName" cssClass=" form-control" id="username"/>
+                                    <form:errors path="userName" cssClass="error"/>
+                                </c:if>
+                                <c:if test="${signupForm.id != null}">
+                                    <form:input type="text" path="userName" cssClass=" form-control" id="username"
+                                                readonly="true"/>
+                                </c:if>
                             </div>
                         </div>
                         <div class="form-group">
@@ -129,8 +146,14 @@
                             </div>
                         </div>
                         <div class="col-md-offset-5">
-                            <spring:message code="connect.signup" var="signup"/>
-                            <input type="submit" class="btn btn-primary" value="${signup}">
+                            <c:if test="${signupForm.id == null}">
+                                <spring:message code="connect.signup" var="signup"/>
+                                <input type="submit" class="btn btn-primary" value="${signup}">
+                            </c:if>
+                            <c:if test="${signupForm.id != null}">
+                                <spring:message code="common.update" var="update"/>
+                                <input type="submit" class="btn btn-primary" value="${update}">
+                            </c:if>
                         </div>
                     </fieldset>
                     <script>
