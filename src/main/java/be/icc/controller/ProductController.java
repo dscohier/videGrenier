@@ -166,10 +166,13 @@ public class ProductController {
         if (redirect != null) {
             return redirect;
         }
-        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), addProductForm.getFile().getOriginalFilename());
-        if (filePath.contains("error")) {
-            attr.addFlashAttribute("addProductForm", addProductForm);
-            return "redirect:/product/newProduct?error=PictureFormat";
+        String filePath = "";
+        if (isNotBlank(addProductForm.getFile().getOriginalFilename())) {
+            filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), addProductForm.getFile().getOriginalFilename());
+            if (filePath.contains("error")) {
+                attr.addFlashAttribute("addProductForm", addProductForm);
+                return "redirect:/product/newProduct?error=PictureFormat";
+            }
         }
         Product product = productService.findEntityById(addProductForm.getId());
         product.setDescription(addProductForm.getDescription().replace("\n", "<br>"));
