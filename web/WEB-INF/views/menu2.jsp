@@ -30,7 +30,7 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
-            <div class="col-lg-3 text-right hidden-xs menu-2">
+            <div class="col-lg-3 hidden-xs menu-2">
                 <ul>
                     <li class="search">
                         <div class="input-group">
@@ -44,7 +44,7 @@
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication property="principal.username" var="username" />
                         <li class="has-dropdown">
-                            <a href="services.html"><spring:message code="menu.profile"/></a>
+                            <a href="<c:url value="/profile?username=${username}"/>"><spring:message code="menu.profile"/></a>
                             <ul class="dropdown">
                                 <li><a href="<c:url value="/profile?username=${username}"/>"><spring:message code="menu.myProfile"/></a></li>
                                 <li><a href="<c:url value="/connect/modifyProfil"/>"><spring:message code="menu.modify"/></a></li>
