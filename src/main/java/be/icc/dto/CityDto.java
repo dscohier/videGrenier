@@ -9,7 +9,7 @@ public class CityDto {
 
     private Long id;
     private String name;
-    private String state;
+    private String country;
 
     public CityDto() {
     }
@@ -30,19 +30,19 @@ public class CityDto {
         this.name = name;
     }
 
-    public String getState() {
-        return state;
+    public String getCountry() {
+        return country;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public City toEntity() {
         City city = new City();
         city.setId(this.getId());
         city.setName(this.getName());
-        city.setState(this.getState());
+        city.setCountry(this.getCountry());
         return city;
     }
 }

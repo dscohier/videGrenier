@@ -85,7 +85,7 @@ public class ProductController {
     public String updateProduct(@ModelAttribute("addProductForm")  AddProductForm updateProductForm,Model model, @RequestParam(required = false) String error) {
         ProductDto productDto = productService.findById(updateProductForm.getId());
         if (!productDto.getSeller().getUsername().equals(((UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername())) {
-            return "redirect:/product/details?id=" + updateProductForm.getId();
+            return "redirect:/product/details2?id=" + updateProductForm.getId();
         }
         if (!model.containsAttribute("addProductForm") || updateProductForm != null) {
             AddProductForm addProductForm = new AddProductForm();
@@ -156,7 +156,7 @@ public class ProductController {
         productDto.setSeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
         productDto.setCreationDate(new Date());
         productDto = productService.add(productDto);
-        return "redirect:/product/details?id=" + productDto.getId();
+        return "redirect:/product/details2?id=" + productDto.getId();
     }
 
     @RequestMapping("/update")
@@ -187,7 +187,7 @@ public class ProductController {
         product.setPrice(addProductForm.getPrice());
         product.setCategory(categoryService.createOrGetIfExists(addProductForm.getCategory()).toEntity());
         ProductDto productDto = productService.update(product);
-        return "redirect:/product/details?id=" + productDto.getId();
+        return "redirect:/product/details2?id=" + productDto.getId();
     }
 
     private String checkError(BindingResult result, RedirectAttributes attr, AddProductForm addProductForm) {
@@ -230,7 +230,12 @@ public class ProductController {
         } else{
             model.addAttribute("lastBidder",product.getBidders().toArray()[product.getBidders().size()-1]);
         }
-        return "details";
+
+        if (!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("user", userDto);
+        }
+         return "details2";
     }
 
 
@@ -238,10 +243,10 @@ public class ProductController {
     public String bid(@ModelAttribute("bidForm")  BidForm bidForm, Model model) {
         Product product = productService.findEntityById(bidForm.getIdProduct());
         if (product.getPrice() >= bidForm.getNewPrice()) {
-            return "redirect:/product/details?id=" + product.getId() + "&error=InvalidBid";
+            return "redirect:/product/details2?id=" + product.getId() + "&error=InvalidBid";
         }
         if (product.getEndDate().before(new Date())) {
-            return "redirect:/product/details?id=" + product.getId() + "&error=EndBid";
+            return "redirect:/product/details2?id=" + product.getId() + "&error=EndBid";
         }
         product.setPrice(bidForm.getNewPrice());
         BidderDto bidderDto = new BidderDto();
@@ -251,7 +256,7 @@ public class ProductController {
         bidderDto.setProductId(product.getId());
         product.getBidders().add(bidderService.save(bidderDto).toEntity());
         productService.update(product);
-        return "redirect:/product/details?id=" + product.getId();
+        return "redirect:/product/details2?id=" + product.getId();
     }
 
     @RequestMapping("/mySales")

@@ -8,7 +8,7 @@ import be.icc.entity.Product;
 import java.util.List;
 
 /**
- * Created by Student on 02-01-19.
+ * Created by Scohier Dorian on 02-01-19.
  */
 public interface ProductService {
 

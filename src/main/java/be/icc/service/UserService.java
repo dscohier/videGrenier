@@ -4,7 +4,7 @@ import be.icc.dto.UserDto;
 import be.icc.entity.User;
 
 /**
- * Created by Student on 09-12-18.
+ * Created by Scohier Dorian on 09-12-18.
  */
 public interface UserService {
     UserDto findByUsernameAndPassword(String username, String password);
@@ -16,4 +16,6 @@ public interface UserService {
     User findEntityById(Long id);
 
     UserDto update(User user);
+
+    UserDto findByMail(String email);
 }

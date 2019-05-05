@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Student on 18-12-18.
+ * Created by Scohier Dorian on 18-12-18.
  */
 public class AddProductForm {
     private CategoryEnum category;

@@ -9,7 +9,7 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Pattern;
 
 /**
- * Created by Student on 11-12-18.
+ * Created by Scohier Dorian on 11-12-18.
  */
 public class SignupForm {
 
@@ -32,7 +32,7 @@ public class SignupForm {
     @NotBlank(message = "{error.notBlank}" )
     private String city;
     @NotBlank(message = "{error.selectValueFromGoogle}" )
-    private String state;
+    private String country;
     @NotBlank(message = "{error.notBlank}")
     @Pattern(regexp = "[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,3})", message = "{error.mail}")
     private String email;
@@ -111,12 +111,12 @@ public class SignupForm {
         this.passwordCheck = passwordCheck;
     }
 
-    public String getState() {
-        return state;
+    public String getCountry() {
+        return country;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public MultipartFile getFile() {

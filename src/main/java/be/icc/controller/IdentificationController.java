@@ -94,7 +94,13 @@ public class IdentificationController {
         if (!isUsernameUnique) {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.signupForm", result);
             attr.addFlashAttribute("signupForm", signupForm);
-            return "redirect:/connect?error=notUnique";
+            return "redirect:/connect?error=notUniqueLogin";
+        }
+        boolean isMailUnique = userService.findByMail(signupForm.getEmail()) == null;
+        if (!isMailUnique) {
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.signupForm", result);
+            attr.addFlashAttribute("signupForm", signupForm);
+            return "redirect:/connect?error=notUniqueEmail";
         }
 
         String filePath = null;
@@ -115,7 +121,7 @@ public class IdentificationController {
         user.setUsername(signupForm.getUserName());
         user.setPicture(filePath);
         String city = signupForm.getCity().split(",")[0];
-        CityDto cityDto = cityService.createOrGetIfExists(city, signupForm.getState());
+        CityDto cityDto = cityService.createOrGetIfExists(city, signupForm.getCountry());
         user.setCity(cityDto);
         user.setPanier(panierService.add(new PanierDto()));
         user.setCreationDate(new Date());
@@ -167,7 +173,7 @@ public class IdentificationController {
         user.setUsername(signupForm.getUserName());
         user.setPicture(filePath);
         String city = signupForm.getCity().split(",")[0];
-        CityDto cityDto = cityService.createOrGetIfExists(city, signupForm.getState());
+        CityDto cityDto = cityService.createOrGetIfExists(city, signupForm.getCountry());
         user.setCity(cityDto.toEntity());
         UserDto userDto = userService.update(user);
         return "redirect:/profile?username=" + userDto.getUsername();
@@ -182,8 +188,11 @@ public class IdentificationController {
             if (error.equals("wrong")) {
                 model.addAttribute("error", "error.login.error");
             }
-            if (error.equals("notUnique")) {
+            if (error.equals("notUniqueLogin")) {
                 model.addAttribute("errorSignup", "error.usernameNotUnique");
+            }
+            if (error.equals("notUniqueEmail")) {
+                model.addAttribute("errorSignup", "error.emailNotUnique");
             }
             if (error.equals("noPicture")) {
                 model.addAttribute("errorSignup", "error.profile.noPicture");

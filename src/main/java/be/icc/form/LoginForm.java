@@ -3,7 +3,7 @@ package be.icc.form;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * Created by Student on 11-12-18.
+ * Created by Scohier Dorian on 11-12-18.
  */
 public class LoginForm {
 

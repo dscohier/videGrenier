@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Student on 11-12-18.
+ * Created by Scohier Dorian on 11-12-18.
  */
 @Service
 @Transactional
@@ -26,12 +26,12 @@ public class CityServiceImp implements CityService {
     }
 
     @Override
-    public CityDto createOrGetIfExists(String name, String stateName) {
-        City foundCity = cityRepository.findByNameAndState(name, stateName);
+    public CityDto createOrGetIfExists(String name, String country) {
+        City foundCity = cityRepository.findByNameAndCountry(name, country);
         if (foundCity == null) {
             City newCity = new City();
             newCity.setName(name);
-            newCity.setState(stateName);
+            newCity.setCountry(country);
             return cityRepository.save(newCity).toDto();
         } else {
             return foundCity.toDto();

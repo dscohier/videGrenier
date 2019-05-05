@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by Student on 09-12-18.
+ * Created by Scohier Dorian on 09-12-18.
  */
 @Service
 @Transactional
@@ -88,5 +88,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public UserDto update(User user) {
         User userSaved = userRepository.save(user);
         return userSaved.toDto();
+    }
+
+    @Override
+    public UserDto findByMail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return null;
+        } else {
+            return user.toDto();
+        }
     }
 }

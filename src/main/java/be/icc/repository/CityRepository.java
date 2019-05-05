@@ -4,10 +4,10 @@ import be.icc.entity.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Created by Student on 11-12-18.
+ * Created by Scohier Dorian on 11-12-18.
  */
 public interface CityRepository extends JpaRepository<City,Long> {
 
-    City findByNameAndState(String name, String state);
+    City findByNameAndCountry(String name, String country);
 
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by Student on 09-12-18.
+ * Created by Scohier Dorian on 09-12-18.
  */
 @Service
 @Transactional

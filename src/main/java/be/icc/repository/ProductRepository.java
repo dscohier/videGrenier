@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Student on 09-12-18.
+ * Created by Scohier Dorian on 09-12-18.
  */
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
