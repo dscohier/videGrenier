@@ -91,7 +91,7 @@
                                                 </div>
                                             </a>
                                             <c:if test="${product.auction}">
-                                                <span class="price"><spring:message code="product.details.actualPrice"/> : ${product.price}€ </span>
+                                                <span class="price"><spring:message code="product.details.actualPrice"/> : ${product.price}&euro; </span>
                                                 <c:if test="${lastBidder ne null}">
                                                     <spring:message code="product.details.priceOfferedBy"/> : ${lastBidder.user.username} <spring:message code="product.details.on"/> ${lastBidder.insertionDate}
                                                 </c:if>
@@ -109,7 +109,13 @@
                                             <sec:authorize access="isAuthenticated()">
                                                 <sec:authentication property="principal.username" var="username" />
                                                 <c:if test = "${!product.seller.username.equals(username)}">
-                                                    <p class="card-text"><spring:message code="product.details.distance"/> : <label id="output"></label></p></c:if>
+                                                    <c:if test = "${product.seller.city.id ne user.city.id}">
+                                                        <p class="card-text"><spring:message code="product.details.distance"/> : <label id="output"></label></p>
+                                                    </c:if>
+                                                    <c:if test = "${product.seller.city.id eq user.city.id}">
+                                                        <p class="card-text"><spring:message code="product.details.distance"/> : <spring:message code="product.details.sellerInCity"/></p>
+                                                    </c:if>
+                                                </c:if>
                                             </sec:authorize>
                                             <p class="card-text"><spring:message code="product.details.creationDate"/> : <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.creationDate}"/></p>
                                             <c:if test="${product.auction}">
@@ -140,8 +146,7 @@
                 <c:set value="${product.seller.city.country}" var="countrySeller"></c:set>
                 <c:set value="${user.city.name}" var="cityBuyer"></c:set>
                 <c:set value="${user.city.country}" var="countryBuyer"></c:set>
-                //var origin2 = '${cityBuyer}' + ', ' + '${countryBuyer}';
-                var origin2 = 'Soignies, Belgique';
+                var origin2 = '${cityBuyer}' + ', ' + '${countryBuyer}';
                 var destinationA = '${citySeller}' + ', ' + '${countrySeller}';
 
                 var service = new google.maps.DistanceMatrixService;
