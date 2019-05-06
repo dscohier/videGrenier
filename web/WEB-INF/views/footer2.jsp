@@ -57,10 +57,6 @@
 
 		</div>
 	</footer>
-
-	<div class="gototop js-top">
-		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
-	</div>
 	
 	<!-- jQuery -->
 	<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>

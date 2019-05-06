@@ -1,126 +1,216 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html>
 <html>
-<head>
-    <title>VIDE GRENIER</title>
-</head>
-<body>
-<jsp:include page="menu.jsp"/>
-<c:if test="${not empty error}">
-    <label class="error"><spring:message code="${error}"/></label>
-</c:if>
-    <div class="panel-heading">
-        <font color="#0ce3ac">
-            <h3>${product.name}</h3>
-        </font>
-    </div>
-<div class="row">
-    <div class="col-lg-4">
-        <img  class="img-responsive" src="data:image/jpg;base64,${product.displayPicture()}" width="350" height="350"/>
-    </div>
-    <div class="col-lg-4">
-        <div class="card text-white bg-primary mb-3" style="width: 500px;">
-            <div class="card-header"><h3 style="text-align: center"><spring:message code="product.details.seller"/></h3></div>
-            <div class="card-body">
-                <h5 class="card-title"><spring:message code="product.details.addedBy"/> : ${product.seller.lastName}</h5>
-                <p class="card-text"><spring:message code="common.city"/> : ${product.seller.city.name}</p>
-                <sec:authorize access="isAuthenticated()">
-                    <sec:authentication property="principal.username" var="username" />
-                    <c:if test = "${!product.seller.username.equals(username)}">
-                        <p class="card-text"><spring:message code="product.details.distance"/> : </p></c:if>
-                </sec:authorize>
-                <p class="card-text"><spring:message code="product.details.creationDate"/> : ${product.creationDate}</p>
-                <c:if test="${product.auction}">
-                    <p class="card-text"><spring:message code="product.details.endDate"/> : ${product.endDate}</p>
-                </c:if>
-                <sec:authorize access="isAuthenticated()">
-                    <sec:authentication property="principal.username" var="username" />
-                    <c:if test = "${!product.seller.username.equals(username)}">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit" disabled><spring:message code="product.details.sendMessage"/></button>
-                    </c:if>
-                </sec:authorize>
-                <sec:authorize access="!isAuthenticated()">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit" disabled><spring:message code="product.details.sendMessage"/></button>
-                    <label class="error"><spring:message code="error.details.sendMessage"/></label>
-                </sec:authorize>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card text-white bg-primary mb-3" style="width: 500px;">
-            <c:if test="${product.auction}">
-                <div class="card-header"><h4 style="text-align: center"><spring:message code="product.details.actualPrice"/> : ${product.price}€ </h4></div>
-                <c:if test="${lastBidder ne null}">
-                    <spring:message code="product.details.priceOfferedBy"/> : ${lastBidder.user.username} <spring:message code="product.details.on"/> ${lastBidder.insertionDate}
-                </c:if>
-            </c:if>
-            <c:if test="${!product.auction}">
-                <div class="card-header"><h4 style="text-align: center"><spring:message code="common.price"/> : ${product.price}€ </h4></div>
-            </c:if>
+    <jsp:include page="head.jsp"/>
+    <body>
+        <div id="page">
+            <jsp:include page="menu2.jsp"/>
 
-            <div class="card-body">
-                <sec:authorize access="isAuthenticated()">
-                    <sec:authentication property="principal.username" var="username" />
-
-                    <c:if test = "${!product.seller.username.equals(username)}">
-                        <c:if test="${product.auction}">
-                            <form:form cssClass="form-horizontal" method="post" action="bid" enctype="multipart/form-data" commandName="bidForm">
-                                <form:input type="text" path="newPrice" id="newPrice" style="margin-left: 25%;font-size:18px;"/>
-                                <button class="btn btn-primary btn-lg btn-block" type="submit"><spring:message code="common.toBid"/></button>
-                                <div style="visibility: hidden;">
-                                    <form:input type="text" path="idProduct" cssClass="form-control" id="idProduct"/>
+            <div id="fh5co-product">
+                <div class="container">
+                    <div class="row">
+                        <div class="row animate-box">
+                            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                                <h2>${product.name}</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-md-offset-1 animate-box">
+                            <div class="owl-carousel owl-carousel-fullwidth product-carousel">
+                                <div class="item">
+                                    <div class="active text-center">
+                                        <figure>
+                                            <img src="data:image/jpg;base64,${product.displayPicture()}">
+                                        </figure>
+                                    </div>
                                 </div>
-                            </form:form>
-                        </c:if>
-                        <c:if test="${!product.auction}">
-                             <button class="btn btn-primary btn-lg btn-block" type="submit"><spring:message code="product.details.addToBasket"/></button>
-                        </c:if>
-                    </c:if>
-                </sec:authorize>
-                <sec:authorize access="!isAuthenticated()">
-                    <c:if test="${!product.auction}">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit" disabled><spring:message code="product.details.addToBasket"/></button>
-                        <label class="error"><spring:message code="error.details.addToBasket"/></label>
-                    </c:if>
-                    <c:if test="${product.auction}">
-                            <input type="text" cssClass="form-control" id="newPrice" style="margin-left: 25%;" readonly/>
-                            <button class="btn btn-primary btn-lg btn-block" type="submit" disabled><spring:message code="common.toBid"/></button>
-                            <label class="error"><spring:message code="error.details.bid"/></label>
-                    </c:if>
-                </sec:authorize>
+                                <div class="item">
+                                    <div class="active text-center">
+                                        <figure>
+                                            <img src="images/product-single-2.jpg" alt="user">
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row animate-box">
+                                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                                    <p style="display: inline-block;">
+                                        <sec:authorize access="isAuthenticated()">
+                                            <sec:authentication property="principal.username" var="username" />
+                                        <c:if test = "${!product.seller.username.equals(username)}">
+                                        <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.sendMessage"/></button>
+                                        </c:if>
+                                        </sec:authorize>
+                                        <sec:authorize access="!isAuthenticated()">
+                                            <spring:message code="error.details.sendMessage" var="message"/>
+                                        <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.sendMessage"/></button>
+                                        </sec:authorize>
+                                        <c:if test="${product.auction}">
+                                            <div class="auction">
+                                                <spring:message code="product.details.actualPrice"/> : ${product.price}&euro;
+                                                <br/>
+                                                <c:if test="${lastBidder ne null}">
+                                                    <spring:message code="product.details.priceOfferedBy"/> : ${lastBidder.user.username} <spring:message code="product.details.on"/> <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${lastBidder.insertionDate}"/>
+                                                </c:if>
+                                                <form:form cssClass="form-horizontal" method="post" action="bid" enctype="multipart/form-data" commandName="bidForm">
+                                                    <form:input type="text" path="newPrice" id="newPrice"/>
+                                                    <sec:authorize access="!isAuthenticated()">
+                                                        <spring:message code="error.details.sendMessage" var="message"/>
+                                                        <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="common.toBid"/></button>
+                                                    </sec:authorize>
+                                                    <sec:authorize access="isAuthenticated()">
+                                                        <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="common.toBid"/></button>
+                                                    </sec:authorize>
+                                                    <div style="display: none;">
+                                                        <form:input type="text" path="idProduct" cssClass="form-control" id="idProduct"/>
+                                                    </div>
+                                                </form:form>
+                                            </div>
+                                    </c:if>
+                                    <c:if test="${!product.auction}">
+                                        <sec:authorize access="isAuthenticated()">
+                                            <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToBasket"/></button>
+                                        </sec:authorize>
+                                        <sec:authorize access="!isAuthenticated()">
+                                            <spring:message code="error.details.addToBasket" var="message"/>
+                                            <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToBasket"/></button>
+                                        </sec:authorize>
+                                    </c:if>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="fh5co-tabs animate-box">
+                                <ul class="fh5co-tab-nav">
+                                    <li class="active" style="width: 50%"><a href="#" data-tab="1"><span
+                                            class="icon visible-xs"><i class="icon-file"></i></span><span
+                                            class="hidden-xs"><spring:message
+                                            code="product.details.information"/></span></a></li>
+                                    <li style="width: 50%"><a href="#" data-tab="2"><span class="icon visible-xs"><i
+                                            class="icon-bar-graph"></i></span><span class="hidden-xs"><spring:message
+                                            code="product.details.details"/></span></a></li>
+                                </ul>
+
+                                <!-- Tabs -->
+                                <div class="fh5co-tab-content-wrap">
+
+                                    <div class="fh5co-tab-content tab-content active" data-tab-content="1">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            <a href="<c:url value="/profile?username=${product.seller.username}"/>">
+                                                <div class="fh5co-staff">
+                                                    <img src="data:image/jpg;base64,${product.seller.displayPicture()}"
+                                                         alt="<c:url value="/resources/img/userProfile.png"/>">
+                                                    <h3>${product.seller.username}</h3>
+
+                                                    <span class="rate">
+                                                    <c:forEach begin="1" end="${product.seller.averageRatingSeller}">
+                                                        <i class="icon-star2" style="color:yellow"></i>
+                                                    </c:forEach>
+                                                    <c:forEach begin="${product.seller.averageRatingSeller + 1}" end="5">
+                                                        <i class="icon-star"></i>
+                                                    </c:forEach>
+                                                    <p><spring:message code="profile.opinion"/> : ${product.seller.commentByBuyer.size()} </p>
+                                                </span>
+                                                </div>
+                                            </a>
+                                            <c:if test="${product.auction}">
+                                                <span class="price"><spring:message code="product.details.actualPrice"/> : ${product.price}&euro; </span>
+                                            </c:if>
+                                            <c:if test="${!product.auction}">
+                                                <span class="price"><spring:message code="common.price"/> : ${product.price}&euro; </span>
+                                            </c:if>
+                                            <c:if test="${product.auction}">
+                                                <p class="card-text"><spring:message code="common.typeOfSale"/> : <spring:message code="common.bid"/></p>
+                                            </c:if>
+                                            <c:if test="${!product.auction}">
+                                                <p class="card-text"><spring:message code="common.typeOfSale"/> : <spring:message code="common.directSale"/></p>
+                                            </c:if>
+                                            <p class="card-text"><spring:message code="common.city"/> : ${product.seller.city.name}</p>
+                                            <sec:authorize access="isAuthenticated()">
+                                                <sec:authentication property="principal.username" var="username" />
+                                                <c:if test = "${!product.seller.username.equals(username)}">
+                                                    <c:if test = "${product.seller.city.id ne user.city.id}">
+                                                        <p class="card-text"><spring:message code="product.details.distance"/> : <label id="output"></label></p>
+                                                    </c:if>
+                                                    <c:if test = "${product.seller.city.id eq user.city.id}">
+                                                        <p class="card-text"><spring:message code="product.details.distance"/> : <spring:message code="product.details.sellerInCity"/></p>
+                                                    </c:if>
+                                                </c:if>
+                                            </sec:authorize>
+                                            <p class="card-text"><spring:message code="product.details.creationDate"/> : <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.creationDate}"/></p>
+                                            <c:if test="${product.auction}">
+                                                <p class="card-text"><spring:message code="product.details.endDate"/> : <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.endDate}"/></p>
+                                            </c:if>
+                                        </div>
+                                    </div>
+
+                                    <div class="fh5co-tab-content tab-content" data-tab-content="2">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            ${product.description}
+
+                                            '' + ${product.seller.city.name} + ', ' + ${product.seller.city.country}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <sec:authorize access="isAuthenticated()">
-            <sec:authentication property="principal.username" var="username" />
-            <c:if test = "${product.seller.username.equals(username)}">
-                <form:form cssClass="form-horizontal" method="get" action="updateProduct" enctype="multipart/form-data" commandName="updateProductForm">
-                    <div style="visibility: hidden;">
-                        <form:input type="text" path="id" cssClass="form-control" id="id"/>
-                    </div>
-                    <button class="btn btn-primary btn-lg btn-block" type="submit" style="width: 500px"><spring:message code="product.details.edit"/></button>
-                </form:form>
-            </c:if>
-        </sec:authorize>
-    </div>
+        <script>
+            function initMap() {
+                var markersArray = [];
+                <c:set value="${product.seller.city.name}" var="citySeller"></c:set>
+                <c:set value="${product.seller.city.country}" var="countrySeller"></c:set>
+                <c:set value="${user.city.name}" var="cityBuyer"></c:set>
+                <c:set value="${user.city.country}" var="countryBuyer"></c:set>
+                var origin2 = '${cityBuyer}' + ', ' + '${countryBuyer}';
+                var destinationA = '${citySeller}' + ', ' + '${countrySeller}';
 
-    <div class="card text-white bg-secondary mb-3" style="width: 99%; height: 300px">
-        <div class="card-header"><spring:message code="common.description"/></div>
-        <div class="card-body">
-            <p class="card-text">
-                <div style="overflow: auto; height: 350px;">
-                    ${product.description}
-                </div>
-            </p>
-        </div>
-    </div>
-</div>
-<jsp:include page="footer.jsp"/>
-</body>
+                var service = new google.maps.DistanceMatrixService;
+                service.getDistanceMatrix({
+                    origins: [origin2],
+                    destinations: [destinationA],
+                    travelMode: 'DRIVING',
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                    avoidHighways: false,
+                    avoidTolls: false
+                }, function(response, status) {
+                    if (status !== 'OK') {
+                        alert('Error was: ' + status);
+                    } else {
+                        var originList = response.originAddresses;
+                        var destinationList = response.destinationAddresses;
+                        var outputDiv = document.getElementById('output');
+                        outputDiv.innerHTML = '';
 
+
+                        for (var i = 0; i < originList.length; i++) {
+                            var results = response.rows[i].elements;
+                            for (var j = 0; j < results.length; j++) {
+                                outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
+                                    ': ' + results[j].distance.text + ' in ' +
+                                    results[j].duration.text + '<br>';
+                            }
+                        }
+                    }
+                });
+            }
+
+
+        </script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBaebZ5i6230uvRvSiAqecuRv_pEqnXcA&callback=initMap&language=fr">
+        </script>
+        <jsp:include page="footer2.jsp"/>
+    </body>
 </html>
+

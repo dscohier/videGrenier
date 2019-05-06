@@ -20,3 +20,11 @@
     width:260px;
     height:260px;
 }
+
+.auction {
+    letter-spacing: 2px;
+    border: 2px solid #d1c286;
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 7px 20px 10px 20px;
+}
