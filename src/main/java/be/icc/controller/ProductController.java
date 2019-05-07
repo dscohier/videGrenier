@@ -3,6 +3,7 @@ package be.icc.controller;
 import be.icc.dto.BidderDto;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
+import be.icc.entity.Panier;
 import be.icc.entity.Product;
 import be.icc.form.AddProductForm;
 import be.icc.form.BidForm;
@@ -44,6 +45,8 @@ public class ProductController {
     BidderService bidderService;
     @Autowired
     FileService fileService;
+    @Autowired
+    BasketService basketService;
 
     private static final List<String> contentTypes = Arrays.asList("png", "jpeg", "jpg");
 
@@ -234,6 +237,13 @@ public class ProductController {
         if (!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("user", userDto);
+            boolean isInBasket = false;
+            for (ProductDto productFromPanier : userDto.getPanier().getProducts()) {
+                if (productFromPanier.getId() == product.getId()) {
+                    isInBasket = true;
+                }
+            }
+            model.addAttribute("isInBasket", isInBasket);
         }
          return "details";
     }
@@ -257,6 +267,26 @@ public class ProductController {
         product.getBidders().add(bidderService.save(bidderDto).toEntity());
         productService.update(product);
         return "redirect:/product/details?id=" + product.getId();
+    }
+
+    @RequestMapping(value = "/addToBasket", method = RequestMethod.POST)
+    public String addToBasket(@RequestParam("idProduct") Long idProduct, Model model) {
+        ProductDto product = productService.findById(idProduct);
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+
+        if (product.isSell()) {
+            // TODO return home with error le produit est déja vendu
+            return "redirect:/";
+        }
+
+        UserDto user = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Panier panier = basketService.findEntityById(user.getPanier().getId());
+        panier.getProducts().add(productService.findEntityById(idProduct));
+        user.setPanier(basketService.update(panier).toDto());
+        // TODO return page panier
+        return "redirect:/";
     }
 
     @RequestMapping("/mySales")

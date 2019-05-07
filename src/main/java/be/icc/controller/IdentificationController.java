@@ -59,7 +59,7 @@ public class IdentificationController {
             model.addAttribute("signupForm", new SignupForm());
         }
         initialiseModelForAddAndUpdate(model, error);
-        return "connect";
+        return "/connect";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -148,7 +148,7 @@ public class IdentificationController {
             model.addAttribute("signupForm", signupForm);
         }
         initialiseModelForAddAndUpdate(model, error);
-        return "connect";
+        return "/connect";
     }
 
     @RequestMapping("/update")

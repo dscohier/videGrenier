@@ -17,7 +17,7 @@
                             <li><a href="single.html">Single Shop</a></li>
                         </ul>
                     </li>
-                    <li><a href="about.html">About</a></li>
+                    <li><a href="<c:url value="/product/newProduct"/>"><spring:message code="menu.add"/></a></li>
                     <li class="has-dropdown">
                         <a href="services.html">Services</a>
                         <ul class="dropdown">
@@ -40,7 +40,10 @@
 						      </span>
                         </div>
                     </li>
-                    <li class="shopping-cart"><a href="#" class="cart"><span><small>0</small><i class="icon-shopping-cart"></i></span></a></li>
+                    <sec:authorize access="isAuthenticated()">
+                        <sec:authentication property="principal.panier.productsSize" var="countProduct" />
+                        <li class="shopping-cart"><a href="#" class="cart"><span><small>${countProduct}</small><i class="icon-shopping-cart"></i></span></a></li>
+                    </sec:authorize>
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication property="principal.username" var="username" />
                         <li class="has-dropdown">

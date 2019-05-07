@@ -8,6 +8,7 @@ import java.util.Set;
 public class PanierDto {
     private Long id;
     private Set<ProductDto> products;
+    private int productsSize;
 
     public PanierDto() {
     }
@@ -38,5 +39,13 @@ public class PanierDto {
 
     public void setProducts(Set<ProductDto> products) {
         this.products = products;
+    }
+
+    public int getProductsSize() {
+        return getProducts().size();
+    }
+
+    public void setProductsSize(int productsSize) {
+        this.productsSize = productsSize;
     }
 }

@@ -37,7 +37,7 @@
                             </div>
                             <div class="row animate-box">
                                 <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
-                                    <p style="display: inline-block;">
+                                    <div style="display: inline-block;">
                                         <sec:authorize access="isAuthenticated()">
                                             <sec:authentication property="principal.username" var="username" />
                                         <c:if test = "${!product.seller.username.equals(username)}">
@@ -72,14 +72,25 @@
                                     </c:if>
                                     <c:if test="${!product.auction}">
                                         <sec:authorize access="isAuthenticated()">
-                                            <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToBasket"/></button>
+                                            <c:if test="${!isInBasket}">
+                                                <form:form cssClass="form-horizontal" method="post" action="addToBasket" cssStyle="display: inline-block">
+                                                    <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToBasket"/></button>
+                                                    <div style="display: none;">
+                                                        <input type="text" name="idProduct" value="${product.id}"/>
+                                                    </div>
+                                                </form:form>
+                                            </c:if>
+                                            <c:if test="${isInBasket}">
+                                                <spring:message code="error.details.alreadyInBasket" var="message"/>
+                                                <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToBasket"/></button>
+                                            </c:if>
                                         </sec:authorize>
                                         <sec:authorize access="!isAuthenticated()">
                                             <spring:message code="error.details.addToBasket" var="message"/>
                                             <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToBasket"/></button>
                                         </sec:authorize>
                                     </c:if>
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
