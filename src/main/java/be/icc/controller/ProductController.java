@@ -94,7 +94,7 @@ public class ProductController {
             AddProductForm addProductForm = new AddProductForm();
             addProductForm.setId(productDto.getId());
             addProductForm.setCategory(productDto.getCategory().getCategory());
-            addProductForm.setDescription(productDto.getDescription());
+            addProductForm.setDescription(productDto.getDescription().replace("<br>", ""));
             addProductForm.setName(productDto.getName());
             addProductForm.setPrice(productDto.getPrice());
             if (productDto.isAuction()) {

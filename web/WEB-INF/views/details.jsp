@@ -40,13 +40,21 @@
                                     <div style="display: inline-block;">
                                         <sec:authorize access="isAuthenticated()">
                                             <sec:authentication property="principal.username" var="username" />
-                                        <c:if test = "${!product.seller.username.equals(username)}">
-                                        <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.sendMessage"/></button>
-                                        </c:if>
+                                            <c:if test = "${!product.seller.username.equals(username)}">
+                                                <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.sendMessage"/></button>
+                                            </c:if>
+                                            <c:if test = "${product.seller.username.equals(username)}">
+                                                <form:form cssClass="form-horizontal" method="get" action="updateProduct" commandName="updateProductForm">
+                                                    <div style="visibility: hidden;">
+                                                        <form:input type="text" path="id" cssClass="form-control" id="title"/>
+                                                    </div>
+                                                    <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.edit"/></button>
+                                                </form:form>
+                                            </c:if>
                                         </sec:authorize>
                                         <sec:authorize access="!isAuthenticated()">
                                             <spring:message code="error.details.sendMessage" var="message"/>
-                                        <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.sendMessage"/></button>
+                                            <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.sendMessage"/></button>
                                         </sec:authorize>
                                         <c:if test="${product.auction}">
                                             <div class="auction">
@@ -62,7 +70,9 @@
                                                         <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="common.toBid"/></button>
                                                     </sec:authorize>
                                                     <sec:authorize access="isAuthenticated()">
-                                                        <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="common.toBid"/></button>
+                                                        <c:if test="${!product.seller.username.equals(username)}">
+                                                            <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="common.toBid"/></button>
+                                                        </c:if>
                                                     </sec:authorize>
                                                     <div style="display: none;">
                                                         <form:input type="text" path="idProduct" cssClass="form-control" id="idProduct"/>
@@ -72,7 +82,7 @@
                                     </c:if>
                                     <c:if test="${!product.auction}">
                                         <sec:authorize access="isAuthenticated()">
-                                            <c:if test="${!isInBasket}">
+                                            <c:if test="${!isInBasket and !product.seller.username.equals(username)}">
                                                 <form:form cssClass="form-horizontal" method="post" action="addToBasket" cssStyle="display: inline-block">
                                                     <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToBasket"/></button>
                                                     <div style="display: none;">

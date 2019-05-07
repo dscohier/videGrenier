@@ -156,12 +156,15 @@ public class IdentificationController {
                          RedirectAttributes attr, HttpServletRequest request, @RequestParam MultipartFile file) {
         String redirect = checkError(result, attr, signupForm);
         if (redirect != null) {
-            return "redirect:/connect";
+            return "connect";
         }
-        String filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), signupForm.getFile().getOriginalFilename());
-        if (filePath.contains("error")) {
-            attr.addFlashAttribute("signupForm", signupForm);
-            return "redirect:/connect?error=PictureFormat";
+        String filePath = null;
+        if (isNotBlank(signupForm.getFile().getOriginalFilename())) {
+            filePath = fileService.uploadFile(file, ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), signupForm.getFile().getOriginalFilename());
+            if (filePath.contains("error")) {
+                attr.addFlashAttribute("signupForm", signupForm);
+                return "redirect:/connect?error=PictureFormat";
+            }
         }
         User user = userService.findEntityById(signupForm.getId());
         user.setEmail(signupForm.getEmail());
@@ -171,7 +174,9 @@ public class IdentificationController {
         String hashedPassword= encoder.encode(signupForm.getPassword());
         user.setPassword(hashedPassword);
         user.setUsername(signupForm.getUserName());
-        user.setPicture(filePath);
+        if (filePath != null) {
+            user.setPicture(filePath);
+        }
         String city = signupForm.getCity().split(",")[0];
         CityDto cityDto = cityService.createOrGetIfExists(city, signupForm.getCountry());
         user.setCity(cityDto.toEntity());
