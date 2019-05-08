@@ -12,9 +12,9 @@
             <div class="col-lg-6 text-center menu-1">
                 <ul>
                     <li class="has-dropdown">
-                        <a href="product.html">Shop</a>
+                        <a href="<c:url value="/product/products"/>"><spring:message code="menu.deals"/></a>
                         <ul class="dropdown">
-                            <li><a href="single.html">Single Shop</a></li>
+                            <li><a href="<c:url value="/product/products"/>"><spring:message code="menu.allDeals"/></a></li>
                         </ul>
                     </li>
                     <li><a href="<c:url value="/product/newProduct"/>"><spring:message code="menu.add"/></a></li>

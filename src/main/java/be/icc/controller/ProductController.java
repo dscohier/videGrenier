@@ -69,7 +69,7 @@ public class ProductController {
         } else {
             initialisePaging(model, products);
         }
-        return "products";
+        return "products2";
     }
 
     @RequestMapping("/newProduct")

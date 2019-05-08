@@ -727,7 +727,7 @@ h1, h2, h3, h4, h5, h6, figure {
 #fh5co-about,
 #fh5co-contact,
 #fh5co-footer {
-  padding: 7em 0;
+  padding: 2em 0;
   clear: both;
 }
 @media screen and (max-width: 768px) {
@@ -788,9 +788,6 @@ h1, h2, h3, h4, h5, h6, figure {
   font-weight: 600;
 }
 
-.product {
-  margin-bottom: 40px;
-}
 .product .product-grid {
   background-size: cover;
   background-position: top center;
