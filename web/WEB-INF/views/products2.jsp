@@ -26,7 +26,6 @@
 						</div>
 						<div class="col-lg-11">
 							<c:forEach var="product" items="${products}">
-							<a href="<c:url value="/product/details?id=${product.id}"/>" style="margin-top: 100px">
 								<div class="col-md-4 text-center animate-box" style="margin-top: 20px;">
 									<a href="<c:url value="/profile?username=${product.seller.username}"/>">
 										<div class="fh5co-staff" style="margin-bottom: 5px">
@@ -44,6 +43,7 @@
                                                 </span>
 										</div>
 									</a>
+									<a href="<c:url value="/product/details?id=${product.id}"/>" style="margin-top: 100px">
 									<h3>${product.name}</h3>
 									<div class="product">
 										<img src="data:image/jpg;base64,${product.displayPicture()}">
@@ -64,6 +64,7 @@
 											</span>
 										</c:if>
 									</div>
+									</a>
 								</div>
 								</c:forEach>
 						</div>
