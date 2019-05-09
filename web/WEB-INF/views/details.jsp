@@ -185,6 +185,7 @@
                     </div>
                 </div>
             </div>
+            <jsp:include page="footer2.jsp"/>
         </div>
         <script>
             function initMap() {
@@ -231,7 +232,6 @@
         <script async defer
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBaebZ5i6230uvRvSiAqecuRv_pEqnXcA&callback=initMap&language=fr">
         </script>
-        <jsp:include page="footer2.jsp"/>
     </body>
 </html>
 

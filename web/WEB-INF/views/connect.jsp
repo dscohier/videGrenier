@@ -190,7 +190,7 @@
                     </form:form>
                 </div>
             </c:if>
+            <jsp:include page="footer2.jsp"/>
         </div>
-        <jsp:include page="footer2.jsp"/>
     </body>
 </html>
