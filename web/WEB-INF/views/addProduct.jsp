@@ -115,7 +115,6 @@
                     </form:form>
                 </div>
             </div>
-            <jsp:include page="footer2.jsp"/>
         </div>
         <script>
             function hideAuctionDiv(){
@@ -144,5 +143,6 @@
                 $("#auction").show();
             </script>
         </c:if>
+        <jsp:include page="footer2.jsp"/>
     </body>
 </html>

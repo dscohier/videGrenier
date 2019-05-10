@@ -25,7 +25,10 @@
 
 						</div>
 						<div class="col-lg-11">
-							<c:forEach var="product" items="${products}">
+							<c:forEach var="product" items="${products}" varStatus="loop">
+								<c:if test="${loop.index%3 == 0}">
+									<div class="row">
+								</c:if>
 								<div class="col-md-4 text-center animate-box" style="margin-top: 20px;">
 									<a href="<c:url value="/profile?username=${product.seller.username}"/>">
 										<div class="fh5co-staff" style="margin-bottom: 5px">
@@ -44,29 +47,35 @@
 										</div>
 									</a>
 									<a href="<c:url value="/product/details?id=${product.id}"/>" style="margin-top: 100px">
-									<h3>${product.name}</h3>
-									<div class="product">
-										<img src="data:image/jpg;base64,${product.displayPicture()}">
-									</div>
-									<div class="desc" style="margin-top: 10px;">
-										<c:if test="${not product.auction}">
-											<h4 style="color: #d1c286;"><spring:message code="common.directSale"/></h4>
-											<span class="price">
+										<h3>${product.name}</h3>
+										<div class="product">
+											<img src="data:image/jpg;base64,${product.displayPicture()}">
+										</div>
+										<div class="desc" style="margin-top: 10px;">
+											<c:if test="${not product.auction}">
+												<h4 style="color: #d1c286;"><spring:message code="common.directSale"/></h4>
+												<span class="price">
 											<spring:message code="common.price"/>
 											${product.price}&euro;
 										</span>
-										</c:if>
-										<c:if test="${product.auction}">
-											<h4 style="color: #d1c286"><spring:message code="common.bid"/></h4>
-											<span class="price">
+											</c:if>
+											<c:if test="${product.auction}">
+												<h4 style="color: #d1c286"><spring:message code="common.bid"/></h4>
+												<span class="price">
 												<spring:message code="product.details.actualPrice"/>
 												${product.price}&euro;
 											</span>
-										</c:if>
-									</div>
+											</c:if>
+										</div>
 									</a>
 								</div>
-								</c:forEach>
+								<c:if test="${loop.index%3 == 2}">
+									</div>
+								</c:if>
+							</c:forEach>
+							<c:if test="${products.size()%3 != 0}">
+								</div>
+							</c:if>
 						</div>
 					</div>
 				</div>

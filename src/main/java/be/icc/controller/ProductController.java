@@ -304,10 +304,10 @@ public class ProductController {
     }
 
     private void initialisePaging(Model model, List<ProductDto> products) {
-        model.addAttribute("size", (int) Math.ceil(products.size() / 5.0));
+        model.addAttribute("size", (int) Math.ceil(products.size() / 9.0));
         model.addAttribute("currentPage", 1);
-        if (products.size() > 5) {
-            model.addAttribute("products", products.subList(0, 4));
+        if (products.size() > 9) {
+            model.addAttribute("products", products.subList(0, 9));
         } else {
             model.addAttribute("products", products);
         }
