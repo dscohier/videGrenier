@@ -1,12 +1,14 @@
 package be.icc.controller;
 
 import be.icc.dto.BidderDto;
+import be.icc.dto.CategoryDto;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Panier;
 import be.icc.entity.Product;
 import be.icc.form.AddProductForm;
 import be.icc.form.BidForm;
+import be.icc.form.FilterForm;
 import be.icc.model.FileModel;
 import be.icc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.apache.commons.lang.StringUtils.*;
 
@@ -69,7 +69,21 @@ public class ProductController {
         } else {
             initialisePaging(model, products);
         }
+        FilterForm filterForm = new FilterForm();
+        Set<CategoryDto> categoryDtoSet = categoryService.findAll();
+        model.addAttribute("filterForm", filterForm);
+        ArrayList<String> categories = new ArrayList();
+        for (CategoryDto categoryDto : categoryDtoSet) {
+            categories.add(categoryDto.getCategory().name());
+        }
+        model.addAttribute("categories", categories);
         return "products2";
+    }
+
+    @RequestMapping("/filter")
+    public String update(@ModelAttribute("filterForm") @Valid FilterForm filterForm, BindingResult result,
+                         RedirectAttributes attr, HttpServletRequest request) {
+        return "";
     }
 
     @RequestMapping("/newProduct")
