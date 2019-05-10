@@ -8,7 +8,6 @@
     <jsp:include page="head.jsp"/>
     <body>
         <div id="page">
-            <jsp:include page="menu2.jsp"/>
             <c:if test="${signupForm.id == null}">
                 <div class="col-lg-6">
                     <form:form cssClass="form-horizontal" method="post" action="/VideGrenier/connect/login" commandName="loginForm">
@@ -48,10 +47,10 @@
                 </div>
             </c:if>
             <c:if test="${signupForm.id == null}">
-                <c:set var="signupOrUpdate" value="connect/signup"/>
+                <c:set var="signupOrUpdate" value="/VideGrenier//connect/signup"/>
             </c:if>
             <c:if test="${signupForm.id != null}">
-                <c:set var="signupOrUpdate" value="update"/>
+                <c:set var="signupOrUpdate" value="/VideGrenier//connect/update"/>
             </c:if>
             <c:if test="${empty success}">
                 <div class="col-lg-6">
@@ -105,7 +104,7 @@
                                     <br/>
                                     <form:errors path="country" cssClass="error"/>
                                 </div>
-                                <div style="display: none">
+                                <div style="visibility: hidden;">
                                     <table id="address">
                                         <td><form:input type="text" id="locality" name="city" path="city"></form:input></td>
                                         <td><form:input type="text" path="country" name="country"
@@ -161,13 +160,13 @@
                             var autocomplete;
                             var componentForm = {
                                 locality: 'long_name',
-                                country: 'political',
+                                country: 'long_name'
                             };
 
                             function initSearch() {
                                 autocomplete = new google.maps.places.Autocomplete((
                                     document.getElementById('autocomplete')), {
-                                    types: ['(cities)'],
+                                    types: ['(cities)']
                                 });
                                 autocomplete.addListener('place_changed', fillInAddress);
                             }
