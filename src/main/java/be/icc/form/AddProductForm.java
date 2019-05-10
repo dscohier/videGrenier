@@ -1,6 +1,7 @@
 package be.icc.form;
 
 import be.icc.controller.CategoryEnum;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import java.util.Date;
 public class AddProductForm {
     private CategoryEnum category;
     @NotBlank(message = "{error.notBlank}")
+    @Length(max = 40, message = "{error.addProduct.titleMaxLength}")
     private String name;
     @NotBlank(message = "{error.notBlank}")
     private String description;

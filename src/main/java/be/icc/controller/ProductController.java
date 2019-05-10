@@ -77,6 +77,7 @@ public class ProductController {
             categories.add(categoryDto.getCategory().name());
         }
         model.addAttribute("categories", categories);
+        model.addAttribute("typeOfSale", new String[] {"Enchere", "Vente directe"});
         return "products2";
     }
 

@@ -22,11 +22,64 @@
 							<h4><spring:message code="product.products.filter"/></h4>
 							<br/>
 							<form:form cssClass="form-horizontal" method="get" action="filter" commandName="filterForm" autocomplete="off">
-								<form:checkboxes items = "${categories}" path = "categories" delimiter="<br/>"/>
+								<c:forEach var="categorie" items="${categories}">
+									<label class="control control-checkbox">
+											${categorie}
+										<form:checkbox path="categories" value="${categorie}"/>
+										<div class="control_indicator">
+										</div>
+									</label>
+								</c:forEach>
 								<br/>
 								<spring:message code="common.city"/>
-								<form:input type="text" path="city" cssClass=" form-control"/>
+								<input type="text" id="autocomplete" name="city" value="${filterForm.city}"/>
+								<div style="visibility: hidden;">
+									<table id="address">
+										<td><form:input type="text" id="locality" name="city" path="city"></form:input></td>
+										<td><form:input type="text" path="country" name="country"
+														id="country"></form:input></td>
+									</table>
+								</div>
+								<c:forEach var="typeOfSale" items="${typeOfSale}">
+									<label class="control control-checkbox">
+											${typeOfSale}
+										<form:checkbox path="typeOfSale" value="${typeOfSale}"/>
+										<div class="control_indicator">
+										</div>
+									</label>
+								</c:forEach>
+								<br/>
 								<input type="submit" class="btn btn-primary" value="<spring:message code="product.products.filter"/>">
+								<script>
+                                    var autocomplete;
+                                    var componentForm = {
+                                        locality: 'long_name',
+                                        country: 'long_name'
+                                    };
+
+                                    function initSearch() {
+                                        autocomplete = new google.maps.places.Autocomplete((
+                                            document.getElementById('autocomplete')), {
+                                            types: ['(cities)']
+                                        });
+                                        autocomplete.addListener('place_changed', fillInAddress);
+                                    }
+
+                                    function fillInAddress() {
+                                        // Get the place details from the autocomplete object.
+                                        var place = autocomplete.getPlace();
+                                        for (var i = 0; i < place.address_components.length; i++) {
+                                            var addressType = place.address_components[i].types[0];
+                                            if (componentForm[addressType]) {
+                                                var val = place.address_components[i][componentForm[addressType]];
+                                                document.getElementById(addressType).value = val;
+                                            }
+                                        }
+
+                                    }
+								</script>
+								<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBaebZ5i6230uvRvSiAqecuRv_pEqnXcA&signed_in=true&libraries=places&callback=initSearch&language=fr"
+										async defer></script>
 							</form:form>
 						</div>
 						<div class="col-lg-10">
@@ -94,13 +147,13 @@
 								</c:if>
 							</c:forEach>
 							<c:if test="${products.size()%3 != 0}">
-								</div>
-							</c:if>
 						</div>
+						</c:if>
 					</div>
 				</div>
-				<jsp:include page="footer2.jsp"/>
 			</div>
+			<jsp:include page="footer2.jsp"/>
+		</div>
 	</body>
 </html>
 

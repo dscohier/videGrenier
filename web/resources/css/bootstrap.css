@@ -2182,6 +2182,7 @@ input[type="search"] {
   margin-bottom: 0;
   font-weight: normal;
   cursor: pointer;
+  margin-left: 5px;
 }
 
 .radio input[type="radio"],

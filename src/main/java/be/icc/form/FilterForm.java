@@ -6,7 +6,9 @@ package be.icc.form;
 public class FilterForm {
 
     private String[] categories;
-    String city;
+    private String city;
+    private String country;
+    private String[] typeOfSale;
 
     public String[] getCategories() {
         return categories;
@@ -22,5 +24,21 @@ public class FilterForm {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String[] getTypeOfSale() {
+        return typeOfSale;
+    }
+
+    public void setTypeOfSale(String[] typeOfSale) {
+        this.typeOfSale = typeOfSale;
     }
 }
