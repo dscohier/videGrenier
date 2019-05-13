@@ -1,7 +1,6 @@
 package be.icc.controller;
 
 import be.icc.dto.BidderDto;
-import be.icc.dto.CategoryDto;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Panier;
@@ -23,7 +22,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.*;
 
@@ -69,22 +71,42 @@ public class ProductController {
         } else {
             initialisePaging(model, products);
         }
-        FilterForm filterForm = new FilterForm();
-        Set<CategoryDto> categoryDtoSet = categoryService.findAll();
-        model.addAttribute("filterForm", filterForm);
-        ArrayList<String> categories = new ArrayList();
-        for (CategoryDto categoryDto : categoryDtoSet) {
-            categories.add(categoryDto.getCategory().name());
-        }
-        model.addAttribute("categories", categories);
-        model.addAttribute("typeOfSale", new String[] {"Enchere", "Vente directe"});
+        initFilter(model, new FilterForm());
         return "products2";
     }
 
+    private void initFilter(Model model, FilterForm filterForm) {
+        CategoryEnum[] categoryEnums = CategoryEnum.values();
+        String[] categories = new String[categoryEnums.length];
+            for (int i = 0; i < categoryEnums.length; i++) {
+                categories[i] = categoryEnums[i].name();
+            }
+        if (filterForm.getCategories() == null) {
+            filterForm.setCategories(categories);
+        }
+        model.addAttribute("categories", categories);
+        TypeOfSaleEnum[] typeOfSaleEnums = TypeOfSaleEnum.values();
+        String[] typeOfSale = new String[typeOfSaleEnums.length];
+            for (int i = 0; i < typeOfSaleEnums.length; i++) {
+                typeOfSale[i] = typeOfSaleEnums[i].name();
+            }
+        if (filterForm.getTypeOfSale() == null) {
+            filterForm.setTypeOfSale(typeOfSale);
+        }
+        model.addAttribute("typeOfSale", typeOfSale);
+        model.addAttribute("filterForm", filterForm);
+    }
+
     @RequestMapping("/filter")
-    public String update(@ModelAttribute("filterForm") @Valid FilterForm filterForm, BindingResult result,
-                         RedirectAttributes attr, HttpServletRequest request) {
-        return "";
+    public String update(@ModelAttribute("filterForm") @Valid FilterForm filterForm, BindingResult result, Model model) {
+        List<CategoryEnum> categoryEnums = new ArrayList<>();
+        for (String categorie : filterForm.getCategories()) {
+            categoryEnums.add(CategoryEnum.valueOf(categorie));
+        }
+        List<ProductDto> products = productService.findByCategoryIn(categoryEnums);
+        initFilter(model, filterForm);
+        initialisePaging(model, products);
+        return "products2";
     }
 
     @RequestMapping("/newProduct")

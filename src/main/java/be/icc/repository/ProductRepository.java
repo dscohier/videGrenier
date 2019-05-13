@@ -1,6 +1,5 @@
 package be.icc.repository;
 
-import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
@@ -18,5 +17,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
    List<Product> findByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(Date date);
 
-    List<ProductDto> findBySellerOrderByCreationDateDesc(UserDto seller);
+    List<Product> findBySellerOrderByCreationDateDesc(UserDto seller);
+
+    List<Product> findByCategoryIn(List<Category> category);
 }

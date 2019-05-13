@@ -74,6 +74,28 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<ProductDto> findBySeller(UserDto seller) {
-        return productRepository.findBySellerOrderByCreationDateDesc(seller);
+        List<Product> products = productRepository.findBySellerOrderByCreationDateDesc(seller);
+        List<ProductDto> productsDto = new ArrayList<>();
+        for (Product product : products) {
+            productsDto.add(product.toDto());
+        }
+        return productsDto;
+    }
+
+    @Override
+    public List<ProductDto> findByCategoryIn(List<CategoryEnum> categoryEnums) {
+        List<Category> categories = new ArrayList<>();
+        for (CategoryEnum categoryEnum : categoryEnums) {
+           Category category = categoryRepository.findByCategory(categoryEnum);
+           if (category != null) {
+               categories.add(category);
+           }
+        }
+        List<Product> products = productRepository.findByCategoryIn(categories);
+        List<ProductDto> productsDto = new ArrayList<>();
+        for (Product product : products) {
+            productsDto.add(product.toDto());
+        }
+        return productsDto;
     }
 }

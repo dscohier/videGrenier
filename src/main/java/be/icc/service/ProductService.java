@@ -25,4 +25,6 @@ public interface ProductService {
     Product findEntityById(Long id);
 
     List<ProductDto> findBySeller(UserDto seller);
+
+    List<ProductDto> findByCategoryIn(List<CategoryEnum> categoryEnums);
 }
