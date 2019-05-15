@@ -33,6 +33,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         Root<Product> product = cq.from(Product.class);
         List<Predicate> predicates = new ArrayList<>();
 
+        predicates.add(cb.and(cb.equal(product.get("isSell"), false)));
         whereCategorieIn(filterForm, cb, predicates, product);
         if (filterForm.getTypeOfSale().length != 0 && filterForm.getTypeOfSale().length != 2) {
             TypeOfSaleEnum typeOfSale = TypeOfSaleEnum.valueOf(filterForm.getTypeOfSale()[0]);
@@ -43,6 +44,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             }
         }
         cq.where(predicates.toArray(new Predicate[0]));
+        cq.orderBy(cb.desc(product.get("creationDate")));
 
         List<Product> products = em.createQuery(cq).getResultList();
         List<ProductDto> productDtos = new ArrayList<>();
