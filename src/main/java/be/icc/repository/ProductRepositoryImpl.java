@@ -4,19 +4,20 @@ import be.icc.controller.CategoryEnum;
 import be.icc.controller.TypeOfSaleEnum;
 import be.icc.dto.ProductDto;
 import be.icc.entity.Category;
+import be.icc.entity.City;
 import be.icc.entity.Product;
+import be.icc.entity.User;
 import be.icc.form.FilterForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
@@ -24,6 +25,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     EntityManager em;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    CityRepository cityRepository;
 
     @Override
     public List<ProductDto> findProductsByCriteria(FilterForm filterForm) {
@@ -35,14 +38,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         predicates.add(cb.and(cb.equal(product.get("isSell"), false)));
         whereCategorieIn(filterForm, cb, predicates, product);
-        if (filterForm.getTypeOfSale().length != 0 && filterForm.getTypeOfSale().length != 2) {
-            TypeOfSaleEnum typeOfSale = TypeOfSaleEnum.valueOf(filterForm.getTypeOfSale()[0]);
-            if (typeOfSale == TypeOfSaleEnum.DIRECT_SALE) {
-                predicates.add(cb.and(cb.equal(product.get("isAuction"), false)));
-            } else {
-                predicates.add(cb.and(cb.equal(product.get("isAuction"), true)));
-            }
-        }
+        whereIsAuction(filterForm, cb, predicates, product);
+        whereCityIs(filterForm, cb, predicates, product);
         cq.where(predicates.toArray(new Predicate[0]));
         cq.orderBy(cb.desc(product.get("creationDate")));
 
@@ -52,6 +49,25 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             productDtos.add(productEntity.toDto());
         }
         return productDtos;
+    }
+
+    private void whereCityIs(FilterForm filterForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+        if (isNotBlank(filterForm.getCountry())) {
+            City city = cityRepository.findByNameAndCountry(filterForm.getCity().split(",")[0], filterForm.getCountry());
+            Join<Product, User> user = product.join("seller");
+            predicates.add(cb.and(cb.equal(user.get("city"), city)));
+        }
+    }
+
+    private void whereIsAuction(FilterForm filterForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+        if (filterForm.getTypeOfSale().length != 0 && filterForm.getTypeOfSale().length != 2) {
+            TypeOfSaleEnum typeOfSale = TypeOfSaleEnum.valueOf(filterForm.getTypeOfSale()[0]);
+            if (typeOfSale == TypeOfSaleEnum.DIRECT_SALE) {
+                predicates.add(cb.and(cb.equal(product.get("isAuction"), false)));
+            } else {
+                predicates.add(cb.and(cb.equal(product.get("isAuction"), true)));
+            }
+        }
     }
 
     private void whereCategorieIn(FilterForm filterForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {

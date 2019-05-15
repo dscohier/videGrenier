@@ -93,9 +93,7 @@ public class ProductController {
             filterForm.setTypeOfSale(typeOfSale);
         }
 
-        if (isBlank(filterForm.getCountry())) {
-            filterForm.setCity("");
-        }
+        filterForm.setCity("");
         model.addAttribute("typeOfSale", typeOfSale);
         model.addAttribute("filterForm", filterForm);
     }
