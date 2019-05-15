@@ -52,7 +52,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     private void whereCityIs(FilterForm filterForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
-        if (isNotBlank(filterForm.getCountry())) {
+        if (isNotBlank(filterForm.getCity()) && isNotBlank(filterForm.getCountry())) {
             City city = cityRepository.findByNameAndCountry(filterForm.getCity().split(",")[0], filterForm.getCountry());
             Join<Product, User> user = product.join("seller");
             predicates.add(cb.and(cb.equal(user.get("city"), city)));
