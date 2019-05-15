@@ -75,7 +75,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<ProductDto> findBySeller(UserDto seller) {
-        List<Product> products = productRepository.findBySellerOrderByCreationDateDesc(seller);
+        List<Product> products = productRepository.findBySellerOrderByCreationDateDesc(seller.toEntity());
         List<ProductDto> productsDto = new ArrayList<>();
         for (Product product : products) {
             productsDto.add(product.toDto());

@@ -1,8 +1,8 @@
 package be.icc.repository;
 
-import be.icc.dto.UserDto;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
+import be.icc.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
@@ -17,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product,Long>, ProductR
 
    List<Product> findByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(Date date);
 
-    List<Product> findBySellerOrderByCreationDateDesc(UserDto seller);
+    List<Product> findBySellerOrderByCreationDateDesc(User seller);
 
     List<Product> findByCategoryIn(List<Category> category);
 }

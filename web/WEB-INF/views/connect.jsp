@@ -8,6 +8,7 @@
     <jsp:include page="head.jsp"/>
     <body>
         <div id="page">
+            <jsp:include page="menu2.jsp"/>
             <c:if test="${signupForm.id == null}">
                 <div class="col-lg-6">
                     <form:form cssClass="form-horizontal" method="post" action="/VideGrenier/connect/login" commandName="loginForm">

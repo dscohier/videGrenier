@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
-
+/**
+ * Created by Scohier Dorian on 15-05-2019.
+ */
 @Repository
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @PersistenceContext
