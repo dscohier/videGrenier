@@ -18,14 +18,8 @@
                         </ul>
                     </li>
                     <li><a href="<c:url value="/product/newProduct"/>"><spring:message code="menu.add"/></a></li>
-                    <li class="has-dropdown">
-                        <a href="services.html">Services</a>
-                        <ul class="dropdown">
-                            <li><a href="#">Web Design</a></li>
-                            <li><a href="#">eCommerce</a></li>
-                            <li><a href="#">Branding</a></li>
-                            <li><a href="#">API</a></li>
-                        </ul>
+                    <li>
+                        <a href="<c:url value="/product/mySales"/>"><spring:message code="menu.mySales"/></a>
                     </li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>

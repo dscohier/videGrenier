@@ -71,7 +71,7 @@ public class ProductController {
             initialisePaging(model, products);
         }
         initFilter(model, new FilterForm());
-        return "products2";
+        return "products";
     }
 
     private void initFilter(Model model, FilterForm filterForm) {
@@ -103,7 +103,7 @@ public class ProductController {
         List<ProductDto> products = productService.findProductsByCriteria(filterForm);
         initFilter(model, filterForm);
         initialisePaging(model, products);
-        return "products2";
+        return "products";
     }
 
     @RequestMapping("/newProduct")
