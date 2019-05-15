@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -93,17 +92,17 @@ public class ProductController {
         if (filterForm.getTypeOfSale() == null) {
             filterForm.setTypeOfSale(typeOfSale);
         }
+
+        if (isBlank(filterForm.getCountry())) {
+            filterForm.setCity("");
+        }
         model.addAttribute("typeOfSale", typeOfSale);
         model.addAttribute("filterForm", filterForm);
     }
 
     @RequestMapping("/filter")
     public String update(@ModelAttribute("filterForm") @Valid FilterForm filterForm, BindingResult result, Model model) {
-        List<CategoryEnum> categoryEnums = new ArrayList<>();
-        for (String categorie : filterForm.getCategories()) {
-            categoryEnums.add(CategoryEnum.valueOf(categorie));
-        }
-        List<ProductDto> products = productService.findByCategoryIn(categoryEnums);
+        List<ProductDto> products = productService.findProductsByCriteria(filterForm);
         initFilter(model, filterForm);
         initialisePaging(model, products);
         return "products2";

@@ -4,6 +4,7 @@ import be.icc.controller.CategoryEnum;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Product;
+import be.icc.form.FilterForm;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface ProductService {
     List<ProductDto> findBySeller(UserDto seller);
 
     List<ProductDto> findByCategoryIn(List<CategoryEnum> categoryEnums);
+
+    List<ProductDto> findProductsByCriteria(FilterForm filterForm);
 }

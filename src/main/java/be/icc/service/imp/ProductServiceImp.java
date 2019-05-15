@@ -5,6 +5,7 @@ import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
+import be.icc.form.FilterForm;
 import be.icc.repository.CategoryRepository;
 import be.icc.repository.ProductRepository;
 import be.icc.service.ProductService;
@@ -97,5 +98,10 @@ public class ProductServiceImp implements ProductService {
             productsDto.add(product.toDto());
         }
         return productsDto;
+    }
+
+    @Override
+    public List<ProductDto> findProductsByCriteria(FilterForm filterForm) {
+        return productRepository.findProductsByCriteria(filterForm);
     }
 }

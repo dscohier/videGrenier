@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Scohier Dorian on 09-12-18.
  */
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product,Long>, ProductRepositoryCustom  {
 
    List<Product> findByCategoryAndIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(Category category, Date date);
 
