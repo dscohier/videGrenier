@@ -24,8 +24,8 @@ public class AddProductForm {
 
     private MultipartFile file;
 
-    private double price;
-    private double priceAuction;
+    private long price;
+    private long priceAuction;
 
     private String auctionOrFixPrice;
 
@@ -63,11 +63,11 @@ public class AddProductForm {
         this.description = description;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
@@ -140,11 +140,11 @@ public class AddProductForm {
         this.endDateString = endDateString;
     }
 
-    public double getPriceAuction() {
+    public long getPriceAuction() {
         return priceAuction;
     }
 
-    public void setPriceAuction(double priceAuction) {
+    public void setPriceAuction(long priceAuction) {
         this.priceAuction = priceAuction;
     }
 

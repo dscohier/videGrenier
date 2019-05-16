@@ -5,14 +5,14 @@ package be.icc.form;
  */
 public class BidForm {
 
-    private double newPrice;
+    private long newPrice;
     private Long idProduct;
 
-    public double getNewPrice() {
+    public long getNewPrice() {
         return newPrice;
     }
 
-    public void setNewPrice(double newPrice) {
+    public void setNewPrice(long newPrice) {
         this.newPrice = newPrice;
     }
 

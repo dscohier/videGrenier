@@ -26,7 +26,7 @@ public class Product implements Serializable {
     @Column(nullable = false, length = 10000)
     private String description;
     @Column(nullable = false,  columnDefinition="Decimal(10,2)")
-    private double price;
+    private long price;
     @Column
     private String picture;
     @Column
@@ -93,11 +93,11 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 

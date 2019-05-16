@@ -21,7 +21,7 @@ public class ProductDto {
     private String name;
     private String description;
     private String picture;
-    private double price;
+    private long price;
     private boolean isAuction;
     private boolean isSell;
     private Date endDate;
@@ -82,11 +82,11 @@ public class ProductDto {
         this.description = description;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
