@@ -37,7 +37,7 @@
             <sec:authorize access="isAuthenticated()">
                 <sec:authentication property="principal.username" var="username" />
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/product/mySales"/>"><spring:message code="menu.mySales"/></a>
+                    <a class="nav-link" href="<c:url value="/product/mySales"/>"><spring:message code="common.mySales"/></a>
                 </li>
             </sec:authorize>
             <li class="nav-item">

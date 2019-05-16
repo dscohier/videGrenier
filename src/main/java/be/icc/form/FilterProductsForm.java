@@ -3,7 +3,7 @@ package be.icc.form;
 /**
  * Created by Scohier Dorian on 10-05-19.
  */
-public class FilterForm {
+public class FilterProductsForm {
 
     private String[] categories;
     private String city;

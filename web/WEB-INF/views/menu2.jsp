@@ -19,7 +19,7 @@
                     </li>
                     <li><a href="<c:url value="/product/newProduct"/>"><spring:message code="menu.add"/></a></li>
                     <li>
-                        <a href="<c:url value="/product/mySales"/>"><spring:message code="menu.mySales"/></a>
+                        <a href="<c:url value="/product/mySales"/>"><spring:message code="common.mySales"/></a>
                     </li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>

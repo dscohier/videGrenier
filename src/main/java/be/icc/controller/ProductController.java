@@ -7,7 +7,8 @@ import be.icc.entity.Panier;
 import be.icc.entity.Product;
 import be.icc.form.AddProductForm;
 import be.icc.form.BidForm;
-import be.icc.form.FilterForm;
+import be.icc.form.FilterProductsForm;
+import be.icc.form.FilterSalesForm;
 import be.icc.model.FileModel;
 import be.icc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -49,8 +49,6 @@ public class ProductController {
     @Autowired
     BasketService basketService;
 
-    private static final List<String> contentTypes = Arrays.asList("png", "jpeg", "jpg");
-
     @RequestMapping("/products")
     public String products(Model model, @RequestParam(required = false) String category) {
         List<ProductDto> products;
@@ -70,40 +68,68 @@ public class ProductController {
         } else {
             initialisePaging(model, products);
         }
-        initFilter(model, new FilterForm());
+        initFilterProducts(model, new FilterProductsForm());
         return "products";
     }
 
-    private void initFilter(Model model, FilterForm filterForm) {
-        CategoryEnum[] categoryEnums = CategoryEnum.values();
-        String[] categories = new String[categoryEnums.length];
-            for (int i = 0; i < categoryEnums.length; i++) {
-                categories[i] = categoryEnums[i].name();
-            }
-        if (filterForm.getCategories() == null) {
-            filterForm.setCategories(categories);
+    private void initFilterProducts(Model model, FilterProductsForm filterProductsForm) {
+        String[] categories = initCategories(model);
+        if (filterProductsForm.getCategories() == null) {
+            filterProductsForm.setCategories(categories);
         }
-        model.addAttribute("categories", categories);
+
+        String[] typeOfSales = initTypeOfSale(model);
+        if (filterProductsForm.getTypeOfSale() == null) {
+            filterProductsForm.setTypeOfSale(typeOfSales);
+        }
+
+        filterProductsForm.setCity("");
+        model.addAttribute("filterProductsForm", filterProductsForm);
+    }
+
+    private void initFilterSales(Model model, FilterSalesForm filterSalesForm) {
+        if (filterSalesForm.getCategories() == null) {
+            filterSalesForm.setCategories(initCategories(model));
+        }
+
+        if (filterSalesForm.getTypeOfSale() == null) {
+            filterSalesForm.setTypeOfSale(initTypeOfSale(model));
+        }
+
+        model.addAttribute("filterSalesForm", filterSalesForm);
+    }
+
+    private String[] initTypeOfSale(Model model) {
         TypeOfSaleEnum[] typeOfSaleEnums = TypeOfSaleEnum.values();
         String[] typeOfSale = new String[typeOfSaleEnums.length];
-            for (int i = 0; i < typeOfSaleEnums.length; i++) {
-                typeOfSale[i] = typeOfSaleEnums[i].name();
-            }
-        if (filterForm.getTypeOfSale() == null) {
-            filterForm.setTypeOfSale(typeOfSale);
+        for (int i = 0; i < typeOfSaleEnums.length; i++) {
+            typeOfSale[i] = typeOfSaleEnums[i].name();
         }
-
-        filterForm.setCity("");
         model.addAttribute("typeOfSale", typeOfSale);
-        model.addAttribute("filterForm", filterForm);
+        return typeOfSale;
     }
 
-    @RequestMapping("/filter")
-    public String update(@ModelAttribute("filterForm") @Valid FilterForm filterForm, BindingResult result, Model model) {
-        List<ProductDto> products = productService.findProductsByCriteria(filterForm);
-        initFilter(model, filterForm);
+    private String[] initCategories(Model model) {
+        CategoryEnum[] categoryEnums = CategoryEnum.values();
+        String[] categories = new String[categoryEnums.length];
+        for (int i = 0; i < categoryEnums.length; i++) {
+            categories[i] = categoryEnums[i].name();
+        }
+        model.addAttribute("categories", categories);
+        return categories;
+    }
+
+    @RequestMapping("/filterProducts")
+    public String filterProducts(@ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, BindingResult result, Model model) {
+        List<ProductDto> products = productService.findProductsByCriteria(filterProductsForm);
+        initFilterProducts(model, filterProductsForm);
         initialisePaging(model, products);
         return "products";
+    }
+
+    @RequestMapping("/filterSales")
+    public String filterSales(@ModelAttribute("filterSalesForm") @Valid FilterProductsForm filterProductsForm, BindingResult result, Model model) {
+        return "mySales";
     }
 
     @RequestMapping("/newProduct")
@@ -334,7 +360,8 @@ public class ProductController {
         } else {
             initialisePaging(model, products);
         }
-        return "products";
+        initFilterSales(model, new FilterSalesForm());
+        return "mySales";
     }
 
     private void initialisePaging(Model model, List<ProductDto> products) {

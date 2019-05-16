@@ -20,8 +20,8 @@
 					<div class="container">
 						<div class="col-lg-2 filter text-center">
                             <br/>
-							<h4><spring:message code="product.products.filter"/></h4>
-							<form:form cssClass="form-horizontal" method="get" action="filter" commandName="filterForm" autocomplete="off">
+							<h4><spring:message code="common.filter"/></h4>
+							<form:form cssClass="form-horizontal" method="get" action="filterProducts" commandName="filterProductsForm" autocomplete="off">
 								<c:forEach var="categorie" items="${categories}">
 									<label class="control control-checkbox">
 											${categorie}
@@ -32,7 +32,7 @@
 								</c:forEach>
 								<br/>
 								<spring:message code="common.city"/>
-								<input type="text" id="autocomplete" name="city" value="${filterForm.city}"/>
+								<input type="text" id="autocomplete" name="city" value="${filterProductsForm.city}"/>
 								<div style="visibility: hidden;">
 									<table id="address">
 										<td><form:input type="text" id="locality" name="city" path="city"></form:input></td>
@@ -49,7 +49,7 @@
 									</label>
 								</c:forEach>
 								<br/>
-								<input type="submit" class="btn btn-primary" value="<spring:message code="product.products.filter"/>">
+								<input type="submit" class="btn btn-primary" value="<spring:message code="common.search"/>">
 								<script>
                                     var autocomplete;
                                     var componentForm = {

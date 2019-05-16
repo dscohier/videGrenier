@@ -7,7 +7,7 @@ import be.icc.entity.Category;
 import be.icc.entity.City;
 import be.icc.entity.Product;
 import be.icc.entity.User;
-import be.icc.form.FilterForm;
+import be.icc.form.FilterProductsForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +31,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     CityRepository cityRepository;
 
     @Override
-    public List<ProductDto> findProductsByCriteria(FilterForm filterForm) {
+    public List<ProductDto> findProductsByCriteria(FilterProductsForm filterProductsForm) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
@@ -39,9 +39,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         List<Predicate> predicates = new ArrayList<>();
 
         predicates.add(cb.and(cb.equal(product.get("isSell"), false)));
-        whereCategorieIn(filterForm, cb, predicates, product);
-        whereIsAuction(filterForm, cb, predicates, product);
-        whereCityIs(filterForm, cb, predicates, product);
+        whereCategorieIn(filterProductsForm, cb, predicates, product);
+        whereIsAuction(filterProductsForm, cb, predicates, product);
+        whereCityIs(filterProductsForm, cb, predicates, product);
         cq.where(predicates.toArray(new Predicate[0]));
         cq.orderBy(cb.desc(product.get("creationDate")));
 
@@ -53,17 +53,17 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return productDtos;
     }
 
-    private void whereCityIs(FilterForm filterForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
-        if (isNotBlank(filterForm.getCity()) && isNotBlank(filterForm.getCountry())) {
-            City city = cityRepository.findByNameAndCountry(filterForm.getCity().split(",")[0], filterForm.getCountry());
+    private void whereCityIs(FilterProductsForm filterProductsForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+        if (isNotBlank(filterProductsForm.getCity()) && isNotBlank(filterProductsForm.getCountry())) {
+            City city = cityRepository.findByNameAndCountry(filterProductsForm.getCity().split(",")[0], filterProductsForm.getCountry());
             Join<Product, User> user = product.join("seller");
             predicates.add(cb.and(cb.equal(user.get("city"), city)));
         }
     }
 
-    private void whereIsAuction(FilterForm filterForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
-        if (filterForm.getTypeOfSale().length != 0 && filterForm.getTypeOfSale().length != 2) {
-            TypeOfSaleEnum typeOfSale = TypeOfSaleEnum.valueOf(filterForm.getTypeOfSale()[0]);
+    private void whereIsAuction(FilterProductsForm filterProductsForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+        if (filterProductsForm.getTypeOfSale().length != 0 && filterProductsForm.getTypeOfSale().length != 2) {
+            TypeOfSaleEnum typeOfSale = TypeOfSaleEnum.valueOf(filterProductsForm.getTypeOfSale()[0]);
             if (typeOfSale == TypeOfSaleEnum.DIRECT_SALE) {
                 predicates.add(cb.and(cb.equal(product.get("isAuction"), false)));
             } else {
@@ -72,9 +72,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
     }
 
-    private void whereCategorieIn(FilterForm filterForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+    private void whereCategorieIn(FilterProductsForm filterProductsForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
         List<CategoryEnum> categoryEnums = new ArrayList<>();
-        for (String categorie : filterForm.getCategories()) {
+        for (String categorie : filterProductsForm.getCategories()) {
             categoryEnums.add(CategoryEnum.valueOf(categorie));
         }
 
