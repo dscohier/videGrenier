@@ -1,7 +1,7 @@
 package be.icc.entity;
 
-import be.icc.controller.CategoryEnum;
 import be.icc.dto.CategoryDto;
+import be.icc.enumClass.CategoryEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;

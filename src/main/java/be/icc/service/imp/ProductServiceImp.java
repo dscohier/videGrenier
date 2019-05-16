@@ -1,10 +1,10 @@
 package be.icc.service.imp;
 
-import be.icc.controller.CategoryEnum;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
+import be.icc.enumClass.CategoryEnum;
 import be.icc.form.FilterProductsForm;
 import be.icc.repository.CategoryRepository;
 import be.icc.repository.ProductRepository;

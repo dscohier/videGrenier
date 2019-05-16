@@ -1,6 +1,6 @@
 package be.icc.form;
 
-import be.icc.controller.CategoryEnum;
+import be.icc.enumClass.CategoryEnum;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;

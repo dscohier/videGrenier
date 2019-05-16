@@ -5,6 +5,9 @@ import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Panier;
 import be.icc.entity.Product;
+import be.icc.enumClass.CategoryEnum;
+import be.icc.enumClass.SellOrNotEnum;
+import be.icc.enumClass.TypeOfSaleEnum;
 import be.icc.form.AddProductForm;
 import be.icc.form.BidForm;
 import be.icc.form.FilterProductsForm;
@@ -88,15 +91,32 @@ public class ProductController {
     }
 
     private void initFilterSales(Model model, FilterSalesForm filterSalesForm) {
+        String[] categories = initCategories(model);
         if (filterSalesForm.getCategories() == null) {
-            filterSalesForm.setCategories(initCategories(model));
+            filterSalesForm.setCategories(categories);
         }
 
+        String[] typeOfSales = initTypeOfSale(model);
         if (filterSalesForm.getTypeOfSale() == null) {
-            filterSalesForm.setTypeOfSale(initTypeOfSale(model));
+            filterSalesForm.setTypeOfSale(typeOfSales);
+        }
+
+        String[] sellOrNot = sellOrNot(model);
+        if (filterSalesForm.getSellOrNot() == null) {
+            filterSalesForm.setSellOrNot(sellOrNot);
         }
 
         model.addAttribute("filterSalesForm", filterSalesForm);
+    }
+
+    private String[] sellOrNot(Model model) {
+        SellOrNotEnum[] sellOrNotEnums = SellOrNotEnum.values();
+        String[] sellOrNot = new String[sellOrNotEnums.length];
+        for (int i = 0; i < sellOrNotEnums.length; i++) {
+            sellOrNot[i] = sellOrNotEnums[i].name();
+        }
+        model.addAttribute("sellOrNot", sellOrNot);
+        return sellOrNot;
     }
 
     private String[] initTypeOfSale(Model model) {

@@ -1,7 +1,7 @@
 package be.icc.repository;
 
-import be.icc.controller.CategoryEnum;
 import be.icc.entity.Category;
+import be.icc.enumClass.CategoryEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

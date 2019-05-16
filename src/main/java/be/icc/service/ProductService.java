@@ -1,9 +1,9 @@
 package be.icc.service;
 
-import be.icc.controller.CategoryEnum;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Product;
+import be.icc.enumClass.CategoryEnum;
 import be.icc.form.FilterProductsForm;
 
 import java.util.List;

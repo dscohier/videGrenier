@@ -1,4 +1,4 @@
-package be.icc.controller;
+package be.icc.enumClass;
 
 public enum CategoryEnum {
     INFORMATIQUE,

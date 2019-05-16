@@ -1,7 +1,7 @@
 package be.icc.service;
 
-import be.icc.controller.CategoryEnum;
 import be.icc.dto.CategoryDto;
+import be.icc.enumClass.CategoryEnum;
 
 import java.util.Set;
 

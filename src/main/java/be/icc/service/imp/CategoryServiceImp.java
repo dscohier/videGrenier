@@ -1,8 +1,8 @@
 package be.icc.service.imp;
 
-import be.icc.controller.CategoryEnum;
 import be.icc.dto.CategoryDto;
 import be.icc.entity.Category;
+import be.icc.enumClass.CategoryEnum;
 import be.icc.repository.CategoryRepository;
 import be.icc.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

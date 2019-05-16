@@ -1,12 +1,12 @@
 package be.icc.repository;
 
-import be.icc.controller.CategoryEnum;
-import be.icc.controller.TypeOfSaleEnum;
 import be.icc.dto.ProductDto;
 import be.icc.entity.Category;
 import be.icc.entity.City;
 import be.icc.entity.Product;
 import be.icc.entity.User;
+import be.icc.enumClass.CategoryEnum;
+import be.icc.enumClass.TypeOfSaleEnum;
 import be.icc.form.FilterProductsForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
