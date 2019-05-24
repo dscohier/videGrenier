@@ -11,6 +11,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <div class="col-lg-10">
+        <c:if test="${not empty error}">
+            <label class="error"><spring:message code="${error}"/></label>
+        </c:if>
         <c:forEach var="product" items="${products}" varStatus="loop">
             <c:if test="${loop.index%3 == 0}">
                 <div class="row">
@@ -59,14 +62,14 @@
                         </c:if>
                         <br/>
                         <span class="price">
-													<spring:message code="common.city"/>
-													${product.seller.city.country}, ${product.seller.city.name}
-											</span>
+                            <spring:message code="common.city"/>
+                                ${product.seller.city.country}, ${product.seller.city.name}
+                        </span>
                         <br/>
                         <span class="price">
-													<spring:message code="product.products.added"/>
-													<fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.creationDate}"/>
-											</span>
+                            <spring:message code="product.products.added"/>
+                            <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.creationDate}"/>
+                        </span>
                     </div>
                 </a>
             </div>

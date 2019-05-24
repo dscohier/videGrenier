@@ -6,8 +6,10 @@ import be.icc.entity.City;
 import be.icc.entity.Product;
 import be.icc.entity.User;
 import be.icc.enumClass.CategoryEnum;
+import be.icc.enumClass.SellOrNotEnum;
 import be.icc.enumClass.TypeOfSaleEnum;
 import be.icc.form.FilterProductsForm;
+import be.icc.form.FilterSalesForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -39,18 +41,55 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         List<Predicate> predicates = new ArrayList<>();
 
         predicates.add(cb.and(cb.equal(product.get("isSell"), false)));
-        whereCategorieIn(filterProductsForm, cb, predicates, product);
-        whereIsAuction(filterProductsForm, cb, predicates, product);
+        whereCategorieIn(filterProductsForm.getCategories(), cb, predicates, product);
+        whereIsAuction(filterProductsForm.getTypeOfSale(), cb, predicates, product);
         whereCityIs(filterProductsForm, cb, predicates, product);
+
         cq.where(predicates.toArray(new Predicate[0]));
         cq.orderBy(cb.desc(product.get("creationDate")));
 
         List<Product> products = em.createQuery(cq).getResultList();
+
+        return productToDto(products);
+    }
+
+    private List<ProductDto> productToDto(List<Product> products) {
         List<ProductDto> productDtos = new ArrayList<>();
         for (Product productEntity : products) {
             productDtos.add(productEntity.toDto());
         }
         return productDtos;
+    }
+
+    @Override
+    public List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, User seller) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+
+        Root<Product> product = cq.from(Product.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        whereIsSell(filterSalesForm.getSellOrNot(), cb, predicates, product);
+        whereCategorieIn(filterSalesForm.getCategories(), cb, predicates, product);
+        whereIsAuction(filterSalesForm.getTypeOfSale(), cb, predicates, product);
+        predicates.add(cb.and(cb.equal(product.get("seller"), seller)));
+        cq.where(predicates.toArray(new Predicate[0]));
+        cq.orderBy(cb.desc(product.get("creationDate")));
+
+        List<Product> products = em.createQuery(cq).getResultList();
+
+        return productToDto(products);
+    }
+
+    private void whereIsSell(String[] sellOrNot, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+        if (sellOrNot.length != 0 && sellOrNot.length != 2) {
+            SellOrNotEnum sellOrNotEnum = SellOrNotEnum.valueOf(sellOrNot[0]);
+            if (sellOrNotEnum == SellOrNotEnum.SOLD) {
+                predicates.add(cb.and(cb.equal(product.get("isSell"), true)));
+            } else {
+                predicates.add(cb.and(cb.equal(product.get("isSell"), false)));
+            }
+        }
     }
 
     private void whereCityIs(FilterProductsForm filterProductsForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
@@ -61,9 +100,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
     }
 
-    private void whereIsAuction(FilterProductsForm filterProductsForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
-        if (filterProductsForm.getTypeOfSale().length != 0 && filterProductsForm.getTypeOfSale().length != 2) {
-            TypeOfSaleEnum typeOfSale = TypeOfSaleEnum.valueOf(filterProductsForm.getTypeOfSale()[0]);
+    private void whereIsAuction(String[] typeOfSaleName, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+        if (typeOfSaleName.length != 0 && typeOfSaleName.length != 2) {
+            TypeOfSaleEnum typeOfSale = TypeOfSaleEnum.valueOf(typeOfSaleName[0]);
             if (typeOfSale == TypeOfSaleEnum.DIRECT_SALE) {
                 predicates.add(cb.and(cb.equal(product.get("isAuction"), false)));
             } else {
@@ -72,9 +111,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
     }
 
-    private void whereCategorieIn(FilterProductsForm filterProductsForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+    private void whereCategorieIn(String[] categoriesName, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
         List<CategoryEnum> categoryEnums = new ArrayList<>();
-        for (String categorie : filterProductsForm.getCategories()) {
+        for (String categorie : categoriesName) {
             categoryEnums.add(CategoryEnum.valueOf(categorie));
         }
 

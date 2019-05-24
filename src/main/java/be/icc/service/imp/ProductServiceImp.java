@@ -6,8 +6,10 @@ import be.icc.entity.Category;
 import be.icc.entity.Product;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.form.FilterProductsForm;
+import be.icc.form.FilterSalesForm;
 import be.icc.repository.CategoryRepository;
 import be.icc.repository.ProductRepository;
+import be.icc.repository.UserRepository;
 import be.icc.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,8 @@ public class ProductServiceImp implements ProductService {
     ProductRepository productRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public ProductDto add(ProductDto productDto) {
@@ -103,5 +107,10 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<ProductDto> findProductsByCriteria(FilterProductsForm filterProductsForm) {
         return productRepository.findProductsByCriteria(filterProductsForm);
+    }
+
+    @Override
+    public List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, String username) {
+        return productRepository.findSalesByCriteria(filterSalesForm, userRepository.findByUsername(username));
     }
 }

@@ -140,15 +140,23 @@ public class ProductController {
     }
 
     @RequestMapping("/filterProducts")
-    public String filterProducts(@ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, BindingResult result, Model model) {
+    public String filterProducts(@ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, Model model) {
         List<ProductDto> products = productService.findProductsByCriteria(filterProductsForm);
         initFilterProducts(model, filterProductsForm);
         initialisePaging(model, products);
+        model.addAttribute("error", "error.products.noProductFilter");
         return "products";
     }
 
     @RequestMapping("/filterSales")
-    public String filterSales(@ModelAttribute("filterSalesForm") @Valid FilterProductsForm filterProductsForm, BindingResult result, Model model) {
+    public String filterSales(@ModelAttribute("filterSalesForm") @Valid FilterSalesForm filterSalesForm, Model model) {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+        List<ProductDto> products = productService.findSalesByCriteria(filterSalesForm, ((UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        initFilterSales(model, filterSalesForm);
+        initialisePaging(model, products);
+        model.addAttribute("error", "error.products.noProductFilter");
         return "mySales";
     }
 

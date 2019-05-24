@@ -1,7 +1,9 @@
 package be.icc.repository;
 
 import be.icc.dto.ProductDto;
+import be.icc.entity.User;
 import be.icc.form.FilterProductsForm;
+import be.icc.form.FilterSalesForm;
 
 import java.util.List;
 /**
@@ -9,4 +11,7 @@ import java.util.List;
  */
 interface ProductRepositoryCustom {
     List<ProductDto> findProductsByCriteria(FilterProductsForm filterProductsForm);
+
+    List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, User seller);
+
 }

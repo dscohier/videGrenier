@@ -19,7 +19,7 @@
 					<br/>
 					<div class="container">
 						<div class="col-lg-2 filter text-center">
-                            <br/>
+							<br/>
 							<h4><spring:message code="common.filter"/></h4>
 							<form:form cssClass="form-horizontal" method="get" action="filterSales" commandName="filterSalesForm" autocomplete="off">
 								<c:forEach var="sellOrNot" items="${sellOrNot}">
@@ -53,10 +53,10 @@
 							</form:form>
 						</div>
 						<jsp:include page="productList.jsp"/>
+					</div>
 				</div>
+				<jsp:include page="footer2.jsp"/>
 			</div>
-			<jsp:include page="footer2.jsp"/>
-		</div>
 	</body>
 </html>
 
