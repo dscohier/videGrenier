@@ -2,11 +2,13 @@ package be.icc.service;
 
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
+import be.icc.entity.Bidder;
 import be.icc.entity.Product;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.form.FilterProductsForm;
 import be.icc.form.FilterSalesForm;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,4 +36,5 @@ public interface ProductService {
 
     List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, String username);
 
+    List<ProductDto> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
 }

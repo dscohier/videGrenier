@@ -2,6 +2,7 @@ package be.icc.service.imp;
 
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
+import be.icc.entity.Bidder;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
 import be.icc.enumClass.CategoryEnum;
@@ -112,5 +113,15 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, String username) {
         return productRepository.findSalesByCriteria(filterSalesForm, userRepository.findByUsername(username));
+    }
+
+    @Override
+    public List<ProductDto> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date) {
+        List<Product> products = productRepository.findDistinctProductByBiddersInAndEndDateAfter(bidders, date);
+        List<ProductDto> productsDto = new ArrayList<>();
+        for (Product product : products) {
+            productsDto.add(product.toDto());
+        }
+        return productsDto;
     }
 }

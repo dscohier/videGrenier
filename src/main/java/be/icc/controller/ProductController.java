@@ -3,15 +3,14 @@ package be.icc.controller;
 import be.icc.dto.BidderDto;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
+import be.icc.entity.Bidder;
 import be.icc.entity.Panier;
 import be.icc.entity.Product;
+import be.icc.entity.User;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.enumClass.SellOrNotEnum;
 import be.icc.enumClass.TypeOfSaleEnum;
-import be.icc.form.AddProductForm;
-import be.icc.form.BidForm;
-import be.icc.form.FilterProductsForm;
-import be.icc.form.FilterSalesForm;
+import be.icc.form.*;
 import be.icc.model.FileModel;
 import be.icc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +108,15 @@ public class ProductController {
         model.addAttribute("filterSalesForm", filterSalesForm);
     }
 
+    private void initFilterPurchases(Model model, FilterPurchasesForm filterPurchasesForm) {
+        String[] categories = initCategories(model);
+        if (filterPurchasesForm.getCategories() == null) {
+            filterPurchasesForm.setCategories(categories);
+        }
+
+        model.addAttribute("filterPurchasesForm", filterPurchasesForm);
+    }
+
     private String[] sellOrNot(Model model) {
         SellOrNotEnum[] sellOrNotEnums = SellOrNotEnum.values();
         String[] sellOrNot = new String[sellOrNotEnums.length];
@@ -143,8 +151,11 @@ public class ProductController {
     public String filterProducts(@ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, Model model) {
         List<ProductDto> products = productService.findProductsByCriteria(filterProductsForm);
         initFilterProducts(model, filterProductsForm);
-        initialisePaging(model, products);
-        model.addAttribute("error", "error.products.noProductFilter");
+        if (products.isEmpty()) {
+            model.addAttribute("error", "error.products.noProductFilter");
+        } else {
+            initialisePaging(model, products);
+        }
         return "products";
     }
 
@@ -155,9 +166,28 @@ public class ProductController {
         }
         List<ProductDto> products = productService.findSalesByCriteria(filterSalesForm, ((UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
         initFilterSales(model, filterSalesForm);
-        initialisePaging(model, products);
-        model.addAttribute("error", "error.products.noProductFilter");
+        if (products.isEmpty()) {
+            model.addAttribute("error", "error.products.noProductFilter");
+        } else {
+            initialisePaging(model, products);
+        }
         return "mySales";
+    }
+
+    @RequestMapping("/filterPurchases")
+    public String filterPurchases(@ModelAttribute("filterPurchasesForm") @Valid FilterPurchasesForm filterPurchasesForm, Model model) {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+        User user = userService.findEntityById(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+        List<Bidder> bidders = bidderService.findByUser(user);
+        List<ProductDto> products = productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date());
+        if (products.isEmpty()) {
+            model.addAttribute("error", "error.products.noPurchases");
+        } else {
+            initialisePaging(model, products);
+        }
+        return "myPurchases";
     }
 
     @RequestMapping("/newProduct")
@@ -390,6 +420,23 @@ public class ProductController {
         }
         initFilterSales(model, new FilterSalesForm());
         return "mySales";
+    }
+
+    @RequestMapping("/myPurchases")
+    public String myPurchases(Model model) {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+        User user = userService.findEntityById(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+        List<Bidder> bidders = bidderService.findByUser(user);
+        List<ProductDto> products = productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date());
+        if (products.isEmpty()) {
+            model.addAttribute("error", "error.products.noPurchases");
+        } else {
+            initialisePaging(model, products);
+        }
+        initFilterPurchases(model, new FilterPurchasesForm());
+        return "myPurchases";
     }
 
     private void initialisePaging(Model model, List<ProductDto> products) {

@@ -1,5 +1,6 @@
 package be.icc.repository;
 
+import be.icc.entity.Bidder;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
 import be.icc.entity.User;
@@ -20,4 +21,6 @@ public interface ProductRepository extends JpaRepository<Product,Long>, ProductR
     List<Product> findBySellerOrderByCreationDateDesc(User seller);
 
     List<Product> findByCategoryIn(List<Category> category);
+
+    List<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
 }
