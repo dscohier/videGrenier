@@ -86,7 +86,7 @@ h1, h2, h3, h4, h5, h6, figure {
 
 .fh5co-nav {
   padding: 18px 0;
-  background: #fff;
+  background: #efefef;
 }
 @media screen and (max-width: 768px) {
   .fh5co-nav {
