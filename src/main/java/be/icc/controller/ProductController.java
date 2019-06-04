@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.apache.commons.lang.StringUtils.*;
 
@@ -49,7 +50,7 @@ public class ProductController {
     @Autowired
     FileService fileService;
     @Autowired
-    BasketService basketService;
+    CartService cartService;
 
     @RequestMapping("/products")
     public String products(Model model, @RequestParam(required = false) String category) {
@@ -355,13 +356,13 @@ public class ProductController {
         if (!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("user", userDto);
-            boolean isInBasket = false;
+            boolean isInCart = false;
             for (ProductDto productFromPanier : userDto.getPanier().getProducts()) {
                 if (productFromPanier.getId() == product.getId()) {
-                    isInBasket = true;
+                    isInCart = true;
                 }
             }
-            model.addAttribute("isInBasket", isInBasket);
+            model.addAttribute("isInCart", isInCart);
         }
          return "details";
     }
@@ -387,8 +388,8 @@ public class ProductController {
         return "redirect:/product/details?id=" + product.getId();
     }
 
-    @RequestMapping(value = "/addToBasket", method = RequestMethod.POST)
-    public String addToBasket(@RequestParam("idProduct") Long idProduct, Model model) {
+    @RequestMapping(value = "/addToCart", method = RequestMethod.POST)
+    public String addToCart(@RequestParam("idProduct") Long idProduct, Model model) {
         ProductDto product = productService.findById(idProduct);
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
@@ -400,11 +401,10 @@ public class ProductController {
         }
 
         UserDto user = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Panier panier = basketService.findEntityById(user.getPanier().getId());
+        Panier panier = cartService.findEntityById(user.getPanier().getId());
         panier.getProducts().add(productService.findEntityById(idProduct));
-        user.setPanier(basketService.update(panier).toDto());
-        // TODO return page panier
-        return "redirect:/";
+        user.setPanier(cartService.update(panier).toDto());
+        return "/product/details?id=" + product.getId();
     }
 
     @RequestMapping("/mySales")
@@ -455,5 +455,24 @@ public class ProductController {
         model.addAttribute("url",request.getRequestURL());
 
         return "error";
+    }
+
+    @RequestMapping("/cart")
+    public String cart(Model model) {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+        Set<ProductDto> products = ((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPanier().getProducts();
+        int total = 0;
+        if (products.isEmpty()) {
+            model.addAttribute("error", "error.cart.empty");
+        } else {
+            model.addAttribute("products", products);
+            for (ProductDto product : products) {
+                total += product.getPrice();
+            }
+        }
+        model.addAttribute("total", total);
+        return "cart";
     }
 }

@@ -39,7 +39,7 @@
                     </li>
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication property="principal.panier.productsSize" var="countProduct" />
-                        <li class="shopping-cart"><a href="#" class="cart"><span><small>${countProduct}</small><i class="icon-shopping-cart"></i></span></a></li>
+                        <li class="shopping-cart"><a href="<c:url value="/product/cart"/>" class="cart"><span><small>${countProduct}</small><i class="icon-shopping-cart"></i></span></a></li>
                     </sec:authorize>
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication property="principal.username" var="username" />

@@ -82,22 +82,22 @@
                                     </c:if>
                                     <c:if test="${!product.auction}">
                                         <sec:authorize access="isAuthenticated()">
-                                            <c:if test="${!isInBasket and !product.seller.username.equals(username)}">
-                                                <form:form cssClass="form-horizontal" method="post" action="addToBasket" cssStyle="display: inline-block">
-                                                    <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToBasket"/></button>
+                                            <c:if test="${!isInCart and !product.seller.username.equals(username)}">
+                                                <form:form cssClass="form-horizontal" method="post" action="addToCart" cssStyle="display: inline-block">
+                                                    <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToCart"/></button>
                                                     <div style="display: none;">
                                                         <input type="text" name="idProduct" value="${product.id}"/>
                                                     </div>
                                                 </form:form>
                                             </c:if>
-                                            <c:if test="${isInBasket}">
-                                                <spring:message code="error.details.alreadyInBasket" var="message"/>
-                                                <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToBasket"/></button>
+                                            <c:if test="${isInCart}">
+                                                <spring:message code="error.details.alreadyInCart" var="message"/>
+                                                <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToCart"/></button>
                                             </c:if>
                                         </sec:authorize>
                                         <sec:authorize access="!isAuthenticated()">
-                                            <spring:message code="error.details.addToBasket" var="message"/>
-                                            <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToBasket"/></button>
+                                            <spring:message code="error.details.addToCart" var="message"/>
+                                            <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToCart"/></button>
                                         </sec:authorize>
                                     </c:if>
                                     </div>

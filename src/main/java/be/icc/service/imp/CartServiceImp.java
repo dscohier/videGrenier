@@ -1,8 +1,8 @@
 package be.icc.service.imp;
 
 import be.icc.entity.Panier;
-import be.icc.repository.BasketRepository;
-import be.icc.service.BasketService;
+import be.icc.repository.CartRepository;
+import be.icc.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,18 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class BasketServiceImp implements BasketService {
+public class CartServiceImp implements CartService {
 
     @Autowired
-    BasketRepository basketRepository;
+    CartRepository cartRepository;
 
     @Override
     public Panier findEntityById(Long id) {
-        return basketRepository.findOne(id);
+        return cartRepository.findOne(id);
     }
 
     @Override
     public Panier update(Panier panier) {
-        return basketRepository.save(panier);
+        return cartRepository.save(panier);
     }
 }
