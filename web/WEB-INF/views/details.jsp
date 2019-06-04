@@ -18,7 +18,7 @@
                                 <h2>${product.name}</h2>
                             </div>
                         </div>
-                        <div class="col-md-10 col-md-offset-1 animate-box">
+                        <div class="col-md-10 col-md-offset-1 animate-box" style="margin-top: -100px">
                             <div class="owl-carousel owl-carousel-fullwidth product-carousel">
                                 <div class="item">
                                     <div class="active text-center">
