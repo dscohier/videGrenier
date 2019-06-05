@@ -415,7 +415,12 @@ public class ProductController {
 
         UserDto user = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Panier panier = cartService.findEntityById(user.getPanier().getId());
-        panier.getProducts().remove(productService.findEntityById(idProduct));
+        for (Product product : panier.getProducts()) {
+            if (product.getId() == idProduct) {
+                panier.getProducts().remove(product);
+                break;
+            }
+        }
         user.setPanier(cartService.update(panier).toDto());
         return "redirect:/product/cart";
     }
