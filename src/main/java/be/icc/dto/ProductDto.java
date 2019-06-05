@@ -34,6 +34,7 @@ public class ProductDto {
 
     public Product toEntity(){
         Product product = new Product();
+        product.setId(this.getId());
         product.setCategory(this.getCategory().toEntity());
         for(BidderDto bidder : getBidders()) {
             product.getBidders().add(bidder.toEntity());

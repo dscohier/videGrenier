@@ -33,4 +33,11 @@ public class OrderServiceImp implements OrderService {
         }
         return ordersDto;
     }
+
+    @Override
+    public OrdersDto add(OrdersDto OrdersDto) {
+        Orders orders = OrdersDto.toEntity();
+        OrdersDto ordersSaved = orderRepository.save(orders).toDto();
+        return ordersSaved;
+    }
 }

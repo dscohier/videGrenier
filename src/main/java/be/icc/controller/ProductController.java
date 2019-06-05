@@ -1,6 +1,7 @@
 package be.icc.controller;
 
 import be.icc.dto.BidderDto;
+import be.icc.dto.OrdersDto;
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Bidder;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +53,8 @@ public class ProductController {
     FileService fileService;
     @Autowired
     CartService cartService;
+    @Autowired
+    OrderService orderService;
 
     @RequestMapping("/products")
     public String products(Model model, @RequestParam(required = false) String category) {
@@ -283,7 +287,7 @@ public class ProductController {
 
     @RequestMapping("/update")
     public String update(@ModelAttribute("addProductForm") @Valid AddProductForm addProductForm, BindingResult result,
-                      RedirectAttributes attr, HttpServletRequest request, @RequestParam MultipartFile file) {
+                      RedirectAttributes attr, @RequestParam MultipartFile file) {
         String redirect = checkError(result, attr, addProductForm);
         if (redirect != null) {
             return redirect;
@@ -369,7 +373,7 @@ public class ProductController {
 
 
     @RequestMapping(value = "/bid", method = RequestMethod.POST)
-    public String bid(@ModelAttribute("bidForm")  BidForm bidForm, Model model) {
+    public String bid(@ModelAttribute("bidForm")  BidForm bidForm) {
         Product product = productService.findEntityById(bidForm.getIdProduct());
         if (product.getPrice() >= bidForm.getNewPrice()) {
             return "redirect:/product/details?id=" + product.getId() + "&error=InvalidBid";
@@ -389,7 +393,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/addToCart", method = RequestMethod.POST)
-    public String addToCart(@RequestParam("idProduct") Long idProduct, Model model) {
+    public String addToCart(@RequestParam("idProduct") Long idProduct) {
         Product product = productService.findEntityById(idProduct);
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
@@ -408,7 +412,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/deleteFromCart", method = RequestMethod.POST)
-    public String deleteFromCart(@RequestParam("idProduct") Long idProduct, Model model) {
+    public String deleteFromCart(@RequestParam("idProduct") Long idProduct) {
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
         }
@@ -423,6 +427,28 @@ public class ProductController {
         }
         user.setPanier(cartService.update(panier).toDto());
         return "redirect:/product/cart";
+    }
+
+    @RequestMapping(value = "/order", method = RequestMethod.POST)
+    public String order() {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+
+        UserDto user = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Panier panier = cartService.findEntityById(user.getPanier().getId());
+        OrdersDto order = new OrdersDto();
+        order.setDate(new Date());
+        order.setUser(user);
+        order.setProducts(user.getPanier().getProducts());
+        orderService.add(order);
+        for (Product product : panier.getProducts()) {
+            product.setSell(true);
+            productService.update(product);
+        }
+        panier.setProducts(new HashSet<>());
+        user.setPanier(cartService.update(panier).toDto());
+        return "redirect:/product/myPurchases";
     }
 
     @RequestMapping("/mySales")

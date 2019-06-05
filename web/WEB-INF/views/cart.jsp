@@ -67,6 +67,12 @@
 						<div class="col-lg-2 filter text-center" style="margin-top: 1%">
 							<br/>
 							<h4 style="color: red;"><b><spring:message code="product.cart.total"/> = ${total}&euro; </b></h4>
+								<form:form cssClass="form-horizontal" method="post" action="order">
+									<button class="btn btn-primary btn-outline btn-lg" type="submit" disabled="${products.size() == 0}">
+										<spring:message code="product.cart.order"/>
+									</button>
+								</form:form>
+							</div>
 						</div>
 					</div>
 				</div>
