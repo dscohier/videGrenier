@@ -23,15 +23,6 @@
 							<h4><spring:message code="common.filter"/></h4>
 							<form:form cssClass="form-horizontal" method="get" action="filterPurchases" commandName="filterPurchasesForm" autocomplete="off">
 								<br/><br/>
-								<c:forEach var="categorie" items="${categories}">
-									<label class="control control-checkbox">
-											${categorie}
-										<form:checkbox path="categories" value="${categorie}"/>
-										<div class="control_indicator">
-										</div>
-									</label>
-								</c:forEach>
-								<br/><br/>
 									<label class="control control-checkbox">
 										<spring:message code="myPurchases.currentAuctions"/>
 										<form:checkbox path="currentAuctions"/>

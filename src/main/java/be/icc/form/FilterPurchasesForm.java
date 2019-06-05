@@ -5,16 +5,7 @@ package be.icc.form;
  */
 public class FilterPurchasesForm {
 
-    private String[] categories;
     private boolean currentAuctions = true;
-
-    public String[] getCategories() {
-        return categories;
-    }
-
-    public void setCategories(String[] categories) {
-        this.categories = categories;
-    }
 
     public boolean isCurrentAuctions() {
         return currentAuctions;

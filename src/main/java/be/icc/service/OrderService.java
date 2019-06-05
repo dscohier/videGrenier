@@ -10,5 +10,6 @@ import java.util.List;
 public interface OrderService {
 
     List<OrdersDto> findByUser(Long userId);
+    List<OrdersDto> findByUserOrderByDate(Long userId);
     OrdersDto add(OrdersDto OrdersDto);
 }

@@ -34,6 +34,15 @@ public class OrderServiceImp implements OrderService {
         return ordersDto;
     }
 
+    public List<OrdersDto> findByUserOrderByDate(Long userId) {
+        List<Orders> orders = orderRepository.findByUserOrderByDate(userRepository.findOne(userId));
+        List<OrdersDto> ordersDto = new ArrayList<>();
+        for (Orders order : orders) {
+            ordersDto.add(order.toDto());
+        }
+        return ordersDto;
+    }
+
     @Override
     public OrdersDto add(OrdersDto OrdersDto) {
         Orders orders = OrdersDto.toEntity();

@@ -26,10 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.commons.lang.StringUtils.*;
 
@@ -114,11 +111,6 @@ public class ProductController {
     }
 
     private void initFilterPurchases(Model model, FilterPurchasesForm filterPurchasesForm) {
-        String[] categories = initCategories(model);
-        if (filterPurchasesForm.getCategories() == null) {
-            filterPurchasesForm.setCategories(categories);
-        }
-
         model.addAttribute("filterPurchasesForm", filterPurchasesForm);
     }
 
@@ -186,7 +178,14 @@ public class ProductController {
         }
         User user = userService.findEntityById(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
         List<Bidder> bidders = bidderService.findByUser(user);
-        List<ProductDto> products = productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date());
+        List<ProductDto> products = new ArrayList<>();
+        List<OrdersDto> orders = orderService.findByUser(user.getId());
+        for (OrdersDto ordersDto : orders) {
+            products.addAll(ordersDto.getProducts());
+        }
+        if (filterPurchasesForm.isCurrentAuctions()) {
+            products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date()));
+        }
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noPurchases");
         } else {
@@ -473,7 +472,12 @@ public class ProductController {
         }
         User user = userService.findEntityById(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
         List<Bidder> bidders = bidderService.findByUser(user);
-        List<ProductDto> products = productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date());
+        List<ProductDto> products = new ArrayList<>();
+        List<OrdersDto> orders = orderService.findByUser(user.getId());
+        for (OrdersDto ordersDto : orders) {
+            products.addAll(ordersDto.getProducts());
+        }
+        products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date()));
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noPurchases");
         } else {
