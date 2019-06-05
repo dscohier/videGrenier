@@ -390,7 +390,7 @@ public class ProductController {
 
     @RequestMapping(value = "/addToCart", method = RequestMethod.POST)
     public String addToCart(@RequestParam("idProduct") Long idProduct, Model model) {
-        ProductDto product = productService.findById(idProduct);
+        Product product = productService.findEntityById(idProduct);
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
         }
@@ -402,9 +402,22 @@ public class ProductController {
 
         UserDto user = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Panier panier = cartService.findEntityById(user.getPanier().getId());
-        panier.getProducts().add(productService.findEntityById(idProduct));
+        panier.getProducts().add(product);
         user.setPanier(cartService.update(panier).toDto());
-        return "/product/details?id=" + product.getId();
+        return "redirect:/product/details?id=" + product.getId();
+    }
+
+    @RequestMapping(value = "/deleteFromCart", method = RequestMethod.POST)
+    public String deleteFromCart(@RequestParam("idProduct") Long idProduct, Model model) {
+        if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+            return "redirect:/connect";
+        }
+
+        UserDto user = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Panier panier = cartService.findEntityById(user.getPanier().getId());
+        panier.getProducts().remove(productService.findEntityById(idProduct));
+        user.setPanier(cartService.update(panier).toDto());
+        return "redirect:/product/cart";
     }
 
     @RequestMapping("/mySales")

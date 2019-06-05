@@ -18,12 +18,12 @@
 					</div>
 					<br/>
 					<div class="container">
-						<div class="col-lg-10" style="border-bottom: #d1c286;">
+						<div class="col-lg-10">
 							<c:if test="${not empty error}">
 								<label class="error"><spring:message code="${error}"/></label>
 							</c:if>
 							<c:forEach var="product" items="${products}">
-							<div class="row">
+							<div class="row"  style="border-bottom: 2px solid #d1c286; ">
 								<div class="col-lg-3">
 									<a href="<c:url value="/profile?username=${product.seller.username}"/>">
 										<div class="fh5co-staff" style="margin-bottom: 5px; display: flex; height: 150px">
@@ -41,20 +41,30 @@
 											<div class="col-lg-3">
 												<img src="data:image/jpg;base64,${product.displayPicture()}" style="height: 150px; width: 150px">
 											</div>
-											<div class="col-lg-7" style="display: flex; height: 150px">
+											<div class="col-lg-6" style="display: flex; height: 150px">
 												<h3 style="align-self: center">${product.name}</h3>
 											</div>
 											<div class="col-lg-2" style="display: flex; height: 150px">
 												<h3 style="align-self: center"> <spring:message code="common.price"/>
 														${product.price}&euro;</h3>
 											</div>
+											<div class="col-lg-1" style="display: flex; height: 150px">
+												<form:form cssClass="form-horizontal" method="post" action="deleteFromCart">
+													<div style="display: none;">
+														<input type="text" name="idProduct" value="${product.id}"/>
+													</div>
+													<button class="btn btn-primary btn-outline btn-lg" type="submit" style="margin-top:33%">
+														<i class="fa fa-trash"></i>
+													</button>
+												</form:form>
+											</div>
 										</div>
-							</div>
+								</div>
 								</a>
 							</div>
 							</c:forEach>
 						</div>
-						<div class="col-lg-2 filter text-center">
+						<div class="col-lg-2 filter text-center" style="margin-top: 1%">
 							<br/>
 							<h4 style="color: red;"><b><spring:message code="product.cart.total"/> = ${total}&euro; </b></h4>
 						</div>
