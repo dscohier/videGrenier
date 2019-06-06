@@ -37,4 +37,6 @@ public interface ProductService {
     List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, String username);
 
     List<ProductDto> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
+
+    List<ProductDto>  findLastAdded();
 }

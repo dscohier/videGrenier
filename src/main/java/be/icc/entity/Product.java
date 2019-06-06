@@ -37,6 +37,8 @@ public class Product implements Serializable {
     private Date endDate;
     @Column(nullable = false)
     private Date creationDate;
+    @Column(nullable = false)
+    private long view;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Bidder> bidders;
 
@@ -58,6 +60,7 @@ public class Product implements Serializable {
         product.setEndDate(this.getEndDate());
         product.setCreationDate(this.getCreationDate());
         product.setId(this.getId());
+        product.setView(this.getView());
         return product;
     }
 
@@ -158,5 +161,13 @@ public class Product implements Serializable {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public long getView() {
+        return view;
+    }
+
+    public void setView(long view) {
+        this.view = view;
     }
 }

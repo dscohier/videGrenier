@@ -70,6 +70,10 @@
                             <spring:message code="product.products.added"/>
                             <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.creationDate}"/>
                         </span>
+                        <br/>
+                        <span class="price">
+                            &#128065; &nbsp;${product.view}
+                        </span>
                     </div>
                 </a>
             </div>

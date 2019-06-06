@@ -124,4 +124,14 @@ public class ProductServiceImp implements ProductService {
         }
         return productsDto;
     }
+
+    @Override
+    public List<ProductDto> findLastAdded() {
+        List<Product> products = productRepository.findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(new Date());
+        List<ProductDto> productsDto = new ArrayList<>();
+        for (Product product : products) {
+            productsDto.add(product.toDto());
+        }
+        return productsDto;
+    }
 }

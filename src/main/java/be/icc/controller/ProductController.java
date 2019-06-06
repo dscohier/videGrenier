@@ -357,7 +357,11 @@ public class ProductController {
         }
 
         if (!"anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
-            UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (!product.getSeller().getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
+                product.setView(product.getView()+1);
+                productService.update(product.toEntity());
+            }
             model.addAttribute("user", userDto);
             boolean isInCart = false;
             for (ProductDto productFromPanier : userDto.getPanier().getProducts()) {

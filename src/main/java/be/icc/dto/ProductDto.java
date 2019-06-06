@@ -28,6 +28,7 @@ public class ProductDto {
     private Set<BidderDto> bidders;
     private Date creationDate;
     private UserDto seller;
+    private long view;
 
     public ProductDto() {
     }
@@ -48,6 +49,7 @@ public class ProductDto {
         product.setSell(this.isSell());
         product.setEndDate(this.getEndDate());
         product.setCreationDate(this.getCreationDate());
+        product.setView(this.getView());
         return product;
     }
 
@@ -166,5 +168,13 @@ public class ProductDto {
         } finally {
             return picture;
         }
+    }
+
+    public long getView() {
+        return view;
+    }
+
+    public void setView(long view) {
+        this.view = view;
     }
 }

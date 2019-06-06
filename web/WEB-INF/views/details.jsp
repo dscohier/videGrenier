@@ -168,6 +168,7 @@
                                             <c:if test="${product.auction}">
                                                 <p class="card-text"><spring:message code="product.details.endDate"/> : <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.endDate}"/></p>
                                             </c:if>
+                                            <p class="card-text">&#128065; &nbsp;${product.view}</p>
                                         </div>
                                     </div>
 
