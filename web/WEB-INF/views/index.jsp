@@ -12,8 +12,8 @@
 			<h2>
 				<spring:message code="home.welcome"/>
 			</h2>
-			<div style="border: 2px solid #d1c286; height: 200px">
-				Dernier ajout :
+			<div style="border: 2px solid #d1c286; height: 300px">
+				<spring:message code="home.lastAdded"/> :
 				<br/>
 				<c:forEach var="product" items="${lastAdded}">
 					<div class="col-lg-2">
@@ -24,8 +24,33 @@
 							<c:if test = "${product.name.length() <= 30}">
 								${product.name.toLowerCase()}
 							</c:if>
-							<div>
-								<img src="data:image/jpg;base64,${product.displayPicture()}" style="height: 100px"/>
+							<div style="height: 120px; background: url('data:image/png;base64,${product.displayPicture()}') center center no-repeat; background-size: contain;">
+							</div>
+							<div class="desc">
+								<c:if test="${not product.auction}">
+								<spring:message code="common.directSale"/>
+									<span class="price">
+										<spring:message code="common.price"/>
+											${product.price}&euro;
+									</span>
+									</c:if>
+									<c:if test="${product.auction}">
+									<spring:message code="common.bid"/>
+									<span class="price">
+										<spring:message code="product.details.actualPrice"/>
+											${product.price}&euro;
+									</span>
+									</c:if>
+									<br/>
+									<span class="price">
+										<spring:message code="common.city"/>
+											${product.seller.city.country}, ${product.seller.city.name}
+									</span>
+									<br/>
+									<span class="price">
+										<spring:message code="product.products.added"/>
+										<fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.creationDate}"/>
+									</span>
 							</div>
 						</a>
 					</div>
@@ -33,11 +58,11 @@
 			</div>
 			<br/>
 			<div style="border: 2px solid #d1c286; height: 200px">
-				Article les plus consulté :
+				<spring:message code="home.mostViewed"/> :
 			</div>
 			<br/>
 			<div style="border: 2px solid #d1c286; height: 200px">
-				Nos catégorie :
+				<spring:message code="home.categories"/> :
 			</div>
 			<jsp:include page="footer2.jsp"/>
 		</div>
