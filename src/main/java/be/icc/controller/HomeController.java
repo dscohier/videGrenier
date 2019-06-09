@@ -24,6 +24,7 @@ public class HomeController {
     @RequestMapping("")
     public String index(Model model) {
         model.addAttribute("lastAdded", productService.findLastAdded());
+        model.addAttribute("mostViewed", productService.findMostViewed());
         return "index";
     }
 

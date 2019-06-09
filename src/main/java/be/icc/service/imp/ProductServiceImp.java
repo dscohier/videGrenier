@@ -134,4 +134,13 @@ public class ProductServiceImp implements ProductService {
         }
         return productsDto;
     }
+
+    @Override
+    public List<ProductDto> findMostViewed() {
+        List<Product> products = productRepository.findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByViewDesc(new Date());
+        List<ProductDto> productsDto = new ArrayList<>();
+        for (Product product : products) {
+            productsDto.add(product.toDto());
+        }
+        return productsDto;    }
 }

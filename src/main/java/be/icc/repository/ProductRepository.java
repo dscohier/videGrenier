@@ -25,4 +25,6 @@ public interface ProductRepository extends JpaRepository<Product,Long>, ProductR
     List<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
 
     List<Product> findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(Date date);
+
+    List<Product> findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByViewDesc(Date date);
 }

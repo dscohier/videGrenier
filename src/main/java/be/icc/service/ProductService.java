@@ -39,4 +39,6 @@ public interface ProductService {
     List<ProductDto> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
 
     List<ProductDto>  findLastAdded();
+
+    List<ProductDto> findMostViewed();
 }
