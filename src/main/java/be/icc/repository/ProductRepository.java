@@ -14,9 +14,9 @@ import java.util.List;
  */
 public interface ProductRepository extends JpaRepository<Product,Long>, ProductRepositoryCustom  {
 
-   List<Product> findByCategoryAndIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(Category category, Date date);
+   List<Product> findByCategoryAndEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Category category, Date date);
 
-   List<Product> findByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(Date date);
+   List<Product> findByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Date date);
 
     List<Product> findBySellerOrderByCreationDateDesc(User seller);
 
@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product,Long>, ProductR
 
     List<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
 
-    List<Product> findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(Date date);
+    List<Product> findFirst6ByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Date date);
 
-    List<Product> findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByViewDesc(Date date);
+    List<Product> findFirst6ByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByViewDesc(Date date);
 }

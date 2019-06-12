@@ -55,7 +55,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<ProductDto> findByCategoryAndSalable(CategoryEnum categoryEnum) {
         Category category = categoryRepository.findByCategory(categoryEnum);
-        List<Product> products = productRepository.findByCategoryAndIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(category, new Date());
+        List<Product> products = productRepository.findByCategoryAndEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(category, new Date());
         ArrayList<ProductDto> productsDto = new ArrayList<>();
         for (Product product : products) {
             productsDto.add(product.toDto());
@@ -65,7 +65,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<ProductDto> findAllSalableProduct() {
-        List<Product> products = productRepository.findByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(new Date());
+        List<Product> products = productRepository.findByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(new Date());
         ArrayList<ProductDto> productsDto = new ArrayList<>();
         for (Product product : products) {
             productsDto.add(product.toDto());
@@ -127,7 +127,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<ProductDto> findLastAdded() {
-        List<Product> products = productRepository.findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByCreationDateDesc(new Date());
+        List<Product> products = productRepository.findFirst6ByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(new Date());
         List<ProductDto> productsDto = new ArrayList<>();
         for (Product product : products) {
             productsDto.add(product.toDto());
@@ -137,7 +137,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<ProductDto> findMostViewed() {
-        List<Product> products = productRepository.findFirst6ByIsSellFalseAndEndDateAfterOrEndDateIsNullOrderByViewDesc(new Date());
+        List<Product> products = productRepository.findFirst6ByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByViewDesc(new Date());
         List<ProductDto> productsDto = new ArrayList<>();
         for (Product product : products) {
             productsDto.add(product.toDto());

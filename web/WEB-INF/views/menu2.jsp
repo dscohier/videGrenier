@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
-                <div id="fh5co-logo"><a href="index.jsp">Shop.</a></div>
+                <div id="fh5co-logo"><a href="<c:url value="/"/>">Vide Grenier</a></div>
             </div>
             <div class="col-lg-6 text-center menu-1">
                 <ul>
