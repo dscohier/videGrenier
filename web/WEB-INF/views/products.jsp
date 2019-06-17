@@ -40,6 +40,9 @@
 														id="country"></form:input></td>
 									</table>
 								</div>
+								<spring:message code="product.add.title"/>
+								<input type="text" name="title" value="${filterProductsForm.title}"/>
+								<br/><br/>
 								<c:forEach var="typeOfSale" items="${typeOfSale}">
 									<label class="control control-checkbox">
 											${typeOfSale}

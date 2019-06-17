@@ -44,6 +44,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         whereCategorieIn(filterProductsForm.getCategories(), cb, predicates, product);
         whereIsAuction(filterProductsForm.getTypeOfSale(), cb, predicates, product);
         whereCityIs(filterProductsForm, cb, predicates, product);
+        whereTitleLike(filterProductsForm, cb, predicates, product);
 
         cq.where(predicates.toArray(new Predicate[0]));
         cq.orderBy(cb.desc(product.get("creationDate")));
@@ -97,6 +98,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             City city = cityRepository.findByNameAndCountry(filterProductsForm.getCity().split(",")[0], filterProductsForm.getCountry());
             Join<Product, User> user = product.join("seller");
             predicates.add(cb.and(cb.equal(user.get("city"), city)));
+        }
+    }
+
+    private void whereTitleLike(FilterProductsForm filterProductsForm, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
+        if (isNotBlank(filterProductsForm.getTitle())) {
+            predicates.add(cb.and(cb.like(cb.upper(product.get("name")), "%" + filterProductsForm.getTitle() + "%")));
         }
     }
 

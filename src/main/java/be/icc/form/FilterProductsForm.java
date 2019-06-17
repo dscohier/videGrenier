@@ -9,6 +9,7 @@ public class FilterProductsForm {
     private String city;
     private String country;
     private String[] typeOfSale;
+    private String title;
 
     public String[] getCategories() {
         return categories;
@@ -40,5 +41,13 @@ public class FilterProductsForm {
 
     public void setTypeOfSale(String[] typeOfSale) {
         this.typeOfSale = typeOfSale;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

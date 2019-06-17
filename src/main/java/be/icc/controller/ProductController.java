@@ -77,13 +77,13 @@ public class ProductController {
     }
 
     private void initFilterProducts(Model model, FilterProductsForm filterProductsForm) {
-        String[] categories = initCategories(model);
         if (filterProductsForm.getCategories() == null) {
+            String[] categories = initCategories(model);
             filterProductsForm.setCategories(categories);
         }
 
-        String[] typeOfSales = initTypeOfSale(model);
         if (filterProductsForm.getTypeOfSale() == null) {
+            String[] typeOfSales = initTypeOfSale(model);
             filterProductsForm.setTypeOfSale(typeOfSales);
         }
 
