@@ -41,8 +41,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         List<Predicate> predicates = new ArrayList<>();
 
         predicates.add(cb.and(cb.equal(product.get("isSell"), false)));
-        whereCategorieIn(filterProductsForm.getCategories(), cb, predicates, product);
-        whereIsAuction(filterProductsForm.getTypeOfSale(), cb, predicates, product);
+        if (filterProductsForm.getCategories() != null) {
+            whereCategorieIn(filterProductsForm.getCategories(), cb, predicates, product);
+        }
+        if (filterProductsForm.getTypeOfSale() != null) {
+            whereIsAuction(filterProductsForm.getTypeOfSale(), cb, predicates, product);
+        }
         whereCityIs(filterProductsForm, cb, predicates, product);
         whereTitleLike(filterProductsForm, cb, predicates, product);
 

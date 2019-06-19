@@ -1,6 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <nav class="fh5co-nav" role="navigation">
@@ -30,12 +31,15 @@
             <div class="col-lg-3 hidden-xs menu-2">
                 <ul>
                     <li class="search">
-                        <div class="input-group">
-                            <input type="text" placeholder="Search..">
-                            <span class="input-group-btn">
-						        <button class="btn btn-primary" type="button"><i class="icon-search"></i></button>
-						      </span>
-                        </div>
+                        <c:url var="action"  value="/product/title" />
+                        <form:form cssClass="form-horizontal" method="get" action="${action}">
+                            <div class="input-group">
+                                <input type="text" id="title" name="title" placeholder="Search.."/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                </span>
+                            </div>
+                        </form:form>
                     </li>
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication property="principal.panier.productsSize" var="countProduct" />

@@ -54,8 +54,8 @@ public class ProductController {
     OrderService orderService;
 
     @RequestMapping("/products")
-    public String products(Model model, @RequestParam(required = false) String category) {
-        List<ProductDto> products;
+    public String products(Model model, @RequestParam(required = false) String category, String title) {
+        List<ProductDto> products = new ArrayList<>();
         if (isNotBlank(category)) {
             CategoryEnum categoryEnum;
             try {
@@ -65,7 +65,13 @@ public class ProductController {
             }
             products = productService.findByCategoryAndSalable(categoryEnum);
         } else {
-            products = productService.findAllSalableProduct();
+            if (isNotBlank(title)) {
+                FilterProductsForm filterProductsForm = new FilterProductsForm();
+                filterProductsForm.setTitle(title);
+                products = productService.findProductsByCriteria(filterProductsForm);
+            } else {
+                products = productService.findAllSalableProduct();
+            }
         }
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noProducts");
@@ -74,6 +80,11 @@ public class ProductController {
         }
         initFilterProducts(model, new FilterProductsForm());
         return "products";
+    }
+
+    @RequestMapping("/title")
+    public String productsTitle(HttpServletRequest request, Model model,  @RequestParam String title) {
+        return products(model, null, title);
     }
 
     private void initFilterProducts(Model model, FilterProductsForm filterProductsForm) {
