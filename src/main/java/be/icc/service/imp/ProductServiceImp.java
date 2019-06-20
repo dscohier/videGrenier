@@ -88,8 +88,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findProductsByCriteria(FilterProductsForm filterProductsForm) {
-        return productRepository.findProductsByCriteria(filterProductsForm);
+    public Page<Product> findProductsByCriteria(FilterProductsForm filterProductsForm, Pageable page) {
+        return productRepository.findProductsByCriteria(filterProductsForm, page);
     }
 
     @Override

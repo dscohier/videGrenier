@@ -58,7 +58,7 @@ public class ProductController {
     private int SIZE_PAGE = 2;
 
     @RequestMapping("/products")
-    public String products(Model model, @RequestParam(required = false) String category, String title,  @RequestParam(required = false) Integer pageNumber) {
+    public String products(Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber) {
         Page<Product> productsPage = null;
         Pageable page;
         FilterProductsForm filterProductsForm = new FilterProductsForm();
@@ -82,7 +82,7 @@ public class ProductController {
             if (isNotBlank(title)) {
                 model.addAttribute("title", title);
                 filterProductsForm.setTitle(title);
-                // TODO productsPage = productService.findProductsByCriteria(filterProductsForm);
+                productsPage = productService.findProductsByCriteria(filterProductsForm, page);
             } else {
                 productsPage = productService.findAllSalableProduct(page);
             }
@@ -176,13 +176,19 @@ public class ProductController {
     }
 
     @RequestMapping("/filterProducts")
-    public String filterProducts(@ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, Model model) {
-        List<ProductDto> products = productService.findProductsByCriteria(filterProductsForm);
-        initFilterProducts(model, filterProductsForm);
-        if (products.isEmpty()) {
-            model.addAttribute("error", "error.products.noProductFilter");
+    public String filterProducts(@ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, Model model, @RequestParam(required = false) Integer pageNumber) {
+        Pageable page;
+        if (pageNumber != null) {
+            page = new PageRequest(pageNumber, SIZE_PAGE);
         } else {
-            initialisePaging(model, products);
+            page = new PageRequest(0, SIZE_PAGE);
+        }
+        Page<Product> productsPage  = productService.findProductsByCriteria(filterProductsForm, page);
+        initFilterProducts(model, filterProductsForm);
+        if (productsPage == null || productsPage.getContent().isEmpty()) {
+            model.addAttribute("error", "error.products.noProducts");
+        } else {
+            initialisePaging(model, productsPage, pageNumber);
         }
         return "products";
     }

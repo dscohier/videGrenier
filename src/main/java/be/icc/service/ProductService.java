@@ -34,7 +34,7 @@ public interface ProductService {
 
     Page<Product> findByCategoryIn(List<CategoryEnum> categoryEnums, Pageable pageable);
 
-    List<ProductDto> findProductsByCriteria(FilterProductsForm filterProductsForm);
+    Page<Product> findProductsByCriteria(FilterProductsForm filterProductsForm, Pageable page);
 
     List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, String username);
 

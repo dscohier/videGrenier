@@ -11,6 +11,9 @@ import be.icc.enumClass.TypeOfSaleEnum;
 import be.icc.form.FilterProductsForm;
 import be.icc.form.FilterSalesForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -33,7 +36,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     CityRepository cityRepository;
 
     @Override
-    public List<ProductDto> findProductsByCriteria(FilterProductsForm filterProductsForm) {
+    public Page<Product> findProductsByCriteria(FilterProductsForm filterProductsForm, Pageable page) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
@@ -55,7 +58,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         List<Product> products = em.createQuery(cq).getResultList();
 
-        return productToDto(products);
+        return new PageImpl<>(products, page, products.size());
     }
 
     private List<ProductDto> productToDto(List<Product> products) {

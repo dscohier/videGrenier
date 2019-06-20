@@ -100,8 +100,8 @@
                                 <c:if test="${not empty title}">
                                     <input type="text" id="title" name="title" value="${title}"/>
                                 </c:if>
-                                <c:if test="${not empty categorie}">
-                                    <input type="text" id="categorie" name="categorie" value="${categorie}"/>
+                                <c:if test="${not empty category}">
+                                    <input type="text" id="category" name="category" value="${category}"/>
                                 </c:if>
                             </div>
                             <input type="submit" class="btn btn-primary" value="${i.count}"/>
