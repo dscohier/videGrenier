@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: dscohier
@@ -81,8 +82,33 @@
                 </div>
             </c:if>
         </c:forEach>
-        <c:if test="${products.size()%3 != 0}">
+        <c:if test="${productsPage.content.size()%3 != 0}">
     </div>
     </c:if>
-    </div>
+    <c:if test="${productsPage.totalPages > 0}">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <c:forEach begin="1" end="${productsPage.totalPages}" varStatus="i">
+                    <c:if test="${i.count eq currentPage}">
+                        <input type="submit" class="btn btn-primary" value="${i.count}" disabled/>
+                    </c:if>
+                    <c:if test="${i.count ne currentPage}">
+                        <c:url var="action"  value="/product/products" />
+                        <form:form cssClass="form-horizontal" method="get" action="${action}">
+                            <div style="display: none;">
+                                <input type="text" id="pageNumber" name="pageNumber" value="${i.count-1}"/>
+                                <c:if test="${not empty title}">
+                                    <input type="text" id="title" name="title" value="${title}"/>
+                                </c:if>
+                                <c:if test="${not empty categorie}">
+                                    <input type="text" id="categorie" name="categorie" value="${categorie}"/>
+                                </c:if>
+                            </div>
+                            <input type="submit" class="btn btn-primary" value="${i.count}"/>
+                        </form:form>
+                    </c:if>
+                </c:forEach>
+            </div>
+        </div>
+    </c:if>
 </html>

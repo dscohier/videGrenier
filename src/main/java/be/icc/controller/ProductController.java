@@ -15,6 +15,9 @@ import be.icc.form.*;
 import be.icc.model.FileModel;
 import be.icc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,39 +55,56 @@ public class ProductController {
     CartService cartService;
     @Autowired
     OrderService orderService;
+    private int SIZE_PAGE = 2;
 
     @RequestMapping("/products")
-    public String products(Model model, @RequestParam(required = false) String category, String title) {
-        List<ProductDto> products = new ArrayList<>();
+    public String products(Model model, @RequestParam(required = false) String category, String title,  @RequestParam(required = false) Integer pageNumber) {
+        Page<Product> productsPage = null;
+        Pageable page;
+        FilterProductsForm filterProductsForm = new FilterProductsForm();
+        if (pageNumber != null) {
+            page = new PageRequest(pageNumber, SIZE_PAGE);
+        } else {
+            page = new PageRequest(0, SIZE_PAGE);
+        }
         if (isNotBlank(category)) {
+            model.addAttribute("category", category);
             CategoryEnum categoryEnum;
             try {
                 categoryEnum = CategoryEnum.valueOf(category);
             } catch (Exception e) {
                 return "redirect:";
             }
-            products = productService.findByCategoryAndSalable(categoryEnum);
+            productsPage = productService.findByCategoryAndSalable(categoryEnum, page);
+            String categories[] = {category};
+            filterProductsForm.setCategories(categories);
         } else {
             if (isNotBlank(title)) {
-                FilterProductsForm filterProductsForm = new FilterProductsForm();
+                model.addAttribute("title", title);
                 filterProductsForm.setTitle(title);
-                products = productService.findProductsByCriteria(filterProductsForm);
+                // TODO productsPage = productService.findProductsByCriteria(filterProductsForm);
             } else {
-                products = productService.findAllSalableProduct();
+                productsPage = productService.findAllSalableProduct(page);
             }
         }
-        if (products.isEmpty()) {
+        if (productsPage == null || productsPage.getContent().isEmpty()) {
             model.addAttribute("error", "error.products.noProducts");
         } else {
-            initialisePaging(model, products);
+            model.addAttribute("productsPage", productsPage);
+            if (pageNumber == null) {
+                pageNumber = 1;
+            } else {
+                pageNumber++;
+            }
+            initialisePaging(model, productsPage, pageNumber);
         }
-        initFilterProducts(model, new FilterProductsForm());
+        initFilterProducts(model, filterProductsForm);
         return "products";
     }
 
     @RequestMapping("/title")
     public String productsTitle(HttpServletRequest request, Model model,  @RequestParam String title) {
-        return products(model, null, title);
+        return products(model, null, title, 0);
     }
 
     private void initFilterProducts(Model model, FilterProductsForm filterProductsForm) {
@@ -195,7 +215,8 @@ public class ProductController {
             products.addAll(ordersDto.getProducts());
         }
         if (filterPurchasesForm.isCurrentAuctions()) {
-            products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date()));
+            Pageable page = new PageRequest(0, SIZE_PAGE);
+            // TODO products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date(), page));
         }
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noPurchases");
@@ -470,12 +491,13 @@ public class ProductController {
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
         }
-        List<ProductDto> products = productService.findBySeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+        Pageable page = new PageRequest(0, SIZE_PAGE);
+        /*TODO List<ProductDto> products = productService.findBySeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()), page);
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noSales");
         } else {
             initialisePaging(model, products);
-        }
+        }*/
         initFilterSales(model, new FilterSalesForm());
         return "mySales";
     }
@@ -492,7 +514,8 @@ public class ProductController {
         for (OrdersDto ordersDto : orders) {
             products.addAll(ordersDto.getProducts());
         }
-        products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date()));
+        Pageable page = new PageRequest(0, SIZE_PAGE);
+        // TODO products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date(), page));
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noPurchases");
         } else {
@@ -501,7 +524,7 @@ public class ProductController {
         initFilterPurchases(model, new FilterPurchasesForm());
         return "myPurchases";
     }
-
+// TODO REPLACE
     private void initialisePaging(Model model, List<ProductDto> products) {
         model.addAttribute("size", (int) Math.ceil(products.size() / 9.0));
         model.addAttribute("currentPage", 1);
@@ -511,6 +534,17 @@ public class ProductController {
             model.addAttribute("products", products);
         }
     }
+
+    private void initialisePaging(Model model, Page<Product> page, Integer pageNumber) {
+        List<ProductDto> products = new ArrayList<>();
+       for (Product product : page.getContent()) {
+           products.add(product.toDto());
+       }
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("products", products);
+    }
+
+
 
     @ExceptionHandler(Exception.class)
     public String ErreurExample(HttpServletRequest request, Model model, Exception exception) {

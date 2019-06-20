@@ -13,6 +13,8 @@ import be.icc.repository.ProductRepository;
 import be.icc.repository.UserRepository;
 import be.icc.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,24 +55,14 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findByCategoryAndSalable(CategoryEnum categoryEnum) {
+    public Page<Product> findByCategoryAndSalable(CategoryEnum categoryEnum, Pageable pageable) {
         Category category = categoryRepository.findByCategory(categoryEnum);
-        List<Product> products = productRepository.findByCategoryAndEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(category, new Date());
-        ArrayList<ProductDto> productsDto = new ArrayList<>();
-        for (Product product : products) {
-            productsDto.add(product.toDto());
-        }
-        return productsDto;
+        return productRepository.findByCategoryAndEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(category, new Date(), pageable);
     }
 
     @Override
-    public List<ProductDto> findAllSalableProduct() {
-        List<Product> products = productRepository.findByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(new Date());
-        ArrayList<ProductDto> productsDto = new ArrayList<>();
-        for (Product product : products) {
-            productsDto.add(product.toDto());
-        }
-        return productsDto;
+    public Page<Product> findAllSalableProduct(Pageable pageable) {
+        return productRepository.findByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(new Date(), pageable);
     }
 
     @Override
@@ -79,17 +71,12 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findBySeller(UserDto seller) {
-        List<Product> products = productRepository.findBySellerOrderByCreationDateDesc(seller.toEntity());
-        List<ProductDto> productsDto = new ArrayList<>();
-        for (Product product : products) {
-            productsDto.add(product.toDto());
-        }
-        return productsDto;
+    public Page<Product> findBySeller(UserDto seller, Pageable pageable) {
+       return productRepository.findBySellerOrderByCreationDateDesc(seller.toEntity(), pageable);
     }
 
     @Override
-    public List<ProductDto> findByCategoryIn(List<CategoryEnum> categoryEnums) {
+    public Page<Product> findByCategoryIn(List<CategoryEnum> categoryEnums, Pageable pageable) {
         List<Category> categories = new ArrayList<>();
         for (CategoryEnum categoryEnum : categoryEnums) {
            Category category = categoryRepository.findByCategory(categoryEnum);
@@ -97,12 +84,7 @@ public class ProductServiceImp implements ProductService {
                categories.add(category);
            }
         }
-        List<Product> products = productRepository.findByCategoryIn(categories);
-        List<ProductDto> productsDto = new ArrayList<>();
-        for (Product product : products) {
-            productsDto.add(product.toDto());
-        }
-        return productsDto;
+        return productRepository.findByCategoryIn(categories, pageable);
     }
 
     @Override
@@ -116,13 +98,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date) {
-        List<Product> products = productRepository.findDistinctProductByBiddersInAndEndDateAfter(bidders, date);
-        List<ProductDto> productsDto = new ArrayList<>();
-        for (Product product : products) {
-            productsDto.add(product.toDto());
-        }
-        return productsDto;
+    public Page<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date, Pageable pageable) {
+        return productRepository.findDistinctProductByBiddersInAndEndDateAfter(bidders, date, pageable);
     }
 
     @Override

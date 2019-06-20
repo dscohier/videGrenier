@@ -4,7 +4,9 @@ import be.icc.entity.Bidder;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
 import be.icc.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -12,17 +14,17 @@ import java.util.List;
 /**
  * Created by Scohier Dorian on 09-12-18.
  */
-public interface ProductRepository extends JpaRepository<Product,Long>, ProductRepositoryCustom  {
+public interface ProductRepository  extends PagingAndSortingRepository<Product,Long>, ProductRepositoryCustom  {
 
-   List<Product> findByCategoryAndEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Category category, Date date);
+    Page<Product> findByCategoryAndEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Category category, Date date, Pageable pageable);
 
-   List<Product> findByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Date date);
+    Page<Product> findByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Date date, Pageable pageable);
 
-    List<Product> findBySellerOrderByCreationDateDesc(User seller);
+    Page<Product> findBySellerOrderByCreationDateDesc(User seller, Pageable pageable);
 
-    List<Product> findByCategoryIn(List<Category> category);
+    Page<Product> findByCategoryIn(List<Category> category, Pageable pageable);
 
-    List<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
+    Page<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date, Pageable pageable);
 
     List<Product> findFirst6ByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Date date);
 
