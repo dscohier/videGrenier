@@ -85,6 +85,12 @@
 										async defer></script>
 							</form:form>
 						</div>
+						<c:if test="${filter}">
+							<c:url var="action"  value="/product/filterProducts" />
+						</c:if>
+						<c:if test="${filter}">
+							<c:url var="action"  value="/product/products" />
+						</c:if>
 						<jsp:include page="productList.jsp"/>
 				</div>
 			</div>

@@ -55,10 +55,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         cq.where(predicates.toArray(new Predicate[0]));
         cq.orderBy(cb.desc(product.get("creationDate")));
+        int totalRows = em.createQuery(cq).getResultList().size();
+        List<Product> products = em.createQuery(cq).setFirstResult(page.getPageNumber() * page.getPageSize()).setMaxResults(page.getPageSize()).getResultList();
 
-        List<Product> products = em.createQuery(cq).getResultList();
-
-        return new PageImpl<>(products, page, products.size());
+        return new PageImpl<>(products, page, totalRows);
     }
 
     private List<ProductDto> productToDto(List<Product> products) {

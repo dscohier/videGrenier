@@ -93,7 +93,6 @@
                         <input type="submit" class="btn btn-primary" value="${i.count}" disabled/>
                     </c:if>
                     <c:if test="${i.count ne currentPage}">
-                        <c:url var="action"  value="/product/products" />
                         <form:form cssClass="form-horizontal" method="get" action="${action}">
                             <div style="display: none;">
                                 <input type="text" id="pageNumber" name="pageNumber" value="${i.count-1}"/>

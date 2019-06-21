@@ -58,9 +58,10 @@ public class ProductController {
     private int SIZE_PAGE = 2;
 
     @RequestMapping("/products")
-    public String products(Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber) {
+    public String products(HttpServletRequest request, Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber) {
         Page<Product> productsPage = null;
         Pageable page;
+        request.getSession().setAttribute("filterProductsForm", null);
         FilterProductsForm filterProductsForm = new FilterProductsForm();
         if (pageNumber != null) {
             page = new PageRequest(pageNumber, SIZE_PAGE);
@@ -91,11 +92,6 @@ public class ProductController {
             model.addAttribute("error", "error.products.noProducts");
         } else {
             model.addAttribute("productsPage", productsPage);
-            if (pageNumber == null) {
-                pageNumber = 1;
-            } else {
-                pageNumber++;
-            }
             initialisePaging(model, productsPage, pageNumber);
         }
         initFilterProducts(model, filterProductsForm);
@@ -104,7 +100,7 @@ public class ProductController {
 
     @RequestMapping("/title")
     public String productsTitle(HttpServletRequest request, Model model,  @RequestParam String title) {
-        return products(model, null, title, 0);
+        return products(null, model, null, title, 0);
     }
 
     private void initFilterProducts(Model model, FilterProductsForm filterProductsForm) {
@@ -176,11 +172,13 @@ public class ProductController {
     }
 
     @RequestMapping("/filterProducts")
-    public String filterProducts(@ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, Model model, @RequestParam(required = false) Integer pageNumber) {
+    public String filterProducts(HttpServletRequest request, @ModelAttribute("filterProductsForm") @Valid FilterProductsForm filterProductsForm, Model model, @RequestParam(required = false) Integer pageNumber) {
         Pageable page;
         if (pageNumber != null) {
+            filterProductsForm = (FilterProductsForm) request.getSession().getAttribute("filterProductsForm");
             page = new PageRequest(pageNumber, SIZE_PAGE);
         } else {
+            request.getSession().setAttribute("filterProductsForm", filterProductsForm);
             page = new PageRequest(0, SIZE_PAGE);
         }
         Page<Product> productsPage  = productService.findProductsByCriteria(filterProductsForm, page);
@@ -188,6 +186,8 @@ public class ProductController {
         if (productsPage == null || productsPage.getContent().isEmpty()) {
             model.addAttribute("error", "error.products.noProducts");
         } else {
+            model.addAttribute("productsPage", productsPage);
+            model.addAttribute("filter", true);
             initialisePaging(model, productsPage, pageNumber);
         }
         return "products";
@@ -543,6 +543,11 @@ public class ProductController {
 
     private void initialisePaging(Model model, Page<Product> page, Integer pageNumber) {
         List<ProductDto> products = new ArrayList<>();
+        if (pageNumber == null) {
+            pageNumber = 1;
+        } else {
+            pageNumber++;
+        }
        for (Product product : page.getContent()) {
            products.add(product.toDto());
        }
