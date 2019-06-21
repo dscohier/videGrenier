@@ -52,6 +52,12 @@
 								<input type="submit" class="btn btn-primary" value="<spring:message code="common.search"/>">
 							</form:form>
 						</div>
+						<c:if test="${filter}">
+							<c:url var="action"  value="/product/filterSales" />
+						</c:if>
+						<c:if test="${filter}">
+							<c:url var="action"  value="/product/mySales" />
+						</c:if>
 						<jsp:include page="productList.jsp"/>
 					</div>
 				</div>
