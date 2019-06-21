@@ -16,6 +16,7 @@ import be.icc.model.FileModel;
 import be.icc.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -209,7 +210,7 @@ public class ProductController {
     }
 
     @RequestMapping("/filterPurchases")
-    public String filterPurchases(@ModelAttribute("filterPurchasesForm") @Valid FilterPurchasesForm filterPurchasesForm, Model model) {
+    public String filterPurchases(HttpServletRequest request, @ModelAttribute("filterPurchasesForm") @Valid FilterPurchasesForm filterPurchasesForm, Model model, @RequestParam(required = false) Integer pageNumber) {
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
         }
@@ -217,17 +218,26 @@ public class ProductController {
         List<Bidder> bidders = bidderService.findByUser(user);
         List<ProductDto> products = new ArrayList<>();
         List<OrdersDto> orders = orderService.findByUser(user.getId());
+        Pageable page;
+        if (pageNumber != null) {
+            filterPurchasesForm = (FilterPurchasesForm) request.getSession().getAttribute("filterPurchasesForm");
+            page = new PageRequest(pageNumber, SIZE_PAGE);
+        } else {
+            request.getSession().setAttribute("filterPurchasesForm", filterPurchasesForm);
+            page = new PageRequest(0, SIZE_PAGE);
+        }
         for (OrdersDto ordersDto : orders) {
             products.addAll(ordersDto.getProducts());
         }
         if (filterPurchasesForm.isCurrentAuctions()) {
-            Pageable page = new PageRequest(0, SIZE_PAGE);
-            // TODO products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date(), page));
+            products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date()));
         }
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noPurchases");
         } else {
-            initialisePaging(model, products);
+            Page<ProductDto> productsPage = new PageImpl<>(products, page, products.size());
+            model.addAttribute("productsPage", productsPage);
+            initialisePagingDto(model, productsPage, pageNumber);
         }
         return "myPurchases";
     }
@@ -509,9 +519,16 @@ public class ProductController {
     }
 
     @RequestMapping("/myPurchases")
-    public String myPurchases(Model model) {
+    public String myPurchases(HttpServletRequest request, Model model, @RequestParam(required = false) Integer pageNumber) {
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
+        }
+        request.getSession().setAttribute("filterPurchasesForm", null);
+        Pageable page;
+        if (pageNumber != null) {
+            page = new PageRequest(pageNumber, SIZE_PAGE);
+        } else {
+            page = new PageRequest(0, SIZE_PAGE);
         }
         User user = userService.findEntityById(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
         List<Bidder> bidders = bidderService.findByUser(user);
@@ -520,12 +537,13 @@ public class ProductController {
         for (OrdersDto ordersDto : orders) {
             products.addAll(ordersDto.getProducts());
         }
-        Pageable page = new PageRequest(0, SIZE_PAGE);
-        // TODO products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date(), page));
+        products.addAll(productService.findDistinctProductByBiddersInAndEndDateAfter(bidders, new Date()));
         if (products.isEmpty()) {
             model.addAttribute("error", "error.products.noPurchases");
         } else {
-            initialisePaging(model, products);
+            Page<ProductDto> productsPage = new PageImpl<>(products, page, products.size());
+            model.addAttribute("productsPage", productsPage);
+            initialisePagingDto(model, productsPage, pageNumber);
         }
         initFilterPurchases(model, new FilterPurchasesForm());
         return "myPurchases";
@@ -555,7 +573,22 @@ public class ProductController {
         model.addAttribute("products", products);
     }
 
-
+    // TODO refactor difficult logic
+    private void initialisePagingDto(Model model, Page<ProductDto> page, Integer pageNumber) {
+        if (pageNumber == null) {
+            pageNumber = 1;
+        } else {
+            pageNumber++;
+        }
+        List<ProductDto> products;
+        if (page.getContent().size()/SIZE_PAGE  < pageNumber) {
+            products = page.getContent().subList((pageNumber-1) * SIZE_PAGE, page.getNumberOfElements());
+        } else {
+            products =  page.getContent().subList((pageNumber-1) * SIZE_PAGE, (pageNumber-1) * SIZE_PAGE + SIZE_PAGE);
+        }
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("products", products);
+    }
 
     @ExceptionHandler(Exception.class)
     public String ErreurExample(HttpServletRequest request, Model model, Exception exception) {

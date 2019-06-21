@@ -82,7 +82,7 @@
                 </div>
             </c:if>
         </c:forEach>
-        <c:if test="${productsPage.content.size()%3 != 0}">
+        <c:if test="${products.size()%3 != 0}">
     </div>
     </c:if>
     <c:if test="${productsPage.totalPages > 0}">

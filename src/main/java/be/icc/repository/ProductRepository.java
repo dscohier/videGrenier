@@ -24,7 +24,7 @@ public interface ProductRepository  extends PagingAndSortingRepository<Product,L
 
     Page<Product> findByCategoryIn(List<Category> category, Pageable pageable);
 
-    Page<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date, Pageable pageable);
+    List<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
 
     List<Product> findFirst6ByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByCreationDateDesc(Date date);
 

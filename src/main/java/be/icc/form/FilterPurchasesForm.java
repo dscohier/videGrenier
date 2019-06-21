@@ -1,9 +1,11 @@
 package be.icc.form;
 
+import java.io.Serializable;
+
 /**
  * Created by Scohier Dorian on 27-05-19.
  */
-public class FilterPurchasesForm {
+public class FilterPurchasesForm implements Serializable {
 
     private boolean currentAuctions = true;
 

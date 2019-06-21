@@ -98,8 +98,13 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Page<Product> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date, Pageable pageable) {
-        return productRepository.findDistinctProductByBiddersInAndEndDateAfter(bidders, date, pageable);
+    public List<ProductDto> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date) {
+        List<Product> products =  productRepository.findDistinctProductByBiddersInAndEndDateAfter(bidders, date);
+        List<ProductDto> productsDto = new ArrayList<>();
+        for (Product product : products) {
+            productsDto.add(product.toDto());
+        }
+        return productsDto;
     }
 
     @Override
