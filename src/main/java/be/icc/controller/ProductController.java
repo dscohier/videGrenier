@@ -195,16 +195,26 @@ public class ProductController {
     }
 
     @RequestMapping("/filterSales")
-    public String filterSales(@ModelAttribute("filterSalesForm") @Valid FilterSalesForm filterSalesForm, Model model) {
+    public String filterSales(HttpServletRequest request, @ModelAttribute("filterSalesForm") @Valid FilterSalesForm filterSalesForm, Model model, @RequestParam(required = false) Integer pageNumber) {
+        Pageable page;
+        if (pageNumber != null) {
+            filterSalesForm = (FilterSalesForm) request.getSession().getAttribute("filterSalesForm");
+            page = new PageRequest(pageNumber, SIZE_PAGE);
+        } else {
+            request.getSession().setAttribute("filterSalesForm", filterSalesForm);
+            page = new PageRequest(0, SIZE_PAGE);
+        }
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
         }
-        List<ProductDto> products = productService.findSalesByCriteria(filterSalesForm, ((UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        Page<Product> productsPage = productService.findSalesByCriteria(filterSalesForm, ((UserDto)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername(), page);
         initFilterSales(model, filterSalesForm);
-        if (products.isEmpty()) {
+        if (productsPage == null || productsPage.getContent().isEmpty()) {
             model.addAttribute("error", "error.products.noProductFilter");
         } else {
-            initialisePaging(model, products);
+            model.addAttribute("productsPage", productsPage);
+            model.addAttribute("filter", true);
+            initialisePaging(model, productsPage, pageNumber);
         }
         return "mySales";
     }
@@ -503,17 +513,24 @@ public class ProductController {
     }
 
     @RequestMapping("/mySales")
-    public String mySales(Model model) {
+    public String mySales(HttpServletRequest request, Model model, @RequestParam(required = false) Integer pageNumber) {
         if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())) {
             return "redirect:/connect";
         }
-        Pageable page = new PageRequest(0, SIZE_PAGE);
-        /*TODO List<ProductDto> products = productService.findBySeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()), page);
-        if (products.isEmpty()) {
+        request.getSession().setAttribute("filterSalesForm", null);
+        Pageable page;
+        if (pageNumber != null) {
+            page = new PageRequest(pageNumber, SIZE_PAGE);
+        } else {
+            page = new PageRequest(0, SIZE_PAGE);
+        }
+        Page<Product> productsPage = productService.findBySeller(userService.findByUsername(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()), page);
+        if (productsPage == null || productsPage.getContent().isEmpty()) {
             model.addAttribute("error", "error.products.noSales");
         } else {
-            initialisePaging(model, products);
-        }*/
+            model.addAttribute("productsPage", productsPage);
+            initialisePaging(model, productsPage, pageNumber);
+        }
         initFilterSales(model, new FilterSalesForm());
         return "mySales";
     }

@@ -36,7 +36,7 @@ public interface ProductService {
 
     Page<Product> findProductsByCriteria(FilterProductsForm filterProductsForm, Pageable page);
 
-    List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, String username);
+    Page<Product> findSalesByCriteria(FilterSalesForm filterSalesForm, String username, Pageable page);
 
     List<ProductDto> findDistinctProductByBiddersInAndEndDateAfter(List<Bidder> bidders, Date date);
 

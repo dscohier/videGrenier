@@ -1,9 +1,11 @@
 package be.icc.form;
 
+import java.io.Serializable;
+
 /**
  * Created by Scohier Dorian on 15-05-19.
  */
-public class FilterSalesForm {
+public class FilterSalesForm implements Serializable {
 
     private String[] categories;
     private String[] typeOfSale;

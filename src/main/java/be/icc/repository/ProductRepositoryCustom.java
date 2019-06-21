@@ -1,20 +1,17 @@
 package be.icc.repository;
 
-import be.icc.dto.ProductDto;
 import be.icc.entity.Product;
 import be.icc.entity.User;
 import be.icc.form.FilterProductsForm;
 import be.icc.form.FilterSalesForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 /**
  * Created by Scohier Dorian on 15-05-2019.
  */
 interface ProductRepositoryCustom {
     Page<Product> findProductsByCriteria(FilterProductsForm filterProductsForm, Pageable page);
 
-    List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, User seller);
+    Page<Product> findSalesByCriteria(FilterSalesForm filterSalesForm, User seller, Pageable page);
 
 }

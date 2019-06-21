@@ -70,7 +70,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public List<ProductDto> findSalesByCriteria(FilterSalesForm filterSalesForm, User seller) {
+    public Page<Product> findSalesByCriteria(FilterSalesForm filterSalesForm, User seller, Pageable page) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
 
@@ -84,9 +84,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         cq.where(predicates.toArray(new Predicate[0]));
         cq.orderBy(cb.desc(product.get("creationDate")));
 
-        List<Product> products = em.createQuery(cq).getResultList();
+        int totalRows = em.createQuery(cq).getResultList().size();
+        List<Product> products = em.createQuery(cq).setFirstResult(page.getPageNumber() * page.getPageSize()).setMaxResults(page.getPageSize()).getResultList();
 
-        return productToDto(products);
+        return new PageImpl<>(products, page, totalRows);
     }
 
     private void whereIsSell(String[] sellOrNot, CriteriaBuilder cb, List<Predicate> predicates, Root<Product> product) {
