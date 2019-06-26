@@ -59,7 +59,7 @@
 	</footer>
 	
 	<!-- jQuery -->
-	<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
+	<!--<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
 	<!-- jQuery Easing -->
 	<script src="<c:url value="/resources/js/jquery.easing.1.3.js"/>"></script>
 	<!-- Bootstrap -->

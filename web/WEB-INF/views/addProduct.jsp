@@ -10,7 +10,7 @@
     <jsp:include page="head.jsp"/>
     <body>
         <div id="page">
-            <jsp:include page="menu2.jsp"/>
+            <jsp:include page="menu.jsp"/>
             <div class="col-lg-6">
                 <c:if test="${addProductForm.id == null}">
                     <c:set var="addOrUpdate" value="add" />

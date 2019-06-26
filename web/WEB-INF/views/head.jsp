@@ -38,5 +38,12 @@
         <!-- Include Bootstrap Datepicker -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+        <!-- star rating plugin -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="<c:url value="/resources/css/star-rating.css"/>" media="all" rel="stylesheet" type="text/css" />
+    <link href="<c:url value="/resources/themes/krajee-svg/theme.css"/>" media="all" rel="stylesheet" type="text/css" />
+    <script src="<c:url value="/resources/js/star-rating.js"/>" type="text/javascript"></script>
+    <script src="<c:url value="/resources/themes/krajee-svg/theme.js"/>" type="text/javascript"></script>
     </head>
 </html>

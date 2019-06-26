@@ -20,6 +20,7 @@
                 <div class="row">
             </c:if>
             <div class="col-md-4 text-center animate-box" style="margin-top: 20px;">
+                <c:if test="${empty mySale}">
                 <a href="<c:url value="/profile?username=${product.seller.username}"/>">
                     <div class="fh5co-staff" style="margin-bottom: 5px">
                         <img src="data:image/jpg;base64,${product.seller.displayPicture()}" style="width: 70px"
@@ -36,6 +37,10 @@
                         </span>
                     </div>
                 </a>
+            </c:if>
+                <c:if test="${not empty mySale and !product.sell}">
+                    <h4><spring:message code="product.products.notSell"/></h4>
+                </c:if>
                 <a href="<c:url value="/product/details?id=${product.id}"/>" style="margin-top: 100px">
                     <h3>${product.name}</h3>
                     <div class="product">
@@ -63,7 +68,6 @@
                         </c:if>
                         <br/>
                         <span class="price">
-                            <spring:message code="common.city"/>
                                 ${product.seller.city.country}, ${product.seller.city.name}
                         </span>
                         <br/>
@@ -77,7 +81,46 @@
                         </span>
                     </div>
                 </a>
+            <c:if test="${not empty displayNote}">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#${product.id}">
+                    <spring:message code="product.products.rate"/>
+                </button>
+            </c:if>
             </div>
+            <c:if test="${not empty displayNote}">
+            <!-- Modal -->
+                <div class="modal fade" id="${product.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <form:form cssClass="form-horizontal" method="post" action="rate" commandName="ratingForm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <input type="number" class="kv-svg rating-loading" value="2.5" data-size="lg" title="">
+                                <script>
+                                    $(document).on('ready', function () {
+                                        $('.kv-svg').rating({
+                                            theme: 'krajee-svg',
+                                            filledStar: '<span class="krajee-icon krajee-icon-star"></span>',
+                                            emptyStar: '<span class="krajee-icon krajee-icon-star"></span>'
+                                        });
+                                    });
+                                </script>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form:textarea  path="description" cssClass="form-control" id="description" cssStyle="height: 350px; width: 570px;"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                        </form:form>
+                    </div>
+                </div>
+            </c:if>
             <c:if test="${loop.index%3 == 2}">
                 </div>
             </c:if>

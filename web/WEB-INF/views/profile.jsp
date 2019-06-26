@@ -6,7 +6,7 @@
 <jsp:include page="head.jsp"/>
 <body>
 <div id="page">
-	<jsp:include page="menu2.jsp"/>
+	<jsp:include page="menu.jsp"/>
 	<div class="fh5co-staff">
 		<img src="data:image/jpg;base64,${user.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
 		<h3>${user.username}</h3>

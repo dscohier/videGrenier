@@ -8,7 +8,7 @@
     <jsp:include page="head.jsp"/>
     <body>
         <div id="page">
-            <jsp:include page="menu2.jsp"/>
+            <jsp:include page="menu.jsp"/>
 
             <div id="fh5co-product">
                 <div class="container">

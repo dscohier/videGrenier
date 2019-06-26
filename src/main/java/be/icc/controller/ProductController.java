@@ -214,7 +214,9 @@ public class ProductController {
         } else {
             model.addAttribute("productsPage", productsPage);
             model.addAttribute("filter", true);
+            model.addAttribute("mySale", true);
             initialisePaging(model, productsPage, pageNumber);
+
         }
         return "mySales";
     }
@@ -248,6 +250,8 @@ public class ProductController {
             Page<ProductDto> productsPage = new PageImpl<>(products, page, products.size());
             model.addAttribute("productsPage", productsPage);
             initialisePagingDto(model, productsPage, pageNumber);
+            model.addAttribute("ratingForm", new RatingForm());
+            model.addAttribute("displayNote", true);
         }
         return "myPurchases";
     }
@@ -532,6 +536,7 @@ public class ProductController {
             initialisePaging(model, productsPage, pageNumber);
         }
         initFilterSales(model, new FilterSalesForm());
+        model.addAttribute("mySale", true);
         return "mySales";
     }
 
@@ -561,20 +566,19 @@ public class ProductController {
             Page<ProductDto> productsPage = new PageImpl<>(products, page, products.size());
             model.addAttribute("productsPage", productsPage);
             initialisePagingDto(model, productsPage, pageNumber);
+            model.addAttribute("ratingForm", new RatingForm());
+            model.addAttribute("displayNote", true);
         }
         initFilterPurchases(model, new FilterPurchasesForm());
         return "myPurchases";
     }
-// TODO REPLACE
-    private void initialisePaging(Model model, List<ProductDto> products) {
-        model.addAttribute("size", (int) Math.ceil(products.size() / 9.0));
-        model.addAttribute("currentPage", 1);
-        if (products.size() > 9) {
-            model.addAttribute("products", products.subList(0, 9));
-        } else {
-            model.addAttribute("products", products);
-        }
+
+    @RequestMapping("/rate")
+    public String rate(Model model,  @RequestParam String idProfil) {
+
+        return "";
     }
+
 
     private void initialisePaging(Model model, Page<Product> page, Integer pageNumber) {
         List<ProductDto> products = new ArrayList<>();
