@@ -1,6 +1,7 @@
 package be.icc.dto;
 
 import be.icc.entity.Authority;
+import be.icc.entity.Comment;
 import be.icc.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -51,10 +52,12 @@ public class UserDto implements UserDetails {
         user.setAverageRatingBuyer(this.getAverageRatingBuyer());
         user.setAverageRatingSeller(this.getAverageRatingSeller());
         for(CommentDto comment : getCommentByBuyer()) {
-            user.getCommentByBuyer().add(comment.toEntity());
+            Comment commentBuyer = new Comment(comment.getId(), comment.getComment(), comment.getDate(), comment.getNote(), comment.getGiven().onlyPersonnalInformation(), comment.getReceived().onlyPersonnalInformation());
+            user.getCommentByBuyer().add(commentBuyer);
         }
         for(CommentDto comment : getCommentBySeller()) {
-            user.getCommentBySeller().add(comment.toEntity());
+            Comment commentSeller = new Comment(comment.getId(), comment.getComment(), comment.getDate(), comment.getNote(), comment.getGiven().onlyPersonnalInformation(), comment.getReceived().onlyPersonnalInformation());
+            user.getCommentBySeller().add(commentSeller);
         }
         for(ProductDto product : getProductToSell()) {
             user.getProductToSell().add(product.toEntity());
@@ -68,6 +71,25 @@ public class UserDto implements UserDetails {
         return user;
     }
 
+    // Permet d'eviter une boucle infinie
+    public User onlyPersonnalInformation(){
+        User user= new User();
+        user.setId(this.getId());
+        user.setPicture(this.getPicture());
+        for (Authority a: this.getAuthorities()) {
+            user.getAuthorities().add(a);
+        }
+        user.setPassword(this.getPassword());
+        user.setFirstName(this.getFirstName());
+        user.setLastName(this.getLastName());
+        user.setEmail(this.getEmail());
+        user.setUsername(this.getUsername());
+        user.setAverageRatingBuyer(this.getAverageRatingBuyer());
+        user.setAverageRatingSeller(this.getAverageRatingSeller());
+        if(getCity()!=null)  user.setCity(this.getCity().toEntity());
+        user.setCreationDate(this.getCreationDate());
+        return user;
+    }
 
     public UserDto() {
     }

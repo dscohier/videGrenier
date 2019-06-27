@@ -1,5 +1,6 @@
 package be.icc.entity;
 
+import be.icc.dto.CommentDto;
 import be.icc.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -36,8 +37,10 @@ public class User implements UserDetails{
     @Column(nullable = false)
     private double averageRatingBuyer;
     @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "comment_buyer")
     private Set<Comment> commentByBuyer;
     @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "comment_seller")
     private Set<Comment> commentBySeller;
     @OneToOne
     private Panier panier;
@@ -52,6 +55,7 @@ public class User implements UserDetails{
 
     public User() {
     }
+
     public UserDto toDto(){
         UserDto user= new UserDto();
         user.setId(this.getId());
@@ -67,10 +71,12 @@ public class User implements UserDetails{
         user.setAverageRatingBuyer(this.getAverageRatingBuyer());
         user.setAverageRatingSeller(this.getAverageRatingSeller());
         for(Comment comment : getCommentByBuyer()) {
-            user.getCommentByBuyer().add(comment.toDto());
+            CommentDto commentBuyer = new CommentDto(comment.getId(), comment.getComment(), comment.getDate(), comment.getNote(), comment.getGiven().onlyPersonnalInformation(), comment.getReceived().onlyPersonnalInformation());
+            user.getCommentByBuyer().add(commentBuyer);
         }
         for(Comment comment : getCommentBySeller()) {
-            user.getCommentBySeller().add(comment.toDto());
+            CommentDto commentSeller = new CommentDto(comment.getId(), comment.getComment(), comment.getDate(), comment.getNote(), comment.getGiven().onlyPersonnalInformation(), comment.getReceived().onlyPersonnalInformation());
+            user.getCommentByBuyer().add(commentSeller);
         }
 
         for(Product product : getProductToSell()) {
@@ -84,6 +90,26 @@ public class User implements UserDetails{
         user.setCreationDate(this.getCreationDate());
         return user;
     }
+
+    public UserDto onlyPersonnalInformation(){
+        UserDto user= new UserDto();
+        user.setId(this.getId());
+        user.setPicture(this.getPicture());
+        for (Authority a: this.getAuthorities()) {
+            user.getAuthorities().add(a);
+        }
+        user.setPassword(this.getPassword());
+        user.setFirstName(this.getFirstName());
+        user.setLastName(this.getLastName());
+        user.setEmail(this.getEmail());
+        user.setUsername(this.getUsername());
+        user.setAverageRatingBuyer(this.getAverageRatingBuyer());
+        user.setAverageRatingSeller(this.getAverageRatingSeller());
+        if(getCity()!=null)  user.setCity(this.getCity().toDto());
+        user.setCreationDate(this.getCreationDate());
+        return user;
+    }
+
 
     public Long getId() {
         return id;

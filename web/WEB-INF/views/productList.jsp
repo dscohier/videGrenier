@@ -81,21 +81,23 @@
                         </span>
                     </div>
                 </a>
-            <c:if test="${not empty displayNote}">
+            <c:if test="${not empty displayNote and product.sell}">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#${product.id}">
                     <spring:message code="product.products.rate"/>
                 </button>
             </c:if>
             </div>
-            <c:if test="${not empty displayNote}">
+            <c:if test="${not empty displayNote and product.sell}">
             <!-- Modal -->
                 <div class="modal fade" id="${product.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <form:form cssClass="form-horizontal" method="post" action="rate" commandName="ratingForm">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <input type="number" class="kv-svg rating-loading" value="2.5" data-size="lg" title="">
+                                <form:input type="number" style="display:none" value="${product.seller.id}" path="idUserToRate"/>
+                                <form:input type="boolean" style="display:none" value="${true}" path="isForSeller"/>
+                                <form:input type="number" class="kv-svg rating-loading" value="2.5" data-size="lg" title="" path="rating"/>
                                 <script>
                                     $(document).on('ready', function () {
                                         $('.kv-svg').rating({
@@ -114,7 +116,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                         </form:form>

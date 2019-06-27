@@ -82,7 +82,7 @@
                                     </c:if>
                                     <c:if test="${!product.auction}">
                                         <sec:authorize access="isAuthenticated()">
-                                            <c:if test="${!isInCart and !product.seller.username.equals(username)}">
+                                            <c:if test="${!isInCart and !product.seller.username.equals(username) and !product.sell}">
                                                 <form:form cssClass="form-horizontal" method="post" action="addToCart" cssStyle="display: inline-block">
                                                     <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToCart"/></button>
                                                     <div style="display: none;">

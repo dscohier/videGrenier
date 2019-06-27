@@ -1,13 +1,7 @@
 package be.icc.controller;
 
-import be.icc.dto.BidderDto;
-import be.icc.dto.OrdersDto;
-import be.icc.dto.ProductDto;
-import be.icc.dto.UserDto;
-import be.icc.entity.Bidder;
-import be.icc.entity.Panier;
-import be.icc.entity.Product;
-import be.icc.entity.User;
+import be.icc.dto.*;
+import be.icc.entity.*;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.enumClass.SellOrNotEnum;
 import be.icc.enumClass.TypeOfSaleEnum;
@@ -44,6 +38,8 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    CommentService commentService;
     @Autowired
     CategoryService categoryService;
     @Autowired
@@ -574,9 +570,21 @@ public class ProductController {
     }
 
     @RequestMapping("/rate")
-    public String rate(Model model,  @RequestParam String idProfil) {
-
-        return "";
+    public String rate(@ModelAttribute("ratingForm")  RatingForm ratingForm) {
+        CommentDto comment = new CommentDto();
+        comment.setComment(ratingForm.getDescription().replace("\n", "<br>"));
+        comment.setDate(new Date());
+        comment.setGiven(userService.findEntityById(((UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()).toDto());
+        comment.setNote(ratingForm.getRating());
+        User user = userService.findEntityById(ratingForm.getIdUserToRate());
+        comment.setReceived(user.toDto());
+        comment = commentService.add(comment);
+        if (ratingForm.getIsForSeller()) {
+            user.getCommentByBuyer().add(comment.toEntity());
+            user.setAverageRatingSeller((user.getAverageRatingSeller() + comment.getNote()) / user.getCommentByBuyer().size());
+        }
+        userService.update(user);
+        return "redirect:/profile?username=" + user.getUsername();
     }
 
 

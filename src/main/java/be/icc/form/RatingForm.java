@@ -5,14 +5,32 @@ package be.icc.form;
  */
 public class RatingForm {
 
-    private int rating = 1;
+    private double rating = 1;
     private String description;
+    private Long idUserToRate;
+    private boolean isForSeller;
 
-    public int getRating() {
+    public boolean getIsForSeller() {
+        return isForSeller;
+    }
+
+    public void setIsForSeller(boolean forSeller) {
+        isForSeller = forSeller;
+    }
+
+    public Long getIdUserToRate() {
+        return idUserToRate;
+    }
+
+    public void setIdUserToRate(Long idUserToRate) {
+        this.idUserToRate = idUserToRate;
+    }
+
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

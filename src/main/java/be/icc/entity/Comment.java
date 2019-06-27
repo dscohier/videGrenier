@@ -20,13 +20,22 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private Date date;
     @Column(nullable = false)
-    private int note;
+    private double note;
     @ManyToOne
     private User given;
     @ManyToOne
     private User received;
 
     public Comment() {
+    }
+
+    public Comment(Long id, String comment, Date date, double note, User given, User received) {
+        this.id = id;
+        this.comment = comment;
+        this.date = date;
+        this.note = note;
+        this.given = given;
+        this.received = received;
     }
 
     public CommentDto toDto(){
@@ -64,11 +73,11 @@ public class Comment implements Serializable {
         this.date = date;
     }
 
-    public int getNote() {
+    public double getNote() {
         return note;
     }
 
-    public void setNote(int note) {
+    public void setNote(double note) {
         this.note = note;
     }
 
@@ -96,7 +105,7 @@ public class Comment implements Serializable {
         Comment comment = (Comment) o;
 
         if (!id.equals(comment.id)) return false;
-        return comment.getGiven().equals(this.given) && comment.getReceived().equals(this.getReceived());
+        return comment.getGiven().equals(this.getGiven()) && comment.getReceived().equals(this.getReceived());
     }
 
     @Override

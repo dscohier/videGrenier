@@ -12,11 +12,21 @@ public class CommentDto {
     private Long id;
     private String comment;
     private Date date;
-    private int note;
+    private double note;
     private UserDto given;
     private UserDto received;
 
     public CommentDto() {
+
+    }
+
+    public CommentDto(Long id, String comment, Date date, double note, UserDto given, UserDto received) {
+        this.id = id;
+        this.comment = comment;
+        this.date = date;
+        this.note = note;
+        this.given = given;
+        this.received = received;
     }
 
     public Comment toEntity(){
@@ -54,11 +64,11 @@ public class CommentDto {
         this.date = date;
     }
 
-    public int getNote() {
+    public double getNote() {
         return note;
     }
 
-    public void setNote(int note) {
+    public void setNote(double note) {
         this.note = note;
     }
 
@@ -86,7 +96,7 @@ public class CommentDto {
         CommentDto comment = (CommentDto) o;
 
         if (!id.equals(comment.id)) return false;
-        return comment.getGiven().equals(this.given) && comment.getReceived().equals(this.getReceived());
+        return comment.getGiven().equals(this.given) && comment.getReceived().equals(this.received);
     }
 
     @Override

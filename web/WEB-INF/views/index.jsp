@@ -8,7 +8,7 @@
 	<jsp:include page="head.jsp"/>
 	<body>
 		<div id="page">
-			<jsp:include page="menu2.jsp"/>
+			<jsp:include page="menu.jsp"/>
 			<h2>
 				<spring:message code="home.welcome"/>
 			</h2>
