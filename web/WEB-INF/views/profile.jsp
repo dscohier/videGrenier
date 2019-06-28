@@ -90,18 +90,20 @@
                                         <div>
                                             <c:if test="${user.commentByBuyer.size() > 0}">
                                                 <c:forEach var="comment" items="${user.commentByBuyer}">
-                                                    <div class="comment" style="display: inline;">
-                                                        <img src="data:image/jpg;base64,${comment.given.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
-                                                        <h3>${comment.given.username}</h3>
-                                                        <span class="rate">
-                                                            <c:forEach begin="1" end="${comment.note}">
-                                                                <i class="icon-star2" style="color:yellow"></i>
-                                                            </c:forEach>
-                                                            <c:forEach begin="${comment.note + 1}" end="5">
-                                                                <i class="icon-star"></i>
-                                                            </c:forEach>
-                                                        </span>
-                                                    </div>
+                                                    <a href="<c:url value="/profile?username=${comment.given.username}"/>">
+                                                        <div class="comment" style="display: inline;">
+                                                            <img src="data:image/jpg;base64,${comment.given.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
+                                                            <h3>${comment.given.username}</h3>
+                                                            <span class="rate">
+                                                                <c:forEach begin="1" end="${comment.note}">
+                                                                    <i class="icon-star2" style="color:yellow"></i>
+                                                                </c:forEach>
+                                                                <c:forEach begin="${comment.note + 1}" end="5">
+                                                                    <i class="icon-star"></i>
+                                                                </c:forEach>
+                                                            </span>
+                                                        </div>
+                                                    </a>
                                                     <div>
                                                         <blockquote>
                                                             <p>${comment.comment}</p>
@@ -125,18 +127,20 @@
                                         <div>
                                             <c:if test="${user.commentBySeller.size() > 0}">
                                                 <c:forEach var="comment" items="${user.commentBySeller}">
-                                                    <div class="comment" style="display: inline;">
-                                                        <img src="data:image/jpg;base64,${comment.given.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
-                                                        <h3>${comment.given.username}</h3>
-                                                        <span class="rate">
-                                                            <c:forEach begin="1" end="${comment.note}">
-                                                                <i class="icon-star2" style="color:yellow"></i>
-                                                            </c:forEach>
-                                                            <c:forEach begin="${comment.note + 1}" end="5">
-                                                                <i class="icon-star"></i>
-                                                            </c:forEach>
-                                                        </span>
-                                                    </div>
+                                                    <a href="<c:url value="/profile?username=${comment.given.username}"/>">
+                                                        <div class="comment" style="display: inline;">
+                                                            <img src="data:image/jpg;base64,${comment.given.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
+                                                            <h3>${comment.given.username}</h3>
+                                                            <span class="rate">
+                                                                <c:forEach begin="1" end="${comment.note}">
+                                                                    <i class="icon-star2" style="color:yellow"></i>
+                                                                </c:forEach>
+                                                                <c:forEach begin="${comment.note + 1}" end="5">
+                                                                    <i class="icon-star"></i>
+                                                                </c:forEach>
+                                                            </span>
+                                                        </div>
+                                                    </a>
                                                     <div>
                                                         <blockquote>
                                                             <p>${comment.comment}</p>
