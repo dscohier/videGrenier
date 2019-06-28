@@ -81,6 +81,40 @@
 							</div>
 						</div>
 					</div>
+					<div class="fh5co-tab-content tab-content" data-tab-content="3">
+						<div class="col-md-10 col-md-offset-1">
+							<h3><spring:message code="profile.opinionFromSeller"/></h3>
+						</div>
+						<div class="col-md-10 col-md-offset-1">
+							<div class="feed">
+								<div>
+									<c:if test="${user.commentBySeller.size() > 0}">
+									<c:forEach var="comment" items="${user.commentBySeller}">
+									<div class="comment" style="display: inline;">
+										<img src="data:image/jpg;base64,${comment.given.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
+										<h3>${comment.given.username}</h3>
+										<span class="rate">
+												<c:forEach begin="1" end="${comment.note}">
+												<i class="icon-star2" style="color:yellow"></i>
+													</c:forEach>
+													<c:forEach begin="${comment.note + 1}" end="5">
+													<i class="icon-star"></i>
+													</c:forEach>
+									</div>
+								</div>
+								<div>
+									<blockquote>
+										<p>${comment.comment}</p>
+									</blockquote>
+								</div>
+								</c:forEach>
+								</c:if>
+								<c:if test="${user.commentBySeller.size() == 0}">
+									<h3><spring:message code="profile.noComment"/></h3>
+								</c:if>
+							</div>
+						</div>
+					</div>
 					<div class="fh5co-tab-content tab-content" data-tab-content="2">
 						<div class="col-md-10 col-md-offset-1">
 							<h3><spring:message code="profile.opinionFromBuyer"/></h3>
@@ -110,40 +144,6 @@
 								</c:forEach>
 								</c:if>
 								<c:if test="${user.commentByBuyer.size() == 0}">
-									<h3><spring:message code="profile.noComment"/></h3>
-								</c:if>
-							</div>
-						</div>
-					</div>
-					<div class="fh5co-tab-content tab-content" data-tab-content="3">
-						<div class="col-md-10 col-md-offset-1">
-							<h3><spring:message code="profile.opinionFromSeller"/></h3>
-						</div>
-						<div class="col-md-10 col-md-offset-1">
-							<div class="feed">
-								<div>
-									<c:if test="${user.commentBySeller.size() > 0}">
-									<c:forEach var="comment" items="${user.commentBySeller}">
-										<div class="comment" style="display: inline;">
-											<img src="data:image/jpg;base64,${comment.given.displayPicture()}" alt="<c:url value="/resources/img/userProfile.png"/>">
-											<h3>${comment.given.username}</h3>
-											<span class="rate">
-												<c:forEach begin="1" end="${comment.note}">
-												<i class="icon-star2" style="color:yellow"></i>
-													</c:forEach>
-													<c:forEach begin="${comment.note + 1}" end="5">
-													<i class="icon-star"></i>
-													</c:forEach>
-										</div>
-								</div>
-								<div>
-									<blockquote>
-										<p>${comment.comment}</p>
-									</blockquote>
-								</div>
-								</c:forEach>
-								</c:if>
-								<c:if test="${user.commentBySeller.size() == 0}">
 									<h3><spring:message code="profile.noComment"/></h3>
 								</c:if>
 							</div>

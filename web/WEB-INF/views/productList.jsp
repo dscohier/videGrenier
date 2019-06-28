@@ -39,7 +39,25 @@
                 </a>
             </c:if>
                 <c:if test="${not empty mySale and !product.sell}">
-                    <h4><spring:message code="product.products.notSell"/></h4>
+                    <h4 style="margin-top: 57px"><spring:message code="product.products.notSell"/></h4>
+                </c:if>
+                <c:if test="${not empty mySale and product.sell}">
+                    <a href="<c:url value="/profile?username=${product.buyer.username}"/>">
+                        <div class="fh5co-staff" style="margin-bottom: 5px">
+                            <img src="data:image/jpg;base64,${product.buyer.displayPicture()}" style="width: 70px"
+                                 alt="<c:url value="/resources/img/userProfile.png"/>">
+                            <span class="rate">
+                            <h4 style="display: inline-block">${product.buyer.username}</h4>
+                            <c:forEach begin="1" end="${product.buyer.averageRatingSeller}">
+                                <i class="icon-star2" style="color:yellow"></i>
+                            </c:forEach>
+                            <c:forEach begin="${product.buyer.averageRatingSeller + 1}" end="5">
+                                <i class="icon-star"></i>
+                            </c:forEach>
+                            <p style="display: inline-block">${product.buyer.commentByBuyer.size()}</p>
+                        </span>
+                        </div>
+                    </a>
                 </c:if>
                 <a href="<c:url value="/product/details?id=${product.id}"/>" style="margin-top: 100px">
                     <h3>${product.name}</h3>
@@ -95,8 +113,14 @@
                         <form:form cssClass="form-horizontal" method="post" action="rate" commandName="ratingForm">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <form:input type="number" style="display:none" value="${product.seller.id}" path="idUserToRate"/>
-                                <form:input type="boolean" style="display:none" value="${true}" path="isForSeller"/>
+                                <c:if test="${not empty mySale}">
+                                    <form:input type="number" style="display:none" value="${product.buyer.id}" path="idUserToRate"/>
+                                    <form:input type="boolean" style="display:none" value="${false}" path="isForSeller"/>
+                                </c:if>
+                                <c:if test="${empty mySale}">
+                                    <form:input type="number" style="display:none" value="${product.seller.id}" path="idUserToRate"/>
+                                    <form:input type="boolean" style="display:none" value="${true}" path="isForSeller"/>
+                                </c:if>
                                 <form:input type="number" class="kv-svg rating-loading" value="2.5" data-size="lg" title="" path="rating"/>
                                 <script>
                                     $(document).on('ready', function () {

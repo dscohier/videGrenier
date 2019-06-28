@@ -52,13 +52,15 @@ public class ProductController {
     CartService cartService;
     @Autowired
     OrderService orderService;
-    private int SIZE_PAGE = 2;
+    private int SIZE_PAGE = 9;
 
     @RequestMapping("/products")
     public String products(HttpServletRequest request, Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber) {
         Page<Product> productsPage = null;
         Pageable page;
-        request.getSession().setAttribute("filterProductsForm", null);
+        if (request != null) {
+            request.getSession().setAttribute("filterProductsForm", null);
+        }
         FilterProductsForm filterProductsForm = new FilterProductsForm();
         if (pageNumber != null) {
             page = new PageRequest(pageNumber, SIZE_PAGE);
@@ -96,7 +98,7 @@ public class ProductController {
     }
 
     @RequestMapping("/title")
-    public String productsTitle(HttpServletRequest request, Model model,  @RequestParam String title) {
+    public String productsTitle(Model model,  @RequestParam String title) {
         return products(null, model, null, title, 0);
     }
 
@@ -582,6 +584,9 @@ public class ProductController {
         if (ratingForm.getIsForSeller()) {
             user.getCommentByBuyer().add(comment.toEntity());
             user.setAverageRatingSeller((user.getAverageRatingSeller() + comment.getNote()) / user.getCommentByBuyer().size());
+        } else {
+            user.getCommentBySeller().add(comment.toEntity());
+            user.setAverageRatingBuyer((user.getAverageRatingBuyer() + comment.getNote()) / user.getCommentBySeller().size());
         }
         userService.update(user);
         return "redirect:/profile?username=" + user.getUsername();
@@ -596,10 +601,17 @@ public class ProductController {
             pageNumber++;
         }
        for (Product product : page.getContent()) {
-           products.add(product.toDto());
+           ProductDto productDto = product.toDto();
+           OrdersDto ordersDto = orderService.findByProducts_Id(product.getId());
+           if (ordersDto != null) {
+               productDto.setBuyer(ordersDto.getUser());
+           }
+           products.add(productDto);
        }
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("products", products);
+        model.addAttribute("displayNote", true);
+        model.addAttribute("ratingForm", new RatingForm());
     }
 
     // TODO refactor difficult logic

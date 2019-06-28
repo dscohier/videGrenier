@@ -12,4 +12,5 @@ public interface OrderService {
     List<OrdersDto> findByUser(Long userId);
     List<OrdersDto> findByUserOrderByDate(Long userId);
     OrdersDto add(OrdersDto OrdersDto);
+    OrdersDto findByProducts_Id(Long id);
 }

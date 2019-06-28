@@ -30,6 +30,8 @@ public class ProductDto {
     private UserDto seller;
     private long view;
 
+    private transient UserDto buyer;
+
     public ProductDto() {
     }
 
@@ -168,6 +170,14 @@ public class ProductDto {
         } finally {
             return picture;
         }
+    }
+
+    public UserDto getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(UserDto buyer) {
+        this.buyer = buyer;
     }
 
     public long getView() {

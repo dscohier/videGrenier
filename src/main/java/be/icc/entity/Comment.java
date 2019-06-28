@@ -107,11 +107,4 @@ public class Comment implements Serializable {
         if (!id.equals(comment.id)) return false;
         return comment.getGiven().equals(this.getGiven()) && comment.getReceived().equals(this.getReceived());
     }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + given.hashCode() + received.hashCode();
-        return result;
-    }
 }

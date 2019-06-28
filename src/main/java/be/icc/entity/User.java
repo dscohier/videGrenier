@@ -76,7 +76,7 @@ public class User implements UserDetails{
         }
         for(Comment comment : getCommentBySeller()) {
             CommentDto commentSeller = new CommentDto(comment.getId(), comment.getComment(), comment.getDate(), comment.getNote(), comment.getGiven().onlyPersonnalInformation(), comment.getReceived().onlyPersonnalInformation());
-            user.getCommentByBuyer().add(commentSeller);
+            user.getCommentBySeller().add(commentSeller);
         }
 
         for(Product product : getProductToSell()) {
@@ -294,12 +294,5 @@ public class User implements UserDetails{
 
         if (!id.equals(user.id)) return false;
         return email.equals(user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + email.hashCode();
-        return result;
     }
 }

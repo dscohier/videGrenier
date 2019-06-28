@@ -49,4 +49,13 @@ public class OrderServiceImp implements OrderService {
         OrdersDto ordersSaved = orderRepository.save(orders).toDto();
         return ordersSaved;
     }
+
+    @Override
+    public OrdersDto findByProducts_Id(Long id) {
+        Orders orders = orderRepository.findByProducts_Id(id);
+        if (orders != null) {
+            return orders.toDto();
+        }
+        return null;
+    }
 }
