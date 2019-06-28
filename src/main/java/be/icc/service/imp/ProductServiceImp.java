@@ -5,6 +5,7 @@ import be.icc.dto.UserDto;
 import be.icc.entity.Bidder;
 import be.icc.entity.Category;
 import be.icc.entity.Product;
+import be.icc.entity.User;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.form.FilterProductsForm;
 import be.icc.form.FilterSalesForm;
@@ -125,4 +126,14 @@ public class ProductServiceImp implements ProductService {
             productsDto.add(product.toDto());
         }
         return productsDto;    }
+
+    @Override
+    public List<ProductDto> findBySellerAndIsSellTrue(User seller) {
+        List<Product> products = productRepository.findBySellerAndIsSellTrue(seller);
+        List<ProductDto> productsDto = new ArrayList<>();
+        for (Product product : products) {
+            productsDto.add(product.toDto());
+        }
+        return productsDto;
+    }
 }

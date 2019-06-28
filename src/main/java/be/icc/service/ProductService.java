@@ -4,6 +4,7 @@ import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
 import be.icc.entity.Bidder;
 import be.icc.entity.Product;
+import be.icc.entity.User;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.form.FilterProductsForm;
 import be.icc.form.FilterSalesForm;
@@ -43,4 +44,6 @@ public interface ProductService {
     List<ProductDto>  findLastAdded();
 
     List<ProductDto> findMostViewed();
+
+    List<ProductDto> findBySellerAndIsSellTrue(User seller);
 }

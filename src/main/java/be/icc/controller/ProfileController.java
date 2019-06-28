@@ -3,6 +3,7 @@ package be.icc.controller;
 import be.icc.dto.OrdersDto;
 import be.icc.dto.UserDto;
 import be.icc.service.OrderService;
+import be.icc.service.ProductService;
 import be.icc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ public class ProfileController {
     UserService userService;
     @Autowired
     OrderService orderService;
+    @Autowired
+    ProductService productService;
 
     // TODO error if user not exist
     @RequestMapping("")
@@ -37,6 +40,7 @@ public class ProfileController {
             for (OrdersDto orderDto : ordersDto) {
                 purchaseNumber += orderDto.getProducts().size();
             }
+            model.addAttribute("saleNumber", productService.findBySellerAndIsSellTrue(user.toEntity()).size());
             model.addAttribute("user", user);
             model.addAttribute("purchaseNumber", purchaseNumber);
             return "profile";

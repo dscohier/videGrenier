@@ -72,7 +72,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <h2 class="uppercase"><spring:message code="profile.salesNumber"/></h2>
-                                            <p>${user.productToSell.size()}</p>
+                                            <p>${saleNumber}</p>
                                         </div>
                                         <div class="col-md-6">
                                             <h2 class="uppercase"><spring:message code="profile.purchaseNumber"/></h2>
