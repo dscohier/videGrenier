@@ -1,6 +1,7 @@
 package be.icc.form;
 
 import be.icc.service.UserService;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ public class SignupForm {
     UserService userService;
 
     @NotBlank(message = "{error.notBlank}")
+    @Length(max = 14, message = "{error.profile.userMaxLength}")
     private String userName;
 
     @NotBlank(message = "{error.notBlank}")
