@@ -104,6 +104,9 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#${product.id}">
                     <spring:message code="product.products.rate"/>
                 </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sendMessage${product.id}">
+                    <spring:message code="product.details.sendMessage"/>
+                </button>
             </c:if>
             </div>
             <c:if test="${not empty displayNote and product.sell}">
@@ -139,10 +142,44 @@
                                 <form:textarea  path="description" cssClass="form-control" id="description" cssStyle="height: 350px; width: 570px;"/>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><spring:message code="common.close"/></button>
+                                <button type="submit" class="btn btn-primary"><spring:message code="common.send"/></button>
                             </div>
                         </div>
+                        </form:form>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="sendMessage${product.id}" tabindex="-1" role="dialog" aria-labelledby="Send Message" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <form:form cssClass="form-horizontal" method="post" action="sendMessage" commandName="sendMessageForm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <c:if test="${not empty mySale}">
+                                    <spring:message code="common.sendMessageToBuyer"/>
+                                    </c:if>
+                                    <c:if test="${empty mySale}">
+                                        <spring:message code="common.sendMessageToSeller"/>
+                                    </c:if>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form:textarea  path="content" cssClass="form-control" id="content" cssStyle="height: 350px; width: 570px;"/>
+                                    <c:if test="${not empty mySale}">
+                                        <form:input type="number" style="display:none" value="${product.buyer.id}" path="idUserToSend"/>
+                                    </c:if>
+                                    <c:if test="${empty mySale}">
+                                        <form:input type="number" style="display:none" value="${product.seller.id}" path="idUserToSend"/>
+                                    </c:if>
+                                    <form:input type="number" style="display:none" value="${product.id}" path="idProduct"/>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><spring:message code="common.close"/></button>
+                                    <button type="submit" class="btn btn-primary"><spring:message code="common.send"/></button>
+                                </div>
+                            </div>
                         </form:form>
                     </div>
                 </div>

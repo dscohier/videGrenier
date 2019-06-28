@@ -1,6 +1,7 @@
 <html>
 <body>
     <h3>${subject}</h3>
+    <br/>
     <h3>${content}</h3>
     <br/><br/>
     <b><h3 style="color: red;">Veuillez répondre à ce message à l'adresse suivante : ${mailFrom}</h3></b>

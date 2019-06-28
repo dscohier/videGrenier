@@ -252,6 +252,7 @@ public class ProductController {
             model.addAttribute("productsPage", productsPage);
             initialisePagingDto(model, productsPage, pageNumber);
             model.addAttribute("ratingForm", new RatingForm());
+            model.addAttribute("sendMessageForm", new SendMessageForm());
             model.addAttribute("displayNote", true);
         }
         return "myPurchases";
@@ -572,6 +573,8 @@ public class ProductController {
             model.addAttribute("productsPage", productsPage);
             initialisePagingDto(model, productsPage, pageNumber);
             model.addAttribute("ratingForm", new RatingForm());
+            model.addAttribute("sendMessageForm", new SendMessageForm());
+            model.addAttribute("sendMessageForm", new SendMessageForm());
             model.addAttribute("displayNote", true);
         }
         initFilterPurchases(model, new FilterPurchasesForm());
@@ -605,7 +608,7 @@ public class ProductController {
         Product product = productService.findEntityById(sendMessageForm.getIdProduct());
         UserDto myUser = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         mailService.sendMessage(user.getEmail(), sendMessageForm.getContent().replace("\n", "<br>"), myUser.getUsername(), myUser.getEmail(), product.getName());
-        return "redirect:/product/details?id=" + sendMessageForm.getIdProduct() + "&success=success.messageSendToSeller";
+        return "redirect:/product/details?id=" + sendMessageForm.getIdProduct() + "&success=success.messageSend";
     }
 
 
@@ -628,6 +631,7 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("displayNote", true);
         model.addAttribute("ratingForm", new RatingForm());
+        model.addAttribute("sendMessageForm", new SendMessageForm());
     }
 
     // TODO refactor difficult logic
