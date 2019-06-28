@@ -9,7 +9,9 @@
     <body>
         <div id="page">
             <jsp:include page="menu.jsp"/>
-
+            <c:if test="${not empty success}">
+                <label class="success"><spring:message code="${success}"/></label>
+            </c:if>
             <div id="fh5co-product">
                 <div class="container">
                     <div class="row">
@@ -41,7 +43,9 @@
                                         <sec:authorize access="isAuthenticated()">
                                             <sec:authentication property="principal.username" var="username" />
                                             <c:if test = "${!product.seller.username.equals(username)}">
-                                                <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.sendMessage"/></button>
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#message">
+                                                    <spring:message code="product.details.sendMessage"/>
+                                                </button>
                                             </c:if>
                                             <c:if test = "${product.seller.username.equals(username)}">
                                                 <form:form cssClass="form-horizontal" method="get" action="updateProduct" commandName="updateProductForm">
@@ -79,27 +83,27 @@
                                                     </div>
                                                 </form:form>
                                             </div>
-                                    </c:if>
-                                    <c:if test="${!product.auction}">
-                                        <sec:authorize access="isAuthenticated()">
-                                            <c:if test="${!isInCart and !product.seller.username.equals(username) and !product.sell}">
-                                                <form:form cssClass="form-horizontal" method="post" action="addToCart" cssStyle="display: inline-block">
-                                                    <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToCart"/></button>
-                                                    <div style="display: none;">
-                                                        <input type="text" name="idProduct" value="${product.id}"/>
-                                                    </div>
-                                                </form:form>
-                                            </c:if>
-                                            <c:if test="${isInCart}">
-                                                <spring:message code="error.details.alreadyInCart" var="message"/>
+                                        </c:if>
+                                        <c:if test="${!product.auction}">
+                                            <sec:authorize access="isAuthenticated()">
+                                                <c:if test="${!isInCart and !product.seller.username.equals(username) and !product.sell}">
+                                                    <form:form cssClass="form-horizontal" method="post" action="addToCart" cssStyle="display: inline-block">
+                                                        <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToCart"/></button>
+                                                        <div style="display: none;">
+                                                            <input type="text" name="productId" value="${product.id}"/>
+                                                        </div>
+                                                    </form:form>
+                                                </c:if>
+                                                <c:if test="${isInCart}">
+                                                    <spring:message code="error.details.alreadyInCart" var="message"/>
+                                                    <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToCart"/></button>
+                                                </c:if>
+                                            </sec:authorize>
+                                            <sec:authorize access="!isAuthenticated()">
+                                                <spring:message code="error.details.addToCart" var="message"/>
                                                 <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToCart"/></button>
-                                            </c:if>
-                                        </sec:authorize>
-                                        <sec:authorize access="!isAuthenticated()">
-                                            <spring:message code="error.details.addToCart" var="message"/>
-                                            <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="product.details.addToCart"/></button>
-                                        </sec:authorize>
-                                    </c:if>
+                                            </sec:authorize>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -130,14 +134,14 @@
                                                     <h3>${product.seller.username}</h3>
 
                                                     <span class="rate">
-                                                    <c:forEach begin="1" end="${product.seller.averageRatingSeller}">
-                                                        <i class="icon-star2" style="color:yellow"></i>
-                                                    </c:forEach>
-                                                    <c:forEach begin="${product.seller.averageRatingSeller + 1}" end="5">
-                                                        <i class="icon-star"></i>
-                                                    </c:forEach>
-                                                    <p><spring:message code="profile.opinion"/> : ${product.seller.commentByBuyer.size()} </p>
-                                                </span>
+                                                        <c:forEach begin="1" end="${product.seller.averageRatingSeller}">
+                                                            <i class="icon-star2" style="color:yellow"></i>
+                                                        </c:forEach>
+                                                        <c:forEach begin="${product.seller.averageRatingSeller + 1}" end="5">
+                                                            <i class="icon-star"></i>
+                                                        </c:forEach>
+                                                        <p><spring:message code="profile.opinion"/> : ${product.seller.commentByBuyer.size()} </p>
+                                                    </span>
                                                 </div>
                                             </a>
                                             <c:if test="${product.auction}">
@@ -186,6 +190,29 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="message" tabindex="-1" role="dialog" aria-labelledby="Send Message" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <form:form cssClass="form-horizontal" method="post" action="sendMessage" commandName="sendMessageForm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <spring:message code="common.sendMessageToSeller"/>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form:textarea  path="content" cssClass="form-control" id="content" cssStyle="height: 350px; width: 570px;"/>
+                                <form:input type="number" style="display:none" value="${product.seller.id}" path="idUserToSend"/>
+                                <form:input type="number" style="display:none" value="${product.id}" path="idProduct"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><spring:message code="common.close"/></button>
+                                <button type="submit" class="btn btn-primary"><spring:message code="common.send"/></button>
+                            </div>
+                        </div>
+                    </form:form>
+                </div>
+            </div>
             <jsp:include page="footer2.jsp"/>
         </div>
         <script>
@@ -227,8 +254,6 @@
                     }
                 });
             }
-
-
         </script>
         <script async defer
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBaebZ5i6230uvRvSiAqecuRv_pEqnXcA&callback=initMap&language=fr">

@@ -1,20 +1,7 @@
-<%--
-Created by IntelliJ IDEA.
-User: Scohier Dorian
-Date: 13-03-19
-Time: 17:04
-To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand">VIDE GRENIER</a>
-        <button class="navbar-toggler" aria-expanded="false" aria-controls="navbarColor01" aria-label="Toggle navigation" type="button" data-target="#navbarColor01" data-toggle="collapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
+   VIDE GRENIER
     <h3>Bienvenue sur vide grenier</h3>
-     <h3>votre login: ${user.username}</h3>
+    <h3>votre login: ${user.username}</h3>
 </body>
 </html>

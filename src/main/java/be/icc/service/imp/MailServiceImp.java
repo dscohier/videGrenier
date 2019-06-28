@@ -25,6 +25,7 @@ import java.util.Map;
 public class MailServiceImp implements MailService {
     private JavaMailSender mailSender;
     private VelocityEngine velocityEngine;
+
     @Autowired
     UserService userService;
     @Autowired
@@ -47,9 +48,29 @@ public class MailServiceImp implements MailService {
                 message.setSubject("Confirmation de l'inscription");
                 Map model = new HashMap();
                 model.put("user", user);
-                model.put("adresse", "http://localhost:8080/HiberSpring_Web_exploded/activation/" + user.getId());
+                // model.put("adresse", "http://localhost:8080/HiberSpring_Web_exploded/activation/" + user.getId());
                 String text = VelocityEngineUtils.mergeTemplateIntoString(
-                        velocityEngine, "confirmation.vm", model);
+                        velocityEngine, "confirmation.vm", "UTF-8", model);
+                message.setText(text, true);
+            }
+        };
+        this.mailSender.send(preparator);
+    }
+
+    public void sendMessage(String mailTo, String content, String userFrom, String mailFrom, String productTitle) {
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                message.setTo(mailTo);
+                message.setFrom("videgreniernoreply@gmail.com");
+                String subject = "Nouveau message de la part de " + userFrom + " concernant l'annonce " + productTitle;
+                message.setSubject(subject);
+                Map model = new HashMap();
+                model.put("subject", subject);
+                model.put("content", content);
+                model.put("mailFrom", mailFrom);
+                String text = VelocityEngineUtils.mergeTemplateIntoString(
+                        velocityEngine, "sendMessage.vm", "UTF-8", model);
                 message.setText(text, true);
             }
         };

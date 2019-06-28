@@ -52,6 +52,9 @@ public class ProductController {
     CartService cartService;
     @Autowired
     OrderService orderService;
+    @Autowired
+    MailService mailService;
+
     private int SIZE_PAGE = 9;
 
     @RequestMapping("/products")
@@ -409,6 +412,9 @@ public class ProductController {
                     break;
             }
         }
+        if (isNotBlank(success)) {
+            model.addAttribute("success", success);
+        }
         if ((product.getBidders()).isEmpty()) {
             model.addAttribute("lastBidder", null);
 
@@ -431,7 +437,8 @@ public class ProductController {
             }
             model.addAttribute("isInCart", isInCart);
         }
-         return "details";
+        model.addAttribute("sendMessageForm", new SendMessageForm());
+        return "details";
     }
 
 
@@ -590,6 +597,15 @@ public class ProductController {
         }
         userService.update(user);
         return "redirect:/profile?username=" + user.getUsername();
+    }
+
+    @RequestMapping("/sendMessage")
+    public String sendMessage(@ModelAttribute("sendMessageForm") SendMessageForm sendMessageForm) {
+        User user = userService.findEntityById(sendMessageForm.getIdUserToSend());
+        Product product = productService.findEntityById(sendMessageForm.getIdProduct());
+        UserDto myUser = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        mailService.sendMessage(user.getEmail(), sendMessageForm.getContent().replace("\n", "<br>"), myUser.getUsername(), myUser.getEmail(), product.getName());
+        return "redirect:/product/details?id=" + sendMessageForm.getIdProduct() + "&success=success.messageSendToSeller";
     }
 
 
