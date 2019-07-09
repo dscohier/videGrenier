@@ -10,7 +10,7 @@
             <div class="col-lg-3">
                 <div id="fh5co-logo"><a href="<c:url value="/"/>">Vide Grenier</a></div>
             </div>
-            <div class="col-lg-6 text-center menu-1">
+            <div class="col-lg-5 text-center menu-1">
                 <ul>
                     <li class="has-dropdown">
                         <a href="<c:url value="/product/products"/>"><spring:message code="menu.deals"/></a>
@@ -28,13 +28,13 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
-            <div class="col-lg-3 hidden-xs menu-2">
+            <div class="col-lg-4 hidden-xs menu-2">
                 <ul>
                     <li class="search">
                         <c:url var="action"  value="/product/title" />
                         <form:form cssClass="form-horizontal" method="get" action="${action}">
                             <div class="input-group">
-                                <input type="text" id="title" name="title" placeholder="Search.."/>
+                                <input type="text" id="title" name="title" placeholder="<spring:message code="common.search"/>"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                                 </span>
@@ -59,6 +59,7 @@
                     <sec:authorize access="isAnonymous()">
                         <li><a href="<c:url value="/connect"/>"><spring:message code="menu.login"/></a></li>
                     </sec:authorize>
+                    <li><p><a href="?language=en">EN</a>/<a href="?language=fr">FR</a></li>
                 </ul>
             </div>
         </div>
