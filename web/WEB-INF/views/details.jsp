@@ -47,7 +47,7 @@
                                                     <spring:message code="product.details.sendMessage"/>
                                                 </button>
                                             </c:if>
-                                            <c:if test = "${product.seller.username.equals(username)}">
+                                            <c:if test = "${product.seller.username.equals(username) and not product.sell}">
                                                 <form:form cssClass="form-horizontal" method="get" action="updateProduct" commandName="updateProductForm">
                                                     <div style="visibility: hidden;">
                                                         <form:input type="text" path="id" cssClass="form-control" id="title"/>
