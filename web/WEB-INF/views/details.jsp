@@ -48,12 +48,14 @@
                                                 </button>
                                             </c:if>
                                             <sec:authorize access="hasRole('ADMIN')">
-                                                <form:form cssClass="form-horizontal" method="get" action="deleteProduct" commandName="updateProductForm" style="display: inline-block;">
-                                                    <div style="visibility: hidden;">
-                                                        <form:input type="text" path="id" cssClass="form-control" id="title"/>
-                                                    </div>
-                                                    <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.delete"/></button>
-                                                </form:form>
+                                                <c:if test = "${product.seller.username.equals(username) and not product.sell}">
+                                                    <form:form cssClass="form-horizontal" method="get" action="deleteProduct" commandName="updateProductForm" style="display: inline-block;">
+                                                        <div style="visibility: hidden;">
+                                                            <form:input type="text" path="id" cssClass="form-control" id="title"/>
+                                                        </div>
+                                                        <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.delete"/></button>
+                                                    </form:form>
+                                                </c:if>
                                             </sec:authorize>
                                             <c:if test = "${product.seller.username.equals(username) and not product.sell}">
                                                 <form:form cssClass="form-horizontal" style="display: inline-block;" method="get" action="updateProduct" commandName="updateProductForm">
