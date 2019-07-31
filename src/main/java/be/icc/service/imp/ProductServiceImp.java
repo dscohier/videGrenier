@@ -136,4 +136,9 @@ public class ProductServiceImp implements ProductService {
         }
         return productsDto;
     }
+
+    @Override
+    public void delete(Long id) {
+        productRepository.delete(id);
+    }
 }

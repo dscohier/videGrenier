@@ -296,6 +296,19 @@ public class ProductController {
         return "addProduct";
     }
 
+    @RequestMapping("/deleteProduct")
+    public String deleteProduct(@ModelAttribute("addProductForm")  AddProductForm updateProductForm,Model model) {
+        ProductDto productDto = productService.findById(updateProductForm.getId());
+        UserDto loggedIn = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        boolean isAdmin = loggedIn != null || loggedIn.getAuthorities().contains("ROLE_ADMIN");
+        if (((!productDto.getSeller().getUsername().equals(loggedIn.getUsername())) && !isAdmin) || productDto.isSell()) {
+            return "redirect:/product/details?id=" + updateProductForm.getId();
+        } else {
+            productService.delete(updateProductForm.getId());
+        }
+        return "redirect:/product/products";
+    }
+
     private void initialiseModelForAddAndUpdate(Model model, String error) {
         if (!model.containsAttribute("fileModel")) {
             FileModel fileModel = new FileModel();

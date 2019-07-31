@@ -46,4 +46,6 @@ public interface ProductService {
     List<ProductDto> findMostViewed();
 
     List<ProductDto> findBySellerAndIsSellTrue(User seller);
+
+    void delete(Long id);
 }
