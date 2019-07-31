@@ -58,9 +58,14 @@ public class ProductController {
     private int SIZE_PAGE = 9;
 
     @RequestMapping("/products")
-    public String products(HttpServletRequest request, Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber) {
+    public String products(HttpServletRequest request, Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) String error) {
         Page<Product> productsPage = null;
         Pageable page;
+
+        if (isNotBlank(error))  {
+            model.addAttribute("error", error);
+        }
+
         if (request != null) {
             request.getSession().setAttribute("filterProductsForm", null);
         }
@@ -102,7 +107,7 @@ public class ProductController {
 
     @RequestMapping("/title")
     public String productsTitle(Model model,  @RequestParam String title) {
-        return products(null, model, null, title, 0);
+        return products(null, model, null, title, 0, null);
     }
 
     private void initFilterProducts(Model model, FilterProductsForm filterProductsForm) {
@@ -408,6 +413,9 @@ public class ProductController {
     @RequestMapping("/details")
     public String details(Model model, @RequestParam(required = true) Long id, @RequestParam(required = false) String error, @RequestParam(required = false) String success) {
         ProductDto product = productService.findById(id);
+        if (product == null) {
+            return products(null, model, null, null, null, "error.products.productNotExist");
+        }
         model.addAttribute("product", product);
         AddProductForm productForm = new AddProductForm();
         productForm.setId(id);

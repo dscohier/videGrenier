@@ -52,7 +52,11 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public ProductDto findById(Long id) {
-        return productRepository.findOne(id).toDto();
+        Product product = productRepository.findOne(id);
+        if (product != null) {
+            return product.toDto();
+        }
+        return null;
     }
 
     @Override
