@@ -48,7 +48,7 @@
                                                 </button>
                                             </c:if>
                                             <sec:authorize access="hasRole('ADMIN')">
-                                                <c:if test = "${product.seller.username.equals(username) and not product.sell}">
+                                                <c:if test = "${not product.seller.username.equals(username) and not product.sell and product.bidders.isEmpty()}">
                                                     <form:form cssClass="form-horizontal" method="get" action="deleteProduct" commandName="updateProductForm" style="display: inline-block;">
                                                         <div style="visibility: hidden;">
                                                             <form:input type="text" path="id" cssClass="form-control" id="title"/>
@@ -57,7 +57,7 @@
                                                     </form:form>
                                                 </c:if>
                                             </sec:authorize>
-                                            <c:if test = "${product.seller.username.equals(username) and not product.sell}">
+                                            <c:if test = "${product.seller.username.equals(username) and not product.sell and product.bidders.isEmpty()}">
                                                 <form:form cssClass="form-horizontal" style="display: inline-block;" method="get" action="updateProduct" commandName="updateProductForm">
                                                     <div style="visibility: hidden;">
                                                         <form:input type="text" path="id" cssClass="form-control" id="title"/>

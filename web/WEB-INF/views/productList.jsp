@@ -15,6 +15,9 @@
         <c:if test="${not empty error}">
             <label class="error"><spring:message code="${error}"/></label>
         </c:if>
+        <c:if test="${not empty success}">
+            <label class="success"><spring:message code="${success}"/></label>
+        </c:if>
         <c:forEach var="product" items="${products}" varStatus="loop">
             <c:if test="${loop.index%3 == 0}">
                 <div class="row">

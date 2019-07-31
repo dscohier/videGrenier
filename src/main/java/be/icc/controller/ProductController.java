@@ -58,12 +58,15 @@ public class ProductController {
     private int SIZE_PAGE = 9;
 
     @RequestMapping("/products")
-    public String products(HttpServletRequest request, Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) String error) {
+    public String products(HttpServletRequest request, Model model, @RequestParam(required = false) String category, String title, @RequestParam(required = false) Integer pageNumber, String error, String success) {
         Page<Product> productsPage = null;
         Pageable page;
 
         if (isNotBlank(error))  {
             model.addAttribute("error", error);
+        }
+        if (isNotBlank(success))  {
+            model.addAttribute("success", success);
         }
 
         if (request != null) {
@@ -107,7 +110,7 @@ public class ProductController {
 
     @RequestMapping("/title")
     public String productsTitle(Model model,  @RequestParam String title) {
-        return products(null, model, null, title, 0, null);
+        return products(null, model, null, title, 0, null, null);
     }
 
     private void initFilterProducts(Model model, FilterProductsForm filterProductsForm) {
@@ -306,12 +309,16 @@ public class ProductController {
         ProductDto productDto = productService.findById(updateProductForm.getId());
         UserDto loggedIn = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean isAdmin = loggedIn != null || loggedIn.getAuthorities().contains("ROLE_ADMIN");
-        if (((!productDto.getSeller().getUsername().equals(loggedIn.getUsername())) && !isAdmin) || productDto.isSell()) {
+        if (((!productDto.getSeller().getUsername().equals(loggedIn.getUsername())) && !isAdmin)) {
             return "redirect:/product/details?id=" + updateProductForm.getId();
         } else {
-            productService.delete(updateProductForm.getId());
+            if (productDto.isSell() || !productDto.getBidders().isEmpty()) {
+                return products(null, model, null, null, null, "error.products.isNotDeletable", null);
+            } else {
+                productService.delete(updateProductForm.getId());
+            }
         }
-        return "redirect:/product/products";
+        return products(null, model, null, null, null, null, "success.products.productDeleted");
     }
 
     private void initialiseModelForAddAndUpdate(Model model, String error) {
@@ -414,7 +421,7 @@ public class ProductController {
     public String details(Model model, @RequestParam(required = true) Long id, @RequestParam(required = false) String error, @RequestParam(required = false) String success) {
         ProductDto product = productService.findById(id);
         if (product == null) {
-            return products(null, model, null, null, null, "error.products.productNotExist");
+            return products(null, model, null, null, null, "error.products.productNotExist", null);
         }
         model.addAttribute("product", product);
         AddProductForm productForm = new AddProductForm();
