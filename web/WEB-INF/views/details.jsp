@@ -132,16 +132,24 @@
                                     <li class="active" style="width: 50%"><a href="#" data-tab="1"><span
                                             class="icon visible-xs"><i class="icon-file"></i></span><span
                                             class="hidden-xs"><spring:message
-                                            code="product.details.information"/></span></a></li>
+                                            code="product.details.details"/></span></a></li>
                                     <li style="width: 50%"><a href="#" data-tab="2"><span class="icon visible-xs"><i
                                             class="icon-bar-graph"></i></span><span class="hidden-xs"><spring:message
-                                            code="product.details.details"/></span></a></li>
+                                            code="product.details.information"/></span></a></li>
                                 </ul>
 
                                 <!-- Tabs -->
                                 <div class="fh5co-tab-content-wrap">
 
                                     <div class="fh5co-tab-content tab-content active" data-tab-content="1">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            ${product.description}
+
+                                            '' + ${product.seller.city.name} + ', ' + ${product.seller.city.country}
+                                        </div>
+                                    </div>
+
+                                    <div class="fh5co-tab-content tab-content" data-tab-content="2">
                                         <div class="col-md-10 col-md-offset-1">
                                             <a href="<c:url value="/profile?username=${product.seller.username}"/>">
                                                 <div class="fh5co-staff">
@@ -189,14 +197,6 @@
                                                 <p class="card-text"><spring:message code="product.details.endDate"/> : <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${product.endDate}"/></p>
                                             </c:if>
                                             <p class="card-text">&#128065; &nbsp;${product.view}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="fh5co-tab-content tab-content" data-tab-content="2">
-                                        <div class="col-md-10 col-md-offset-1">
-                                            ${product.description}
-
-                                            '' + ${product.seller.city.name} + ', ' + ${product.seller.city.country}
                                         </div>
                                     </div>
                                 </div>
