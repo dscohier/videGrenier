@@ -31,4 +31,6 @@ public interface ProductRepository  extends PagingAndSortingRepository<Product,L
     List<Product> findFirst6ByEndDateAfterOrEndDateIsNullAndIsSellFalseOrderByViewDesc(Date date);
 
     List<Product> findBySellerAndIsSellTrue(User seller);
+
+    List<Product> findByEndDateBeforeAndIsSellFalse(Date date);
 }

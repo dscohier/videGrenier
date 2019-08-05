@@ -139,7 +139,7 @@
                                 </ul>
 
                                 <!-- Tabs -->
-                                <div class="fh5co-tab-content-wrap">
+                                <div class="fh5co-tab-content-wrap" style="height:900px">
 
                                     <div class="fh5co-tab-content tab-content active" data-tab-content="1">
                                         <div class="col-md-10 col-md-offset-1">

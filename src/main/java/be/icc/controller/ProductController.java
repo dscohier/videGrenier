@@ -1,7 +1,10 @@
 package be.icc.controller;
 
 import be.icc.dto.*;
-import be.icc.entity.*;
+import be.icc.entity.Bidder;
+import be.icc.entity.Panier;
+import be.icc.entity.Product;
+import be.icc.entity.User;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.enumClass.SellOrNotEnum;
 import be.icc.enumClass.TypeOfSaleEnum;

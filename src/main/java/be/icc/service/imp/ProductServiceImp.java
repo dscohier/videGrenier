@@ -2,14 +2,12 @@ package be.icc.service.imp;
 
 import be.icc.dto.ProductDto;
 import be.icc.dto.UserDto;
-import be.icc.entity.Bidder;
-import be.icc.entity.Category;
-import be.icc.entity.Product;
-import be.icc.entity.User;
+import be.icc.entity.*;
 import be.icc.enumClass.CategoryEnum;
 import be.icc.form.FilterProductsForm;
 import be.icc.form.FilterSalesForm;
 import be.icc.repository.CategoryRepository;
+import be.icc.repository.OrderRepository;
 import be.icc.repository.ProductRepository;
 import be.icc.repository.UserRepository;
 import be.icc.service.ProductService;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -36,6 +35,8 @@ public class ProductServiceImp implements ProductService {
     CategoryRepository categoryRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     @Override
     public ProductDto add(ProductDto productDto) {
@@ -144,5 +145,24 @@ public class ProductServiceImp implements ProductService {
     @Override
     public void delete(Long id) {
         productRepository.delete(id);
+    }
+
+    @Override
+    public List<Long> closeAuctions() {
+        List<Product> products = productRepository.findByEndDateBeforeAndIsSellFalse(new Date());
+        List<Long> ids = new ArrayList<>();
+        for (Product product : products) {
+            Orders order = new Orders();
+            order.setDate(new Date());
+            order.setUser(((Bidder) product.getBidders().toArray()[product.getBidders().size()-1]).getUser());
+            HashSet<Product> productWin = new HashSet<>();
+            productWin.add(product);
+            order.setProducts(productWin);
+            orderRepository.save(order);
+            product.setSell(true);
+            productRepository.save(product);
+            ids.add(product.getId());
+        }
+        return ids;
     }
 }

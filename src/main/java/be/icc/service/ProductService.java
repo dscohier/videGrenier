@@ -48,4 +48,6 @@ public interface ProductService {
     List<ProductDto> findBySellerAndIsSellTrue(User seller);
 
     void delete(Long id);
+
+    List<Long> closeAuctions();
 }
