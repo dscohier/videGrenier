@@ -70,6 +70,7 @@
                                         code="connect.firstName"/></label>
                                 <div class="col-lg-8">
                                     <form:input type="text" path="firstName" cssClass=" form-control" id="firstName"/>
+                                    <label style="display: none" class="error" id="firstNameError"><spring:message code="error.notBlank"/></label>
                                     <form:errors path="firstName" cssClass="error"/>
                                 </div>
                             </div>
@@ -78,6 +79,7 @@
                                         code="connect.lastName"/></label>
                                 <div class="col-lg-8">
                                     <form:input type="text" path="lastName" cssClass=" form-control" id="lastName"/>
+                                    <label style="display: none" class="error" id="lastNameError"><spring:message code="error.notBlank"/></label>
                                     <form:errors path="lastName" cssClass="error"/>
                                 </div>
                             </div>
@@ -94,6 +96,7 @@
                                         code="connect.mail"/></label>
                                 <div class="col-lg-8">
                                     <form:input type="text" path="email" cssClass=" form-control" id="email"/>
+                                    <label style="display: none" class="error" id="emailError"><spring:message code="error.mail"/></label>
                                     <form:errors path="email" cssClass="error"/>
                                 </div>
                             </div>
@@ -102,6 +105,7 @@
                                         code="common.city"/></label>
                                 <div class="col-lg-8">
                                     <input type="text" id="autocomplete" name="city" value="${signupForm.city}"/>
+                                    <label style="display: none" class="error" id="cityError"><spring:message code="error.notBlank"/></label>
                                     <br/>
                                     <form:errors path="country" cssClass="error"/>
                                 </div>
@@ -118,7 +122,8 @@
                                         code="connect.userName"/></label>
                                 <div class="col-lg-8">
                                     <c:if test="${signupForm.id == null}">
-                                        <form:input type="text" path="userName" cssClass=" form-control" id="username"/>
+                                        <form:input type="text" path="userName" cssClass=" form-control" id="usernameSignUp"/>
+                                        <label style="display: none" class="error" id="usernameError"><spring:message code="error.username.notBlankAndMax14"/></label>
                                         <form:errors path="userName" cssClass="error"/>
                                     </c:if>
                                     <c:if test="${signupForm.id != null}">
@@ -132,15 +137,17 @@
                                         code="connect.password"/></label>
                                 <div class="col-lg-8">
                                     <form:input type="password" path="password" cssClass="form-control" id="pwd"/>
+                                    <label style="display: none" class="error" id="pwdError"><spring:message code="error.notBlank"/></label>
                                     <form:errors path="password" cssClass="error"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="pwdCheck" class="col-lg-2 control-label"><spring:message
+                                <label for="pwdCheck" class="col-lg-4 control-label"><spring:message
                                         code="connect.passwordCheck"/></label>
-                                <div class="col-lg-8">
+                                <div class="col-lg-6">
                                     <form:input type="password" path="passwordCheck" cssClass=" form-control"
                                                 id="pwdCheck"/>
+                                    <label style="display: none" class="error" id="pwdCheckError"><spring:message code="error.notBlank"/></label>
                                     <form:errors path="passwordCheck" cssClass="error"/>
                                     <br/>
                                     <form:errors path="isPasswordMatch" cssClass="error"/>
@@ -149,14 +156,128 @@
                             <div class="col-md-offset-5">
                                 <c:if test="${signupForm.id == null}">
                                     <spring:message code="connect.signup" var="signup"/>
-                                    <input type="submit" class="btn btn-primary" value="${signup}">
+                                    <input type="submit" class="btn btn-primary" id="btnInscription" value="${signup}">
                                 </c:if>
                                 <c:if test="${signupForm.id != null}">
                                     <spring:message code="common.update" var="update"/>
-                                    <input type="submit" class="btn btn-primary" value="${update}">
+                                    <input type="submit" class="btn btn-primary" id="btnInscription" value="${update}">
                                 </c:if>
                             </div>
                         </fieldset>
+                        <script>
+                            $(document).ready(function () {
+
+                                $("#firstName").blur(function () {
+                                    callValidations();
+                                });
+
+                                $("#lastName").blur(function () {
+                                    callValidations();
+                                });
+
+                                $("#autocomplete").blur(function () {
+                                    callValidations();
+                                });
+
+                                $("#email").blur(function () {
+                                    callValidations();
+                                });
+
+                                $("#usernameSignUp").blur(function () {
+                                    callValidations();
+                                });
+
+                                $("#pwd").blur(function () {
+                                    callValidations();
+                                });
+
+                                $("#pwdCheck").blur(function () {
+                                    callValidations();
+                                });
+                                
+                                function callValidations() {
+                                    validationFirstname();
+                                    validationLastname();
+                                    validationEmail();
+                                    validationCity();
+                                    validationUsername();
+                                    validationPassword();
+                                    validationPasswordCheck();
+                                    $('#btnInscription').attr("disabled", false);
+                                }
+
+                                function validationFirstname() {
+                                    var firstname = $("#firstName").val();
+                                    if (firstname.length < 1) {
+                                        $('#btnInscription').attr("disabled", true);
+                                        document.getElementById('firstNameError').style.display = 'block';
+                                        throw new Error("Invalid firstName");
+                                    }
+                                    document.getElementById('firstNameError').style.display = 'none';
+                                }
+
+                                function validationLastname() {
+                                    var lastname = $("#lastName").val();
+                                    if (lastname.length < 1) {
+                                        $('#btnInscription').attr("disabled", true);
+                                        document.getElementById('lastNameError').style.display = 'block';
+                                        throw new Error("Invalid lastName");
+                                    }
+                                    document.getElementById('lastNameError').style.display = 'none';
+                                }
+                                
+                                function validationEmail() {
+                                    var regex = new RegExp("[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,3})");
+                                    if (!$("#email").val().match(regex)) {
+                                        $('#btnInscription').attr("disabled", true);
+                                        document.getElementById('emailError').style.display = 'block';
+                                        throw new Error("Invalid mail");
+                                    }
+                                    document.getElementById('emailError').style.display = 'none';
+                                }
+
+                                function validationCity() {
+                                    var city = $("#autocomplete").val();
+                                    if (city.length < 1) {
+                                        $('#btnInscription').attr("disabled", true);
+                                        document.getElementById('cityError').style.display = 'block';
+                                        throw new Error("Invalid city");
+                                    }
+                                    document.getElementById('cityError').style.display = 'none';
+                                }
+
+                                function validationUsername() {
+                                    var login = $("#usernameSignUp").val();
+                                    if (login.length < 1 || login.length > 14) {
+                                        $('#btnInscription').attr("disabled", true);
+                                        document.getElementById('usernameError').style.display = 'block';
+                                        throw new Error("Invalid username");
+                                    }
+                                    document.getElementById('usernameError').style.display = 'none';
+                                }
+
+                                function validationPassword() {
+                                    var password = $("#pwd").val();
+                                    if (password.length < 1) {
+                                        $('#btnInscription').attr("disabled", true);
+                                        document.getElementById('passwordError').style.display = 'block';
+                                        throw new Error("Invalid password");
+                                    }
+                                    document.getElementById('passwordError').style.display = 'none';
+                                }
+
+                                function validationPasswordCheck() {
+                                    var pwd = document.getElementById("pwd").value;
+                                    var myPswCheck = document.getElementById("pwdCheck").value;
+                                    if (pwd != myPswCheck) {
+                                        $('#btnInscription').attr("disabled", true);
+                                        document.getElementById('myPswCheckError').style.display = 'block';
+                                        throw new Error("Invalid password check");
+                                    }
+                                    document.getElementById('myPswCheckError').style.display = 'none';
+                                }
+                            })
+                        </script>
                         <script>
                             var autocomplete;
                             var componentForm = {
