@@ -147,7 +147,7 @@
                                 <div class="col-lg-6">
                                     <form:input type="password" path="passwordCheck" cssClass=" form-control"
                                                 id="pwdCheck"/>
-                                    <label style="display: none" class="error" id="pwdCheckError"><spring:message code="error.notBlank"/></label>
+                                    <label style="display: none" class="error" id="pwdCheckError"><spring:message code="error.passwordMatch"/></label>
                                     <form:errors path="passwordCheck" cssClass="error"/>
                                     <br/>
                                     <form:errors path="isPasswordMatch" cssClass="error"/>
@@ -201,8 +201,8 @@
                                     validationEmail();
                                     validationCity();
                                     validationUsername();
-                                    validationPassword();
-                                    validationPasswordCheck();
+                                    //validationPassword();
+                                    //validationPasswordCheck();
                                     $('#btnInscription').attr("disabled", false);
                                 }
 
@@ -257,13 +257,13 @@
                                 }
 
                                 function validationPassword() {
-                                    var password = $("#pwd").val();
+                                    var password = document.getElementById("pwd").value;
+                                    alert(password)
                                     if (password.length < 1) {
                                         $('#btnInscription').attr("disabled", true);
-                                        document.getElementById('passwordError').style.display = 'block';
                                         throw new Error("Invalid password");
                                     }
-                                    document.getElementById('passwordError').style.display = 'none';
+                                    document.getElementById('pwdError').style.display = 'none';
                                 }
 
                                 function validationPasswordCheck() {
@@ -271,10 +271,10 @@
                                     var myPswCheck = document.getElementById("pwdCheck").value;
                                     if (pwd != myPswCheck) {
                                         $('#btnInscription').attr("disabled", true);
-                                        document.getElementById('myPswCheckError').style.display = 'block';
+                                        document.getElementById('pwdCheckError').style.display = 'block';
                                         throw new Error("Invalid password check");
                                     }
-                                    document.getElementById('myPswCheckError').style.display = 'none';
+                                    document.getElementById('pwdCheckError').style.display = 'none';
                                 }
                             })
                         </script>
