@@ -106,7 +106,7 @@
                                                     <form:form cssClass="form-horizontal" method="post" action="addToCart" cssStyle="display: inline-block">
                                                         <button class="btn btn-primary btn-outline btn-lg" type="submit"><spring:message code="product.details.addToCart"/></button>
                                                         <div style="display: none;">
-                                                            <input type="text" name="productId" value="${product.id}"/>
+                                                            <input type="text" name="idProduct" value="${product.id}"/>
                                                         </div>
                                                     </form:form>
                                                 </c:if>
@@ -139,7 +139,7 @@
                                 </ul>
 
                                 <!-- Tabs -->
-                                <div class="fh5co-tab-content-wrap" style="height:900px">
+                                <div class="fh5co-tab-content-wrap" style="min-height:750px">
 
                                     <div class="fh5co-tab-content tab-content active" data-tab-content="1">
                                         <div class="col-md-10 col-md-offset-1">
