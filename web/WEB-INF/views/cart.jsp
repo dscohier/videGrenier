@@ -9,7 +9,7 @@
 	<body>
 		<div id="page">
 			<jsp:include page="menu.jsp"/>
-			<div id="fh5co-product">
+			<div id="fh5co-product" style="min-height: 415px;">
 				<div class="container">
 					<div class="row animate-box">
 						<div class="col-md-8 col-md-offset-2 text-center">
@@ -68,7 +68,7 @@
 							<br/>
 							<h4 style="color: red;"><b><spring:message code="product.cart.total"/> = ${total}&euro; </b></h4>
 								<form:form cssClass="form-horizontal" method="post" action="order">
-									<button class="btn btn-primary btn-outline btn-lg" type="submit" disabled="${products.size() == 0}">
+									<button class="btn btn-primary btn-outline btn-lg" type="submit" enabled="${products.size() > 0}">
 										<spring:message code="product.cart.order"/>
 									</button>
 								</form:form>
