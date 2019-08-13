@@ -25,7 +25,6 @@
                     <li>
                         <a href="<c:url value="/product/myPurchases"/>"><spring:message code="common.myPurchases"/></a>
                     </li>
-                    <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
             <div class="col-lg-4 hidden-xs menu-2">

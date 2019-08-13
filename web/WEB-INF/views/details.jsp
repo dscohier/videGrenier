@@ -86,7 +86,7 @@
                                                 <form:form cssClass="form-horizontal" method="post" action="bid" enctype="multipart/form-data" commandName="bidForm">
                                                     <form:input type="text" path="newPrice" id="newPrice"/>
                                                     <sec:authorize access="!isAuthenticated()">
-                                                        <spring:message code="error.details.sendMessage" var="message"/>
+                                                        <spring:message code="error.details.bid" var="message"/>
                                                         <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="common.toBid"/></button>
                                                     </sec:authorize>
                                                     <sec:authorize access="isAuthenticated()">
