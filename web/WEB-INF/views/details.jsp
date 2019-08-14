@@ -84,7 +84,9 @@
                                                     <spring:message code="product.details.priceOfferedBy"/> : ${lastBidder.user.username} <spring:message code="product.details.on"/> <fmt:formatDate pattern="dd-MM-yyyy HH:mm" value="${lastBidder.insertionDate}"/>
                                                 </c:if>
                                                 <form:form cssClass="form-horizontal" method="post" action="bid" enctype="multipart/form-data" commandName="bidForm">
-                                                    <form:input type="text" path="newPrice" id="newPrice"/>
+                                                    <c:if test="${!product.seller.username.equals(username)}">
+                                                        <form:input type="text" path="newPrice" id="newPrice"/>
+                                                    </c:if>
                                                     <sec:authorize access="!isAuthenticated()">
                                                         <spring:message code="error.details.bid" var="message"/>
                                                         <button class="btn btn-primary btn-outline btn-lg" type="submit" disabled data-toggle="tooltip" data-placement="top" title="${message}"><spring:message code="common.toBid"/></button>
