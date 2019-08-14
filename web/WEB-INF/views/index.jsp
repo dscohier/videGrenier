@@ -101,79 +101,79 @@
 				</c:forEach>
 			</div>
 			<br/>
-			<div style="border: 2px solid #d1c286; height: 600px">
+			<div style="border: 2px solid #d1c286; height: 620px">
 				<spring:message code="home.categories"/> :
 				<div>
 					<a class="categories" href="<c:url value="/product/products"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/all.jpg"/>" width="240px" height="240px" />
-							Tout
+							<spring:message code="categorie.all"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=INFORMATIQUE"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/computer.jpg"/>"/>
-							Informatique
+							<spring:message code="categorie.it"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=AUTO_MOTO"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/car.jpg"/>"/>
-							Auto/moto
+							<spring:message code="categorie.vehicle"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=PHOTO_VIDEO"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/camera.jpg"/>"/>
-							Photo/vidéo
+							<spring:message code="categorie.camera"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=MODE"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/fashion.jpg"/>"/>
-							Mode
+							<spring:message code="categorie.fashion"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=BIJOUX"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/jewelry.jpg"/>"/>
-							Bijoux
+							<spring:message code="categorie.jewelry"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=MUSIQUE"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/audio.jpg"/>"/>
-							Musique
+							<spring:message code="categorie.audio"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=JEUX_JOUET"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/toys.jpg"/>"/>
-							Jeux/jouet
+							<spring:message code="categorie.toys"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=BOOK"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/books.jpg"/>"/>
-							Livres
+							<spring:message code="categorie.books"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=ANIMALERIE"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/animals.jpg"/>"/>
-							Animaux
+							<spring:message code="categorie.animals"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=BRICOLAGE"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/crafts.jpg"/>"/>
-							Bricolage
+							<spring:message code="categorie.crafts"/>
 						</div>
 					</a>
 					<a class="categories" href="<c:url value="/product/products?category=AUTRES"/>">
 						<div class="categoriesPicture">
 							<img src="<c:url value="/resources/img/other.jpg"/>"/>
-							Autres
+							<spring:message code="categorie.other"/>
 						</div>
 					</a>
 				</div>
