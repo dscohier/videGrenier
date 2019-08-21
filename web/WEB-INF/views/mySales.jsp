@@ -61,7 +61,7 @@
 						<jsp:include page="productList.jsp"/>
 					</div>
 				</div>
-				<jsp:include page="footer2.jsp"/>
+				<jsp:include page="footer.jsp"/>
 			</div>
 	</body>
 </html>

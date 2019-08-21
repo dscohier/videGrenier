@@ -1,27 +1,39 @@
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/minty/bootstrap.min.css" rel="stylesheet" integrity="sha384-w+yWASP3zYNxxvwoQBD5fUSc1tctKq4KUiZzxgkBSJACiUp+IbweVKvsEhMI+gz7" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-</head>
-<footer>
-<div class="card text-white bg-primary mb-3" >
-    <div class="card-body">
-        <h3>A propos</h3>
-        <ul>
-            <li style="display:inline"><a href="" style="color:white">Qui sommes nous</a></li>
-            <li style="display:inline; margin-left: 150px"><a href="" style="color:white">FAQ</a></li>
-            <li style="display:inline; margin-left: 150px"><a href="" style="color:white">Conditions général d'utilisation</a></li>
-            <li style="display:inline; margin-left: 150px"><a href="" style="color:white">Contact</a></li>
-        </ul>
-        <p>© Vide Grenier 2019</p>
-    </div>
-</div>
-</footer>
-</body>
+<footer id="fh5co-footer" role="contentinfo">
+		<div class="container">
+			<div class="row row-pb-md">
+				<div class="col-md-4 fh5co-widget">
+					<h3>Vide grenier</h3>
+					<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit. Eos cumque dicta adipisci architecto culpa amet.</p>
+				</div>
+				<div class="col-md-2 col-sm-4 col-xs-6 col-md-push-1">
+					<ul class="fh5co-footer-links">
+						<li><a href="#">About</a></li>
+						<li><a href="#">Help</a></li>
+						<li><a href="#">Contact</a></li>
+						<li><a href="#">Terms</a></li>
+						<li><a href="#">Meetups</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	
+	<!-- jQuery -->
+	<!--<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
+	<!-- jQuery Easing -->
+	<script src="<c:url value="/resources/js/jquery.easing.1.3.js"/>"></script>
+	<!-- Bootstrap -->
+	<script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+	<!-- Waypoints -->
+	<script src="<c:url value="/resources/js/jquery.waypoints.min.js"/>"></script>
+	<!-- Carousel -->
+	<script src="<c:url value="/resources/js/owl.carousel.min.js"/>"></script>
+	<!-- countTo -->
+	<script src="<c:url value="/resources/js/jquery.countTo.js"/>"></script>
+	<!-- Flexslider -->
+	<script src="<c:url value="/resources/js/jquery.flexslider-min.js"/>"></script>
+	<!-- Main -->
+	<script src="<c:url value="/resources/js/main.js"/>"></script>
 </html>
